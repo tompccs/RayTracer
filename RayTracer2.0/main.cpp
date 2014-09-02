@@ -1,18 +1,237 @@
-//
-//  main.cpp
-//  RayTracer2.0
-//
-//  Created by Mark Portnoi on 01/08/2014.
-//  Copyright (c) 2014 Mark Portnoi. All rights reserved.
-//
-
 #include <iostream>
+#include "Test.h"
+#include "Functions.h"
+#include "Material.h"
+#include "FresnelJackson.h"
+#include <vector>
 
-int main(int argc, const char * argv[])
-{
+using namespace std;
 
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+void run(double runs, bool debug){
+    
+    //Main algorithm. runs = runs per wavelength. debug = debug mode.
+    
+    //Creates environment
+    
+    Sheet* worldbase = new Sheet;
+    Material* world = new Material;
+    FresnelJackson* inout = new FresnelJackson;
+    Functions* calc = new Functions;
+    Test* print = new Test;
+    
+    Point3D A (0,0,0);
+    Point3D B (10,0,0);
+    Point3D C (0,10,0);
+    double h = 10;
+    
+    worldbase->Set(A,B,C);
+    
+    world->SetRefractiveIndex(1);
+    world->SetConcentration(0);
+    
+    world->Set(worldbase, h);
+    
+    Sheet* lscbase = new Sheet;
+    Material* lsc = new Material;
+    lsc->ReadData(1);
+    
+    
+    Point3D D (1,1,0.01);
+    Point3D E (6,1,0.01);
+    Point3D F (1,6,0.01);
+    double h2 = 0.4;
+    
+    Point3D G (1,1,9);
+    Point3D H (6,1,9);
+    Point3D I (1,6,9);
+    
+    Sheet* source = new Sheet;
+    
+    source->Set(G,H,I);
+    
+    
+    lscbase->Set(D,E,F);
+    lsc->Set(lscbase,h2);
+    
+    lsc->SetRefractiveIndex(1.495);
+    lsc->SetConcentration(1e-4);
+    
+    double hits = 0;
+    double photons = 0;
+    
+    vector<double> output;
+    vector<double> inside;
+    
+    vector<double> d_zero;
+    vector<double> d_one;
+    vector<double> d_two;
+    vector<double> d_three;
+    vector<double> d_four;
+    vector<double> d_five;
+    vector<double> d_morethanfive;
+    
+    vector<double> QYLossData;
+    vector<double> ExitData;
+    
+    vector<double> Reflected;
+    vector<double> NotAbsorbedInside;
+    vector<double> InsideAbsorbedExit;
+    
+    //Loop for each wavelength. Set wavelength Range here.
+    
+    for(int wavelength = 350; wavelength<= 520; wavelength++){
+        
+        double thisphotons = 0;
+        double thishits = 0;
+        double thisinside = 0;
+        double QYLoss = 0;
+        double Exit = 0;
+        double zero = 0;
+        double one = 0;
+        double two = 0;
+        double three = 0;
+        double four = 0;
+        double five = 0;
+        double morethanfive = 0;
+        double reflected = 0;
+        double notabsorbedinside = 0;
+        double insideabsorbedexit = 0;
+        
+        //Loop for individual wavelength.
+        
+        for(int i = 0; i<runs; i++){
+            
+            Photon* photon = new Photon;
+            
+            photons++;
+            thisphotons++;
+            
+            double sx, sy;
+            
+            sx = lscbase->GetA().x + calc->Random(1) * lscbase->GetABLength();
+            sy = lscbase->GetB().y + calc->Random(1) * lscbase->GetACLength();
+            
+            photon->SetPosition(Point3D(sx,sy,3));
+            photon->SetMomentum(Vector3D(0,0,-1));
+            photon->SetWavelength(wavelength);
+            photon->SetRandomPolarisation();
+            
+            world->CorrectPhotonInside(photon);
+            
+            if(debug) {
+                cout<<"New photon:"<<endl;
+                print->PhotonPrint(photon);
+            }
+            
+            while(world->ReturnPhotonInside() & photon->PhotonAliveCheck()){ //While photon is inside world and alive.
+                if(!lsc->ReturnPhotonInside()){ //If photon is not in the LSC.
+                    if(world->GetInterfaceDistance(photon)<lsc->GetInterfaceDistance(photon)){ //If next boundary is exit.
+                        photon->PhotonKill();
+                        if(debug) {
+                            cout<<"World exit."<<endl;
+                        }
+                    }
+                    
+                    else{
+                        inout->In(photon, world, lsc, debug); //Else, entrance reflect/refract event.
+                    }
+                }
+                
+                
+                else while(lsc->ReturnPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
+                    
+                    if(photon->GetAbsorbLength()<=lsc->GetInterfaceDistance(photon)){ //If absorption = next event.
+                        lsc->AbsorptionEvent(photon,debug); //Absorption event.
+                        
+                    }
+                    
+                    else{ //If boundary is next event.
+                        
+                        if(!(lsc->GetInterfaceSheet(photon) == lsc->GetBase()) & !(lsc->GetInterfaceSheet(photon) == lsc->GetTop())){
+                            photon->PhotonKill(); //If sheet is not top or bottom. Kill photon + add counters.
+                            hits++;
+                            thishits++;
+                            if(debug) cout<<"Hit."<<endl;
+                        }
+                        else{
+                            inout->Out(photon, world, lsc, debug); //Otherwise exit reflect/refract event.
+                        }
+                    }
+                }
+            }
+            
+            //Counters
+            
+            if(photon->GetInside()) thisinside++;
+            if(photon->GetAbsorptions()==0) zero++;
+            if(photon->GetAbsorptions()==1) one++;
+            if(photon->GetAbsorptions()==2) two++;
+            if(photon->GetAbsorptions()==3) three++;
+            if(photon->GetAbsorptions()==4) four++;
+            if(photon->GetAbsorptions()==5) five++;
+            if(photon->GetAbsorptions()>5) morethanfive++;
+            if(photon->GetQYLoss()==1) QYLoss++;
+            if(photon->GetExit()==1) Exit++;
+            if(!photon->GetInside()) reflected++;
+            if(photon->GetAbsorptions()==0 && photon->GetInside()) notabsorbedinside++;
+            if(photon->GetInside()&&photon->GetAbsorptions()!=0&&photon->GetExit()) insideabsorbedexit++;
+
+            
+            //Deletes photon.
+            
+            world->SetPhotonInside(0);
+            lsc->SetPhotonInside(0);
+            delete photon;
+            
+        }
+        
+        //Adds value for individual wavelengths to vector.
+        
+        inside.push_back(100*thisinside/thisphotons);
+        output.push_back(100*thishits/thisphotons);
+        d_zero.push_back(100*zero/thisphotons);
+        d_one.push_back(100*one/thisphotons);
+        d_two.push_back(100*two/thisphotons);
+        d_three.push_back(100*three/thisphotons);
+        d_four.push_back(100*four/thisphotons);
+        d_five.push_back(100*five/thisphotons);
+        d_morethanfive.push_back(100*morethanfive/thisphotons);
+        QYLossData.push_back(100*QYLoss/thisphotons);
+        ExitData.push_back(100*Exit/thisphotons);
+        Reflected.push_back(100*reflected/thisphotons);
+        NotAbsorbedInside.push_back(100*notabsorbedinside/thisphotons);
+        InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
+        
+    }
+    
+    //Prints vectors to files for individual wavelengths.
+    
+    print->PrintVectorFile(output, "output.txt");
+    print->PrintVectorFile(inside, "inside.txt");
+    print->PrintVectorFile(d_zero, "0.txt");
+    print->PrintVectorFile(d_one, "1.txt");
+    print->PrintVectorFile(d_two, "2.txt");
+    print->PrintVectorFile(d_three, "3.txt");
+    print->PrintVectorFile(d_four, "4.txt");
+    print->PrintVectorFile(d_five, "5.txt");
+    print->PrintVectorFile(d_morethanfive, "morethan5.txt");
+    print->PrintVectorFile(QYLossData, "qyloss.txt");
+    print->PrintVectorFile(ExitData, "exit.txt");
+    print->PrintVectorFile(Reflected, "reflected.txt");
+    print->PrintVectorFile(NotAbsorbedInside, "nai.txt");
+    print->PrintVectorFile(InsideAbsorbedExit, "iae.txt");
+    
+    //Calculates total efficiency and prints as 'result'
+    
+    double result = 100 * hits/photons;
+    vector<double> finalresult;
+    finalresult.push_back(result);
+    print->PrintVectorFile(finalresult,"efficiency.txt");
+    
+    cout<<"Optical Efficiency: "<<result<<"%"<<endl;
+    
 }
 
+int main(int argc, const char * argv[]){    
+    run(1000000, 0);
+}

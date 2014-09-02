@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C632C86B198B7BC0006430D8"
-               BuildableName = "RayTracer2.0"
-               BlueprintName = "RayTracer2.0"
-               ReferencedContainer = "container:RayTracer2.0.xcodeproj">
+               BuildableName = "RayTracer"
+               BlueprintName = "RayTracer"
+               ReferencedContainer = "container:RayTracer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C632C86B198B7BC0006430D8"
-            BuildableName = "RayTracer2.0"
-            BlueprintName = "RayTracer2.0"
-            ReferencedContainer = "container:RayTracer2.0.xcodeproj">
+            BuildableName = "RayTracer"
+            BlueprintName = "RayTracer"
+            ReferencedContainer = "container:RayTracer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C632C86B198B7BC0006430D8"
-            BuildableName = "RayTracer2.0"
-            BlueprintName = "RayTracer2.0"
-            ReferencedContainer = "container:RayTracer2.0.xcodeproj">
+            BuildableName = "RayTracer"
+            BlueprintName = "RayTracer"
+            ReferencedContainer = "container:RayTracer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C632C86B198B7BC0006430D8"
-            BuildableName = "RayTracer2.0"
-            BlueprintName = "RayTracer2.0"
-            ReferencedContainer = "container:RayTracer2.0.xcodeproj">
+            BuildableName = "RayTracer"
+            BlueprintName = "RayTracer"
+            ReferencedContainer = "container:RayTracer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
