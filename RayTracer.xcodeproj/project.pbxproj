@@ -18,6 +18,7 @@
 		C632C883198B85EE006430D8 /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C632C881198B85EE006430D8 /* Vector3D.cpp */; };
 		C632C886198B8E00006430D8 /* Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C632C884198B8E00006430D8 /* Test.cpp */; };
 		C632C889198B9221006430D8 /* Photon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C632C887198B9221006430D8 /* Photon.cpp */; };
+		C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C636ED4819B73882006AA281 /* MultipleObjects.cpp */; };
 		C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23F9198BBBE500A64442 /* Functions.cpp */; };
 		C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FC198BBFD000A64442 /* Sheet.cpp */; };
 		C6BE2401198C014200A64442 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FF198C014200A64442 /* Box.cpp */; };
@@ -66,6 +67,8 @@
 		C632C885198B8E00006430D8 /* Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test.h; sourceTree = "<group>"; };
 		C632C887198B9221006430D8 /* Photon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Photon.cpp; sourceTree = "<group>"; };
 		C632C888198B9221006430D8 /* Photon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photon.h; sourceTree = "<group>"; };
+		C636ED4819B73882006AA281 /* MultipleObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleObjects.cpp; sourceTree = "<group>"; };
+		C636ED4919B73882006AA281 /* MultipleObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipleObjects.h; sourceTree = "<group>"; };
 		C6BE23F9198BBBE500A64442 /* Functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cpp; sourceTree = "<group>"; };
 		C6BE23FA198BBBE500A64442 /* Functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Functions.h; sourceTree = "<group>"; };
 		C6BE23FC198BBFD000A64442 /* Sheet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sheet.cpp; sourceTree = "<group>"; };
@@ -122,6 +125,7 @@
 			children = (
 				C60C8440199016CD00F302FF /* data */,
 				C632C86F198B7BC0006430D8 /* main.cpp */,
+				C636ED4819B73882006AA281 /* MultipleObjects.cpp */,
 				C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */,
 				C62CBCB21990D4FD004FE771 /* Material.cpp */,
 				C632C884198B8E00006430D8 /* Test.cpp */,
@@ -135,6 +139,7 @@
 				C6BE23FC198BBFD000A64442 /* Sheet.cpp */,
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
+				C636ED4919B73882006AA281 /* MultipleObjects.h */,
 				C6DD74C019ACD3B2009D8EAA /* FresnelJackson.h */,
 				C62CBCB31990D4FD004FE771 /* Material.h */,
 				C62CBCB61990D512004FE771 /* Process.h */,
@@ -217,6 +222,7 @@
 				C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */,
 				C60C844A1990171C00F302FF /* List.cpp in Sources */,
 				C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */,
+				C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */,
 				C6BE2401198C014200A64442 /* Box.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
