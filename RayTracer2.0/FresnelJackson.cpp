@@ -138,13 +138,13 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
 }
 
 void
-FresnelJackson::Out(Photon *photon, Material *world, Material *lsc, bool &debug){
-    Vector3D N = -(lsc->GetInterfaceSheet(photon).GetNormal());
-    double value = photon->GetAbsorbLength() - lsc->GetInterfaceDistance(photon);
+FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects){
+    Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
+    double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
 
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, lsc->GetRefractiveIndex(), world->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, material1->GetRefractiveIndex(), material2->GetRefractiveIndex());
 
-    photon->SetPosition(lsc->GetInterfacePoint(photon));
+    photon->SetPosition(material1->GetInterfacePoint(photon));
     photon->SetMomentum(NewMomentum);
     photon->SetPolarisation(NewPolarisation);
     
@@ -157,9 +157,11 @@ FresnelJackson::Out(Photon *photon, Material *world, Material *lsc, bool &debug)
     }
     
     else{
-        lsc->SetPhotonInside(0);
+        material1->SetPhotonInside(0);
         photon->SetExit();
-        photon->SetAbsorblength(DBL_MAX);
+        material2->SetPhotonInside(1);
+        if(objects->PhotonInMaterial()) material2->SetInitialAbsorbLength(photon);
+        else photon->SetAbsorblength(DBL_MAX);
         if(debug){
             cout<<"Out Event. Refraction:"<<endl;
             print.PhotonPrint(photon);

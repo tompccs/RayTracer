@@ -1,9 +1,9 @@
 #include <iostream>
 #include "Test.h"
 #include "Functions.h"
-#include "Material.h"
 #include "FresnelJackson.h"
 #include <vector>
+#include "MultipleObjects.h"
 
 using namespace std;
 
@@ -18,6 +18,7 @@ void run(double runs, bool debug){
     FresnelJackson* inout = new FresnelJackson;
     Functions* calc = new Functions;
     Test* print = new Test;
+    MultipleObjects* objects = new MultipleObjects;
     
     Point3D A (0,0,0);
     Point3D B (10,0,0);
@@ -55,6 +56,9 @@ void run(double runs, bool debug){
     
     lsc->SetRefractiveIndex(1.495);
     lsc->SetConcentration(1e-4);
+    
+    objects->StoreWorld(world);
+    objects->StoreMaterial(lsc);
     
     double hits = 0;
     double photons = 0;
@@ -124,8 +128,8 @@ void run(double runs, bool debug){
             }
             
             while(world->ReturnPhotonInside() & photon->PhotonAliveCheck()){ //While photon is inside world and alive.
-                if(!lsc->ReturnPhotonInside()){ //If photon is not in the LSC.
-                    if(world->GetInterfaceDistance(photon)<lsc->GetInterfaceDistance(photon)){ //If next boundary is exit.
+                if(!objects->PhotonInMaterial()){ //If photon is not in a LSC.
+                    if(world->GetInterfaceDistance(photon)<objects->NextInterfaceDistance(photon)){ //If next boundary is exit.
                         photon->PhotonKill();
                         if(debug) {
                             cout<<"World exit."<<endl;
@@ -133,28 +137,28 @@ void run(double runs, bool debug){
                     }
                     
                     else{
-                        inout->In(photon, world, lsc, debug); //Else, entrance reflect/refract event.
+                        inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug); //Else, entrance reflect/refract event.
                     }
                 }
                 
                 
-                else while(lsc->ReturnPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
+                else while(objects->PhotonInMaterial()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
                     
-                    if(photon->GetAbsorbLength()<=lsc->GetInterfaceDistance(photon)){ //If absorption = next event.
-                        lsc->AbsorptionEvent(photon,debug); //Absorption event.
+                    if(photon->GetAbsorbLength()<=objects->CurrentMaterial()->GetInterfaceDistance(photon)){ //If absorption = next event.
+                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug); //Absorption event.
                         
                     }
                     
                     else{ //If boundary is next event.
                         
-                        if(!(lsc->GetInterfaceSheet(photon) == lsc->GetBase()) & !(lsc->GetInterfaceSheet(photon) == lsc->GetTop())){
+                        if(!(objects->CurrentMaterial()->GetInterfaceSheet(photon) == objects->CurrentMaterial()->GetBase()) & !(objects->CurrentMaterial()->GetInterfaceSheet(photon) == objects->CurrentMaterial()->GetTop())){
                             photon->PhotonKill(); //If sheet is not top or bottom. Kill photon + add counters.
                             hits++;
                             thishits++;
                             if(debug) cout<<"Hit."<<endl;
                         }
                         else{
-                            inout->Out(photon, world, lsc, debug); //Otherwise exit reflect/refract event.
+                            inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects); //Otherwise exit reflect/refract event.
                         }
                     }
                 }
@@ -233,5 +237,5 @@ void run(double runs, bool debug){
 }
 
 int main(int argc, const char * argv[]){    
-    run(1000000, 0);
+    run(10000, 0);
 }
