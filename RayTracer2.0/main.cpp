@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void run(double runs, bool debug){
+void run(double runs,int lscs, int start, int end, bool debug){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
@@ -72,8 +72,8 @@ void run(double runs, bool debug){
     lsc2->SetConcentration(1e-5);
     
     objects->StoreWorld(world);
-    objects->StoreMaterial(lsc);
-    objects->StoreMaterial(lsc2);
+    if(lscs>=1)objects->StoreMaterial(lsc);
+    if(lscs==2) objects->StoreMaterial(lsc2);
     
     double hits = 0;
     double photons = 0;
@@ -98,7 +98,7 @@ void run(double runs, bool debug){
     
     //Loop for each wavelength. Set wavelength Range here.
     
-    for(int wavelength = 350; wavelength<= 520; wavelength++){
+    for(int wavelength = start; wavelength<= end; wavelength++){
         
         double thisphotons = 0;
         double thishits = 0;
@@ -253,5 +253,5 @@ void run(double runs, bool debug){
 }
 
 int main(int argc, const char * argv[]){    
-    run(10000, 0);
+    run(10000,2,350,520,0);
 }
