@@ -83,3 +83,13 @@ void
 Material::CorrectPhotonInside(Photon *photon){
     PhotonInside = PointinBox(photon);
 }
+
+void
+Material::SetMaterialNumber(long n){
+    Materialnumber = n;
+}
+
+long&
+Material::GetMaterialNumber(){
+    return Materialnumber;
+}

@@ -21,9 +21,9 @@ void run(double runs, bool debug){
     MultipleObjects* objects = new MultipleObjects;
     
     Point3D A (0,0,0);
-    Point3D B (10,0,0);
-    Point3D C (0,10,0);
-    double h = 10;
+    Point3D B (20,0,0);
+    Point3D C (0,20,0);
+    double h = 20;
     
     worldbase->Set(A,B,C);
     
@@ -34,31 +34,46 @@ void run(double runs, bool debug){
     
     Sheet* lscbase = new Sheet;
     Material* lsc = new Material;
-    lsc->ReadData(1);
     
+    Sheet* lscbase2 = new Sheet;
+    Material* lsc2 = new Material;
+    
+    lsc->ReadData(1);
+    lsc2->ReadData(1);
     
     Point3D D (1,1,0.01);
-    Point3D E (6,1,0.01);
-    Point3D F (1,6,0.01);
-    double h2 = 0.4;
+    Point3D E (11,1,0.01);
+    Point3D F (1,11,0.01);
+    double h2 = 0.5;
+    
+    Point3D J (1,1,0.61);
+    Point3D K (11,1,0.61);
+    Point3D L (1,11,0.61);
+    double h3 = 0.5;
     
     Point3D G (1,1,9);
-    Point3D H (6,1,9);
-    Point3D I (1,6,9);
+    Point3D H (11,1,9);
+    Point3D I (1,11,9);
     
     Sheet* source = new Sheet;
     
     source->Set(G,H,I);
     
-    
     lscbase->Set(D,E,F);
     lsc->Set(lscbase,h2);
     
+    lscbase2->Set(J,K,L);
+    lsc2->Set(lscbase2,h3);
+    
     lsc->SetRefractiveIndex(1.495);
-    lsc->SetConcentration(1e-4);
+    lsc->SetConcentration(1e-5);
+    
+    lsc2->SetRefractiveIndex(1.495);
+    lsc2->SetConcentration(1e-5);
     
     objects->StoreWorld(world);
     objects->StoreMaterial(lsc);
+    objects->StoreMaterial(lsc2);
     
     double hits = 0;
     double photons = 0;
@@ -115,7 +130,7 @@ void run(double runs, bool debug){
             sx = lscbase->GetA().x + calc->Random(1) * lscbase->GetABLength();
             sy = lscbase->GetB().y + calc->Random(1) * lscbase->GetACLength();
             
-            photon->SetPosition(Point3D(sx,sy,3));
+            photon->SetPosition(Point3D(sx,sy,9));
             photon->SetMomentum(Vector3D(0,0,-1));
             photon->SetWavelength(wavelength);
             photon->SetRandomPolarisation();
@@ -131,6 +146,7 @@ void run(double runs, bool debug){
                 if(!objects->PhotonInMaterial()){ //If photon is not in a LSC.
                     if(world->GetInterfaceDistance(photon)<objects->NextInterfaceDistance(photon)){ //If next boundary is exit.
                         photon->PhotonKill();
+                        world->SetPhotonInside(0);
                         if(debug) {
                             cout<<"World exit."<<endl;
                         }
@@ -184,7 +200,7 @@ void run(double runs, bool debug){
             //Deletes photon.
             
             world->SetPhotonInside(0);
-            lsc->SetPhotonInside(0);
+            objects->ResetPhotonsInside();
             delete photon;
             
         }

@@ -10,6 +10,7 @@ class Material: public Box{
     Process Events;
     double RefractiveIndex, Concentration;
     bool PhotonInside;
+    long Materialnumber;
     Test print;
 public:
     
@@ -36,6 +37,10 @@ public:
     bool ReturnPhotonInside();
     
     void CorrectPhotonInside(Photon* photon);
+    
+    void SetMaterialNumber(long n);
+    
+    long& GetMaterialNumber();
     
     };
 

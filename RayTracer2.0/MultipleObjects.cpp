@@ -2,7 +2,9 @@
 
 void
 MultipleObjects::StoreMaterial(Material* object){
+    object->SetMaterialNumber(ObjectList.size()+1);
     ObjectList.push_back(object);
+    
 }
 
 void
@@ -49,4 +51,11 @@ MultipleObjects::NextInterfaceMaterial(Photon *photon){
             return ObjectList[i];
     }
     return world;
+}
+
+void
+MultipleObjects::ResetPhotonsInside(){
+    for(int i = 0; i<ObjectList.size(); i++){
+        ObjectList[i]->SetPhotonInside(0);
+    }
 }

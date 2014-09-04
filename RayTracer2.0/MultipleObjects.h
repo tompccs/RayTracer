@@ -27,6 +27,8 @@ public:
     double NextInterfaceDistance(Photon* photon);
     
     Material*& NextInterfaceMaterial(Photon* photon);
+    
+    void ResetPhotonsInside();
 };
 
 #endif
