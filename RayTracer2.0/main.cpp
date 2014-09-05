@@ -13,25 +13,29 @@ void run(double runs,int lscs, int start, int end, bool debug){
     
     //Creates environment
     
-    Sheet* worldbase = new Sheet;
-    Material* world = new Material;
-    FresnelJackson* inout = new FresnelJackson;
-    Functions* calc = new Functions;
-    Test* print = new Test;
-    MultipleObjects* objects = new MultipleObjects;
+    Material* world = new Material; //Creates new world box.
     
+    FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
+    Functions* calc = new Functions; //Used for random number generation
+    Test* print = new Test; //Used to output debug lines
+    MultipleObjects* objects = new MultipleObjects; //Facilitates multiple LSCs
+    
+    
+    //World dimensions and settings
     Point3D A (0,0,0);
     Point3D B (20,0,0);
     Point3D C (0,20,0);
     double h = 20;
     
+    Sheet* worldbase = new Sheet;
     worldbase->Set(A,B,C);
     
     world->SetRefractiveIndex(1);
     world->SetConcentration(0);
-    
     world->Set(worldbase, h);
     
+    
+    //LSC dimensions and settings
     Sheet* lscbase = new Sheet;
     Material* lsc = new Material;
     
@@ -41,10 +45,10 @@ void run(double runs,int lscs, int start, int end, bool debug){
     lsc->ReadData(1);
     lsc2->ReadData(1);
     
-    Point3D D (1,1,0.01);
-    Point3D E (11,1,0.01);
-    Point3D F (1,11,0.01);
-    double h2 = 0.5;
+    Point3D D (1,1,1);
+    Point3D E (6,1,1);
+    Point3D F (1,6,1);
+    double h2 = 0.4;
     
     Point3D J (1,1,0.61);
     Point3D K (11,1,0.61);
@@ -66,12 +70,14 @@ void run(double runs,int lscs, int start, int end, bool debug){
     lsc2->Set(lscbase2,h3);
     
     lsc->SetRefractiveIndex(1.495);
-    lsc->SetConcentration(1e-5);
+    lsc->SetConcentration(1e-4);
     
     lsc2->SetRefractiveIndex(1.495);
     lsc2->SetConcentration(1e-5);
     
-    objects->StoreWorld(world);
+    objects->StoreWorld(world); //Stores world
+    
+    //Stores LSC
     if(lscs>=1)objects->StoreMaterial(lsc);
     if(lscs==2) objects->StoreMaterial(lsc2);
     
@@ -79,22 +85,6 @@ void run(double runs,int lscs, int start, int end, bool debug){
     double photons = 0;
     
     vector<double> output;
-    vector<double> inside;
-    
-    vector<double> d_zero;
-    vector<double> d_one;
-    vector<double> d_two;
-    vector<double> d_three;
-    vector<double> d_four;
-    vector<double> d_five;
-    vector<double> d_morethanfive;
-    
-    vector<double> QYLossData;
-    vector<double> ExitData;
-    
-    vector<double> Reflected;
-    vector<double> NotAbsorbedInside;
-    vector<double> InsideAbsorbedExit;
     
     //Loop for each wavelength. Set wavelength Range here.
     
@@ -102,24 +92,13 @@ void run(double runs,int lscs, int start, int end, bool debug){
         
         double thisphotons = 0;
         double thishits = 0;
-        double thisinside = 0;
-        double QYLoss = 0;
-        double Exit = 0;
-        double zero = 0;
-        double one = 0;
-        double two = 0;
-        double three = 0;
-        double four = 0;
-        double five = 0;
-        double morethanfive = 0;
-        double reflected = 0;
-        double notabsorbedinside = 0;
-        double insideabsorbedexit = 0;
         
         //Loop for individual wavelength.
         
         for(int i = 0; i<runs; i++){
             
+            
+            //New photon settings
             Photon* photon = new Photon;
             
             photons++;
@@ -138,7 +117,7 @@ void run(double runs,int lscs, int start, int end, bool debug){
             world->CorrectPhotonInside(photon);
             
             if(debug) {
-                cout<<"New photon:"<<endl;
+                cout<<"New photon:"<<endl<<endl;
                 print->PhotonPrint(photon);
             }
             
@@ -148,7 +127,7 @@ void run(double runs,int lscs, int start, int end, bool debug){
                         photon->PhotonKill();
                         world->SetPhotonInside(0);
                         if(debug) {
-                            cout<<"World exit."<<endl;
+                            cout<<"World exit."<<endl<<endl;
                         }
                     }
                     
@@ -171,7 +150,11 @@ void run(double runs,int lscs, int start, int end, bool debug){
                             photon->PhotonKill(); //If sheet is not top or bottom. Kill photon + add counters.
                             hits++;
                             thishits++;
-                            if(debug) cout<<"Hit."<<endl;
+                            if(debug){
+                                cout<<"Hit at interface point: ";
+                                print->PrintPoint(objects->CurrentMaterial()->GetInterfacePoint(photon));
+                                cout<<endl;
+                            }
                         }
                         else{
                             inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects); //Otherwise exit reflect/refract event.
@@ -181,21 +164,6 @@ void run(double runs,int lscs, int start, int end, bool debug){
             }
             
             //Counters
-            
-            if(photon->GetInside()) thisinside++;
-            if(photon->GetAbsorptions()==0) zero++;
-            if(photon->GetAbsorptions()==1) one++;
-            if(photon->GetAbsorptions()==2) two++;
-            if(photon->GetAbsorptions()==3) three++;
-            if(photon->GetAbsorptions()==4) four++;
-            if(photon->GetAbsorptions()==5) five++;
-            if(photon->GetAbsorptions()>5) morethanfive++;
-            if(photon->GetQYLoss()==1) QYLoss++;
-            if(photon->GetExit()==1) Exit++;
-            if(!photon->GetInside()) reflected++;
-            if(photon->GetAbsorptions()==0 && photon->GetInside()) notabsorbedinside++;
-            if(photon->GetInside()&&photon->GetAbsorptions()!=0&&photon->GetExit()) insideabsorbedexit++;
-
             
             //Deletes photon.
             
@@ -207,39 +175,13 @@ void run(double runs,int lscs, int start, int end, bool debug){
         
         //Adds value for individual wavelengths to vector.
         
-        inside.push_back(100*thisinside/thisphotons);
         output.push_back(100*thishits/thisphotons);
-        d_zero.push_back(100*zero/thisphotons);
-        d_one.push_back(100*one/thisphotons);
-        d_two.push_back(100*two/thisphotons);
-        d_three.push_back(100*three/thisphotons);
-        d_four.push_back(100*four/thisphotons);
-        d_five.push_back(100*five/thisphotons);
-        d_morethanfive.push_back(100*morethanfive/thisphotons);
-        QYLossData.push_back(100*QYLoss/thisphotons);
-        ExitData.push_back(100*Exit/thisphotons);
-        Reflected.push_back(100*reflected/thisphotons);
-        NotAbsorbedInside.push_back(100*notabsorbedinside/thisphotons);
-        InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
         
     }
     
     //Prints vectors to files for individual wavelengths.
     
     print->PrintVectorFile(output, "output.txt");
-    print->PrintVectorFile(inside, "inside.txt");
-    print->PrintVectorFile(d_zero, "0.txt");
-    print->PrintVectorFile(d_one, "1.txt");
-    print->PrintVectorFile(d_two, "2.txt");
-    print->PrintVectorFile(d_three, "3.txt");
-    print->PrintVectorFile(d_four, "4.txt");
-    print->PrintVectorFile(d_five, "5.txt");
-    print->PrintVectorFile(d_morethanfive, "morethan5.txt");
-    print->PrintVectorFile(QYLossData, "qyloss.txt");
-    print->PrintVectorFile(ExitData, "exit.txt");
-    print->PrintVectorFile(Reflected, "reflected.txt");
-    print->PrintVectorFile(NotAbsorbedInside, "nai.txt");
-    print->PrintVectorFile(InsideAbsorbedExit, "iae.txt");
     
     //Calculates total efficiency and prints as 'result'
     
@@ -248,10 +190,10 @@ void run(double runs,int lscs, int start, int end, bool debug){
     finalresult.push_back(result);
     print->PrintVectorFile(finalresult,"efficiency.txt");
     
-    cout<<"Optical Efficiency: "<<result<<"%"<<endl;
+    cout<<"Total Optical Efficiency: "<<result<<"%"<<endl;
     
 }
 
 int main(int argc, const char * argv[]){    
-    run(10000,2,350,520,0);
+    run(200,1,450,450,1);
 }

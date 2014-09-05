@@ -46,7 +46,6 @@ Material::AbsorptionEvent(Photon *P, bool& debug){
     P->Addabsorption();
     if(debug){
         cout<<"Photon absorbed"<<endl;
-        print.PhotonPrint(P);
     }
     
     
@@ -64,6 +63,7 @@ Material::AbsorptionEvent(Photon *P, bool& debug){
 
     }
     else{
+        if(debug) cout<<"but not reemitted."<<endl<<endl;
         P->PhotonKill();
         P->SetQYLoss();
     }

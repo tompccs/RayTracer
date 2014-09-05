@@ -74,7 +74,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             }
             
             else{
-                    if (Rindex2 > Rindex1) NewPolarisation = - OldPolarisation;
+                    if (Rindex2 > Rindex1) NewPolarisation = -OldPolarisation;
                     else NewPolarisation =   OldPolarisation;
                 }
             
@@ -123,15 +123,16 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
         lsc->SetPhotonInside(1);
         lsc->SetInitialAbsorbLength(photon);
         photon->SetInside();
+        
         if(debug){
-            cout<<"In Event. Refraction:"<<endl;
+            cout<<"Entrance boundary event. Refraction:"<<endl;
             print.PhotonPrint(photon);
         }
     }
     
     else{
         if(debug){
-            cout<<"In Event. Reflection:"<<endl;
+            cout<<"Entrance boundary event. Reflection (No entrance):"<<endl;
             print.PhotonPrint(photon);
         }
     }
@@ -151,7 +152,7 @@ FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bo
     if(!Transmitted){
         photon->SetAbsorblength(value);
         if(debug){
-            cout<<"Out Event. Reflection:"<<endl;
+            cout<<"Exit boundary event. Reflection (No exit):"<<endl;
             print.PhotonPrint(photon);
         }
     }
@@ -163,7 +164,7 @@ FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bo
         if(objects->PhotonInMaterial()) material2->SetInitialAbsorbLength(photon);
         else photon->SetAbsorblength(DBL_MAX);
         if(debug){
-            cout<<"Out Event. Refraction:"<<endl;
+            cout<<"Exit boundary event. Refraction:"<<endl;
             print.PhotonPrint(photon);
         }
     }

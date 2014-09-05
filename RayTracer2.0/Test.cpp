@@ -59,8 +59,8 @@ Test::PhotonPrint(Photon *photon){
     PrintVector(photon->GetMomentum());
     cout<<endl;
     cout<<"Photon has wavelength: ";
-    cout<<photon->GetWavelength()<<endl;
+    cout<<photon->GetWavelength()<<"nm"<<endl;
     cout<<endl;
-    cout<<"Distance to absorption: "<<photon->GetAbsorbLength()<<endl;
+    cout<<"Distance to absorption: "<<photon->GetAbsorbLength()<<"cm"<<endl;
     cout<<endl;
 }
