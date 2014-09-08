@@ -195,5 +195,5 @@ void run(double runs,int lscs, int start, int end, bool debug){
 }
 
 int main(int argc, const char * argv[]){    
-    run(200,2,450,450,1);
+    run(100000,2,350,520,0);
 }
