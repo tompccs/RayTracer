@@ -74,6 +74,8 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             }
             
             else{
+                
+                NewMomentum = -OldMomentum;
                     if (Rindex2 > Rindex1) NewPolarisation = -OldPolarisation;
                     else NewPolarisation =   OldPolarisation;
                 }
