@@ -65,6 +65,8 @@ public:
     double TriangleArea(Point3D A, Point3D B, Point3D C);
     
     bool SignCompare(double A, double B, double C);
+    
+    Point3D Centre();
 
 };
 

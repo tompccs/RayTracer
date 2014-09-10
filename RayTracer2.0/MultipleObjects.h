@@ -29,6 +29,8 @@ public:
     Material*& NextInterfaceMaterial(Photon* photon);
     
     void ResetPhotonsInside();
+    
+    vector<Material*> GetObjectList();
 };
 
 #endif

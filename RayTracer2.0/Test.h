@@ -5,6 +5,7 @@
 #include "Box.h"
 #include <vector>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -22,6 +23,11 @@ public:
     void PrintVectorFile(vector<double> list, string filename);
     
     void PhotonPrint(Photon* photon);
+    
+    void PrintTextVector(vector<string> list, string filename);
+    
+    string NumberToString(double number);
+    
 };
 
 

@@ -64,3 +64,22 @@ Test::PhotonPrint(Photon *photon){
     cout<<"Distance to absorption: "<<photon->GetAbsorbLength()<<"cm"<<endl;
     cout<<endl;
 }
+
+void
+Test::PrintTextVector(vector<string> list, string filename){
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        for(int i=0; i<list.size(); i++){
+            myfile << list[i]<<endl;
+        }
+        myfile.close();
+    }
+    else cout << "Unable to open file";
+}
+
+string
+Test::NumberToString(double number){
+    return to_string(number);
+}
+

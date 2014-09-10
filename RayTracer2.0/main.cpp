@@ -4,10 +4,11 @@
 #include "FresnelJackson.h"
 #include <vector>
 #include "MultipleObjects.h"
+#include "MATLABPrint.h"
 
 using namespace std;
 
-void run(double runs,int lscs, int start, int end, bool debug){
+void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
@@ -20,6 +21,7 @@ void run(double runs,int lscs, int start, int end, bool debug){
     Test* print = new Test; //Used to output debug lines
     MultipleObjects* objects = new MultipleObjects; //Facilitates multiple LSCs
     
+    MATLABPrint* matlab = new MATLABPrint;
     
     //World dimensions and settings
     Point3D A (0,0,0);
@@ -80,6 +82,8 @@ void run(double runs,int lscs, int start, int end, bool debug){
     //Stores LSC
     if(lscs>=1)objects->StoreMaterial(lsc);
     if(lscs==2) objects->StoreMaterial(lsc2);
+    
+    if(matlabprint) matlab->PrintLSCs(objects);
     
     double hits = 0;
     double photons = 0;
@@ -195,5 +199,5 @@ void run(double runs,int lscs, int start, int end, bool debug){
 }
 
 int main(int argc, const char * argv[]){    
-    run(100000,2,350,520,0);
+    run(100,2,350,520,0,0);
 }

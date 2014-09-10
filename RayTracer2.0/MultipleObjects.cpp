@@ -59,3 +59,8 @@ MultipleObjects::ResetPhotonsInside(){
         ObjectList[i]->SetPhotonInside(0);
     }
 }
+
+vector<Material*>
+MultipleObjects::GetObjectList(){
+    return ObjectList;
+}

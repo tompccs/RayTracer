@@ -168,3 +168,8 @@ Sheet::SignCompare(double A, double B, double C){
     if((A>=0 && B>=0 && C>=0) || (A<0 && B<0 && C<0)) return 1;
     return 0;
 }
+
+Point3D
+Sheet::Centre(){
+    return A + ((B-A)/2) + ((C-A)/2);
+}
