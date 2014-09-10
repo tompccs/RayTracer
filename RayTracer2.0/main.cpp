@@ -23,6 +23,8 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
     MATLABPrint* matlab = new MATLABPrint;
     
+    vector<vector<Point3D>> paths;
+    
     //World dimensions and settings
     Point3D A (0,0,0);
     Point3D B (20,0,0);
@@ -89,6 +91,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     double photons = 0;
     
     vector<double> output;
+    vector<Point3D> dyeabs;
     
     //Loop for each wavelength. Set wavelength Range here.
     
@@ -101,6 +104,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
         
         for(int i = 0; i<runs; i++){
             
+            vector<Point3D> photonpath;
             
             //New photon settings
             Photon* photon = new Photon;
@@ -137,6 +141,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
                     
                     else{
                         inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug); //Else, entrance reflect/refract event.
+                        if(matlabprint && objects->PhotonInMaterial()) photonpath.push_back(photon->GetPosition());
                     }
                 }
                 
@@ -144,8 +149,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
                 else while(objects->PhotonInMaterial()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
                     
                     if(photon->GetAbsorbLength()<=objects->CurrentMaterial()->GetInterfaceDistance(photon)){ //If absorption = next event.
-                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug); //Absorption event.
-                        
+                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
                     }
                     
                     else{ //If boundary is next event.
@@ -162,6 +166,8 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
                         }
                         else{
                             inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects); //Otherwise exit reflect/refract event.
+                            if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
+
                         }
                     }
                 }
@@ -173,6 +179,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
             
             world->SetPhotonInside(0);
             objects->ResetPhotonsInside();
+            paths.push_back(photonpath);
             delete photon;
             
         }
@@ -194,10 +201,13 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     finalresult.push_back(result);
     print->PrintVectorFile(finalresult,"efficiency.txt");
     
+    if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
     cout<<"Total Optical Efficiency: "<<result<<"%"<<endl;
+    
+    if(matlabprint) matlab->PhotonPathPrint(paths);
     
 }
 
 int main(int argc, const char * argv[]){    
-    run(100,2,350,520,0,0);
+    run(10,2,450,450,0,1);
 }

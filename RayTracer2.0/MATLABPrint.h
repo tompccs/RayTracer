@@ -23,6 +23,9 @@ public:
     string CentrePoint(Material* box);
     string Size(Material* box);
     string PositionPrint(Photon* photon);
+    void DyeAbsorbPrint(vector<Point3D> points);
+    void PhotonPathPrint(vector<vector<Point3D>>& paths);
+
 };
 
 #endif

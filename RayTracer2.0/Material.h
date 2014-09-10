@@ -30,7 +30,7 @@ public:
     
     void SetInitialAbsorbLength(Photon* P); //Gets absorption length from photon wavelength and material concentration.
     
-    void AbsorptionEvent(Photon* P, bool& debug); //Absorption event.
+    void AbsorptionEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath); //Absorption event.
     
     void SetPhotonInside(bool inside);
     
@@ -41,6 +41,7 @@ public:
     void SetMaterialNumber(long n);
     
     long& GetMaterialNumber();
+    
     
     };
 

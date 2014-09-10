@@ -52,6 +52,58 @@ MATLABPrint::PrintLSCs(MultipleObjects* mo){
 string
 MATLABPrint::PositionPrint(Photon *photon){
     ostringstream buffer;
-    buffer<<"["<<photon->GetMomentum().x<<","<<photon->GetPosition().y<<","<<photon->GetPosition().z<<"]";
+    buffer<<"["<<photon->GetPosition().x<<","<<photon->GetPosition().y<<","<<photon->GetPosition().z<<"]";
     return buffer.str();
+}
+
+void
+MATLABPrint::DyeAbsorbPrint(vector<Point3D> points){
+    vector<double> x;
+    vector<double> y;
+    vector<double> z;
+    
+    for(int i=0; i<points.size(); i++){
+        if(points[i].x >0 && points[i].y >0 && points[i].z >0){
+        x.push_back(points[i].x);
+        y.push_back(points[i].y);
+        z.push_back(points[i].z);
+        }
+    }
+    
+    print->PrintVectorFile(x, "dyeabsorb_x.txt");
+    print->PrintVectorFile(y, "dyeabsorb_y.txt");
+    print->PrintVectorFile(z, "dyeabsorb_z.txt");
+
+}
+
+void
+MATLABPrint::PhotonPathPrint(vector<vector<Point3D>>& paths){
+    for(int i=0; i<paths.size(); i++){
+        vector<double> x;
+        vector<double> y;
+        vector<double> z;
+        
+        for(int j=0; i<paths[j].size(); j++){
+            if(paths[i][j].x >0 && paths[i][j].y >0 && paths[i][j].z >0){
+                x.push_back(paths[i][j].x);
+                y.push_back(paths[i][j].y);
+                z.push_back(paths[i][j].z);
+            }
+        }
+        
+        ostringstream bufferx;
+        bufferx<<"photon_"<<i+1<<"_x"<<".txt";
+        string filenamex = bufferx.str();
+        print->PrintVectorFile(x, filenamex);
+        
+        ostringstream buffery;
+        buffery<<"photon_"<<i+1<<"_y"<<".txt";
+        string filenamey = buffery.str();
+        print->PrintVectorFile(y, filenamey);
+        
+        ostringstream bufferz;
+        bufferz<<"photon_"<<i+1<<"_z"<<".txt";
+        string filenamez = bufferz.str();
+        print->PrintVectorFile(z, filenamez);
+    }
 }

@@ -42,20 +42,27 @@ Material::SetInitialAbsorbLength(Photon* P){
 }
 
 void
-Material::AbsorptionEvent(Photon *P, bool& debug){
+Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
     P->Addabsorption();
     if(debug){
         cout<<"Photon absorbed"<<endl;
     }
     
+    if(matlabprint){
+        Point3D newlocation = P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength();
+        dyeabs.push_back(newlocation);
+        photonpath.push_back(newlocation);
+        
+    }
     
     if(Events.QuantumYieldCheck(P->GetWavelength())){
-        Vector3D a;
-        P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
-        P->SetMomentum(a.GetRandomUnitVector());
-        P->SetWavelength(Events.GetEmissionWavelength());
-        P->SetRandomPolarisation();
-        SetInitialAbsorbLength(P);
+            Vector3D a;
+            P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
+            P->SetMomentum(a.GetRandomUnitVector());
+            P->SetWavelength(Events.GetEmissionWavelength());
+            P->SetRandomPolarisation();
+            SetInitialAbsorbLength(P);
+        
         if(debug){
             cout<<"and reemitted."<<endl;
             print.PhotonPrint(P);
