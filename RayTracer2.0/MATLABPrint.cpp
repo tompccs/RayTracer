@@ -1,6 +1,6 @@
 #include "MATLABPrint.h"
 
-string
+string //returns string '[x,y,z]' for centre point of box
 MATLABPrint::CentrePoint(Material* box){
     Point3D centre;
     
@@ -15,7 +15,7 @@ MATLABPrint::CentrePoint(Material* box){
 
 }
 
-string
+string //returns string '[x,y,z]' for size of box
 MATLABPrint::Size(Material* box){
     Vector3D size;
     
@@ -31,7 +31,7 @@ MATLABPrint::Size(Material* box){
     return buffer.str();
 }
 
-void
+void //prints file with centrepoints & sizes
 MATLABPrint::PrintLSCs(MultipleObjects* mo){
     
     vector<Material*> mats = mo->GetObjectList();
@@ -49,14 +49,14 @@ MATLABPrint::PrintLSCs(MultipleObjects* mo){
     
 }
 
-string
+string //returns string position of photon
 MATLABPrint::PositionPrint(Photon *photon){
     ostringstream buffer;
     buffer<<"["<<photon->GetPosition().x<<","<<photon->GetPosition().y<<","<<photon->GetPosition().z<<"]";
     return buffer.str();
 }
 
-void
+void //stores and prints dye absorb positions
 MATLABPrint::DyeAbsorbPrint(vector<Point3D> points){
     vector<double> x;
     vector<double> y;
@@ -76,7 +76,7 @@ MATLABPrint::DyeAbsorbPrint(vector<Point3D> points){
 
 }
 
-void
+void //prints path of photon into files
 MATLABPrint::PhotonPathPrint(vector<vector<Point3D>>& paths){
     for(int i=0; i<paths.size(); i++){
         vector<double> x;

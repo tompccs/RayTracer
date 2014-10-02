@@ -1,6 +1,6 @@
 #include "FresnelJackson.h"
 
-void
+void //calculates new momentum and vector
 FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2){
     
     double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
@@ -110,7 +110,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
     }
 }
 
-void
+void //entrance event
 FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     
     Vector3D N = (lsc->GetInterfaceSheet(photon).GetNormal());
@@ -140,7 +140,7 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     }
 }
 
-void
+void //exit event
 FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects){
     Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
     double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
@@ -172,7 +172,7 @@ FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bo
     }
 }
 
-Vector3D
+Vector3D //projects a vector onto a plane
 FresnelJackson::ProjectionOnPlane(Vector3D plane_normal, Vector3D vector){
     plane_normal.Normalise();
     return (vector - Dot(vector,plane_normal)*(plane_normal));

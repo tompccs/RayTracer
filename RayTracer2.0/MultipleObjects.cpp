@@ -1,23 +1,23 @@
 #include "MultipleObjects.h"
 
 void
-MultipleObjects::StoreMaterial(Material* object){
+MultipleObjects::StoreMaterial(Material* object){ //stores a material
     object->SetMaterialNumber(ObjectList.size()+1);
     ObjectList.push_back(object);
     
 }
 
-void
+void //stores the world dimensions
 MultipleObjects::StoreWorld(Material *WORLD){
     world = WORLD;
 }
 
-void
+void //prints the size of the object
 MultipleObjects::PrintSize(){
     cout<<ObjectList.size()<<endl;
 }
 
-Material*&
+Material*& //returns the current material.
 MultipleObjects::CurrentMaterial(){
     for(int i = 0; i<ObjectList.size(); i++){
         if(ObjectList[i]->ReturnPhotonInside())
@@ -26,7 +26,7 @@ MultipleObjects::CurrentMaterial(){
     return world;
 }
 
-bool
+bool //returns whether the photon is currently inside a material
 MultipleObjects::PhotonInMaterial(){
     for(int i = 0; i<ObjectList.size(); i++){
         if(ObjectList[i]->ReturnPhotonInside())
@@ -35,7 +35,7 @@ MultipleObjects::PhotonInMaterial(){
     return 0;
 }
 
-double
+double //returns the distance to the next interface
 MultipleObjects::NextInterfaceDistance(Photon* photon){
     vector<double> distances;
     for(int i = 0; i<ObjectList.size(); i++){
@@ -44,7 +44,7 @@ MultipleObjects::NextInterfaceDistance(Photon* photon){
     return calc.GetVectorMin(distances);
 }
 
-Material*&
+Material*& //returns the interface of the next material
 MultipleObjects::NextInterfaceMaterial(Photon *photon){
     for(int i = 0; i<ObjectList.size(); i++){
         if(ObjectList[i]->GetInterfaceDistance(photon)==NextInterfaceDistance(photon) && ObjectList[i]->ReturnPhotonInside()==0)
@@ -53,14 +53,14 @@ MultipleObjects::NextInterfaceMaterial(Photon *photon){
     return world;
 }
 
-void
+void //resets photon inside to 0 for all
 MultipleObjects::ResetPhotonsInside(){
     for(int i = 0; i<ObjectList.size(); i++){
         ObjectList[i]->SetPhotonInside(0);
     }
 }
 
-vector<Material*>
+vector<Material*> //table of materials
 MultipleObjects::GetObjectList(){
     return ObjectList;
 }
