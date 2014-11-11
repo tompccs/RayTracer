@@ -14,7 +14,7 @@
 		<string>https://github.com/mportnoi/RayTracer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>RayTracer.xcodeproj/project.xcworkspace</string>
+	<string>RayTracer.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>84F24B6BC5BCF45D744E43C44D9F4AA2BAE33742</key>

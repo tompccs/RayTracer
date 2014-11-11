@@ -50,9 +50,9 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     lsc2->ReadData(1);
     
     Point3D D (1,1,1);
-    Point3D E (11,1,1);
-    Point3D F (1,11,1);
-    double h2 = 0.5;
+    Point3D E (6,1,1);
+    Point3D F (1,6,1);
+    double h2 = 0.4;
     
     Point3D J (1,1,2);
     Point3D K (11,1,2);
@@ -60,8 +60,8 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     double h3 = 0.5;
     
     Point3D G (1,1,9);
-    Point3D H (11,1,9);
-    Point3D I (1,11,9);
+    Point3D H (6,1,9);
+    Point3D I (1,6,9);
     
     Sheet* source = new Sheet;
     
@@ -74,7 +74,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     lsc2->Set(lscbase2,h3);
     
     lsc->SetRefractiveIndex(1.495);
-    lsc->SetConcentration(1e-5);
+    lsc->SetConcentration(1e-4);
     
     lsc2->SetRefractiveIndex(1.495);
     lsc2->SetConcentration(1e-5);
@@ -209,5 +209,5 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
 }
 
 int main(int argc, const char * argv[]){    
-    run(20,2,450,450,1,0);
+    run(5000,1,350,520,0,0);
 }
