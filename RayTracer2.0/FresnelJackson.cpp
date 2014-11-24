@@ -1,6 +1,6 @@
 #include "FresnelJackson.h"
 
-void //calculates new momentum and vector
+void //calculates new momentum  vector
 FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2){
     
     double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
