@@ -45,58 +45,59 @@ QYLoss(P.QYLoss)
 Photon::~Photon()
 {}
 
-void
+
+void //Sets Photon momentum vector
 Photon::SetMomentum(const Vector3D &M){
     Vector3D a = M;
     Momentum = a.Normalise();
 }
 
-void
+void //Sets Photon Position vector
 Photon::SetPosition(const Point3D &P){
     Position = P;
 }
 
-void
+void //SetPolarisation Vector
 Photon::SetPolarisation(const Vector3D &P){
     Polarisation = P;
 }
 
-void
+void //Set Wavelength
 Photon::SetWavelength(const double &W){
     Wavelength = W;
 }
 
-void
+void // Sets Absorption Length value
 Photon::SetAbsorblength(const double &P){
     AbsorbLength = P;
 }
 
-Vector3D&
+Vector3D& //Get Momentum Vector
 Photon::GetMomentum(){
     return Momentum;
 }
 
-Point3D&
+Point3D& //Get Position Vector
 Photon::GetPosition(){
     return Position;
 }
 
-Vector3D&
+Vector3D& //Get Polarisation Vector
 Photon::GetPolarisation(){
     return Polarisation;
 }
 
-double&
+double& //Get Wavelength
 Photon::GetWavelength(){
     return Wavelength;
 }
 
-double&
+double& //Get Aborption Length
 Photon::GetAbsorbLength(){
     return AbsorbLength;
 }
 
-void
+void //Set a random polarisation vectr
 Photon::SetRandomPolarisation(){
     
     Vector3D orthogonal;
@@ -128,57 +129,57 @@ Photon::SetRandomPolarisation(){
     SetPolarisation(out_vec);
 }
 
-bool&
+bool& //Check photon is alive
 Photon::PhotonAliveCheck(){
     return Alive;
 }
 
-void
+void //Kill Photon
 Photon::PhotonKill(){
     Alive = 0;
 }
 
-void
+void //Set Photon is inside?
 Photon::SetInside(){
     Inside = 1;
 }
 
-void
+void //Add photon absorption
 Photon::Addabsorption(){
     Absorptions++;
 }
 
-bool&
+bool& //Return inside value
 Photon::GetInside(){
     return Inside;
 }
 
-int&
+int& //Get photon absorptions
 Photon::GetAbsorptions(){
     return Absorptions;
 }
 
-void
+void //Set photon leaving material
 Photon::SetExit(){
     Exit = 1;
 }
 
-bool&
+bool& //Return Exit bool
 Photon::GetExit(){
     return Exit;
 }
 
-void
+void //Set if photon has been killed by QY
 Photon::SetQYLoss(){
     QYLoss = 1;
 }
 
-bool&
+bool& //Get if photon has been killed by QY
 Photon::GetQYLoss(){
     return QYLoss;
 }
 
-void
+void //Progress photon by distance
 Photon::Progress(double& distance){
     Position = Position + Momentum*distance;
 }

@@ -1,5 +1,7 @@
 #include "Point2D.h"
 
+//Definitions of a Point.
+
 Origin2D_ Origin2D;
 
 Point2D::Point2D(){}

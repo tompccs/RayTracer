@@ -1,6 +1,6 @@
 #include "Test.h"
 
-void
+void //Prints Point
 Test::PrintPoint(const Point3D& point){
     cout<<"(";
     cout<<point.x;
@@ -12,7 +12,7 @@ Test::PrintPoint(const Point3D& point){
     cout<<endl;
 }
 
-void
+void //Prints Vector
 Test::PrintVector(const Vector3D& vector){
     cout<<"(";
     cout<<vector.x;
@@ -24,13 +24,13 @@ Test::PrintVector(const Vector3D& vector){
     cout<<endl;
 }
 
-void
+void //Prints True or False
 Test::PrintBool(const bool &b){
     if(b) cout<<"True."<<endl;
     else if(!b) cout<<"False."<<endl;
 }
 
-void
+void //Prints Coordinates of a sheet
 Test::PrintSheet(Sheet &sheet){
     PrintPoint(sheet.GetA());
     PrintPoint(sheet.GetB());
@@ -38,7 +38,7 @@ Test::PrintSheet(Sheet &sheet){
     
 }
 
-void
+void //Prints a file with a list of numbers
 Test::PrintVectorFile(vector<double> list, string filename){
     ofstream myfile (filename);
     if (myfile.is_open())
@@ -51,7 +51,7 @@ Test::PrintVectorFile(vector<double> list, string filename){
     else cout << "Unable to open file";
 }
 
-void
+void // Prints Photon details
 Test::PhotonPrint(Photon *photon){
     cout<<"Photon has position: ";
     PrintPoint(photon->GetPosition());
@@ -65,7 +65,7 @@ Test::PhotonPrint(Photon *photon){
     cout<<endl;
 }
 
-void
+void //Prints a list of strings to a file
 Test::PrintTextVector(vector<string> list, string filename){
     ofstream myfile (filename);
     if (myfile.is_open())
@@ -78,7 +78,7 @@ Test::PrintTextVector(vector<string> list, string filename){
     else cout << "Unable to open file";
 }
 
-string
+string //Converts a number to a string
 Test::NumberToString(double number){
     return to_string(number);
 }

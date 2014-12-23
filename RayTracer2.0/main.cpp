@@ -209,5 +209,5 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
 }
 
 int main(int argc, const char * argv[]){    
-    run(10,1,450,450,1,0);
+    run(1000,1,350,520,0,0);
 }

@@ -23,22 +23,22 @@ Box::Set(Sheet *sheet, const double &h){
     return (*this);
 }
 
-double
+double //Returns volume of box
 Box::GetVolume(){
     return GetBase().GetArea()*height;
 }
 
-double&
+double& //Returns Refractive Index of Box
 Box::GetRefractiveIndex(){
     return refractiveindex;
 }
 
-void
+void //Sets Refractive Index of Box
 Box::SetRefractiveIndex(const double &n){
     refractiveindex = n;
 }
 
-Box&
+Box& //Constructs box
 Box::SetSides(){
     Point3D A,B,C,D,E,F,G,H;
     A = base.GetA();
@@ -86,7 +86,7 @@ Box::GetBack(){
     return back;
 }
 
-bool
+bool //Checks if a point is in a box
 Box::PointinBox(Photon* photon){
     int intersections = 0;
     if(base.GetIntersectionTest(photon)){intersections++;}
@@ -99,7 +99,7 @@ Box::PointinBox(Photon* photon){
     return 0;
 }
 
-double
+double //Distance to exit
 Box::GetInterfaceDistance(Photon* photon){
     vector<double> distances;
     if(base.GetIntersectionTest(photon)) distances.push_back(base.IntersectionDistance(photon));
@@ -111,12 +111,12 @@ Box::GetInterfaceDistance(Photon* photon){
     return calc->GetVectorMin(distances);
 }
 
-Point3D
+Point3D //Point of interface
 Box::GetInterfacePoint(Photon *photon){
     return photon->GetPosition() + photon->GetMomentum()*GetInterfaceDistance(photon);
 }
 
-Sheet&
+Sheet& //Returns interface sheet
 Box::GetInterfaceSheet(Photon *photon){
     if(base.IntersectionDistance(photon)==GetInterfaceDistance(photon)) return base;
     if(top.IntersectionDistance(photon)==GetInterfaceDistance(photon)) return top;

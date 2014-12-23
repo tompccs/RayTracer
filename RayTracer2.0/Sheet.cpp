@@ -1,21 +1,22 @@
 #include "Sheet.h"
 
-Sheet::Sheet():
+Sheet::Sheet(): //Constructor
 A(),B(),C(),normal()
 {}
 
+//Constructor
 Sheet::Sheet(const Point3D& a, const Point3D& b, const Point3D& c):
 A(a),B(b),C(c),normal()
 {}
 
-Sheet::Sheet(const Sheet& sheet):
+Sheet::Sheet(const Sheet& sheet): //Constructor
 A(sheet.A),B(sheet.B),C(sheet.C),normal(sheet.normal)
 {}
 
-Sheet::~Sheet()
+Sheet::~Sheet() //Destructor
 {}
 
-Sheet&
+Sheet& //Set
 Sheet::Set(const Point3D &a, const Point3D &b, const Point3D &c){
     A = a;
     B = b;
@@ -23,11 +24,13 @@ Sheet::Set(const Point3D &a, const Point3D &b, const Point3D &c){
     return (*this);
 }
 
-Sheet&
+Sheet& //Return Sheet
 Sheet::Get(){
     return (*this);
 }
 
+
+//Sets
 void
 Sheet::SetA(const Point3D &a){
     A = a;
@@ -43,6 +46,7 @@ Sheet::SetC(const Point3D &c){
     A = c;
 }
 
+//Returns
 Point3D&
 Sheet::GetA(){
     return A;
@@ -63,6 +67,7 @@ Sheet::GetD(){
     return C + (B-A);
 }
 
+//Lengths of sides
 double
 Sheet::GetABLength(){
     return Magnitude(B-A);
@@ -73,11 +78,13 @@ Sheet::GetACLength(){
     return Magnitude(C-A);
 }
 
+//Area
 double
 Sheet::GetArea(){
     return GetABLength()*GetACLength();
 }
 
+//Get Normal vector
 Vector3D
 Sheet::GetNormal(){
     if(obtainednormal==0){
@@ -88,6 +95,7 @@ Sheet::GetNormal(){
     return normal;
 }
 
+//Checks if photon will intersect plane
 bool
 Sheet::PhotonPlaneCheck(Photon *photon){
     double a = GetNormal()*GetA();
@@ -102,7 +110,7 @@ Sheet::PhotonPlaneCheck(Photon *photon){
     }
 }
 
-Point3D
+Point3D //Returns point of intersection
 Sheet::IntersectionPoint(Photon *photon){
     double a = GetNormal()*GetA();
     double b = GetNormal()*photon->GetPosition();
@@ -111,7 +119,7 @@ Sheet::IntersectionPoint(Photon *photon){
     return (photon->GetPosition() + photon->GetMomentum()*t);
 }
 
-double
+double //Returns distance until intersection
 Sheet::IntersectionDistance(Photon *photon){
     double a = GetNormal()*GetA();
     double b = GetNormal()*photon->GetPosition();
@@ -120,7 +128,7 @@ Sheet::IntersectionDistance(Photon *photon){
     return t;
 }
 
-bool
+bool //Returns if a point on a plane, is on a sheet
 Sheet::PointonSheetTest(const Point3D &p){
     Vector3D AB = Cross(p-GetA(),p-GetB()).Normalise();
     Vector3D BD = Cross(p-GetB(),p-GetD()).Normalise();
@@ -132,7 +140,7 @@ Sheet::PointonSheetTest(const Point3D &p){
 
 }
 
-bool
+bool //Checks if photon will intersect sheet
 Sheet::GetIntersectionTest(Photon *photon){
     if(PhotonPlaneCheck(photon)&PointSheetCheck(LinePlaneIntersectPoint(photon))) return 1;
     return 0;
@@ -145,12 +153,12 @@ Sheet::operator==(const Sheet &s){
 }
 
 
-Point3D
+Point3D //Returns point of intersection
 Sheet::LinePlaneIntersectPoint(Photon *photon){
     return photon->GetPosition() + (photon->GetMomentum() * IntersectionDistance(photon));
 }
 
-bool
+bool //Checks if a point is on a sheet
 Sheet::PointSheetCheck(Point3D point){
     Vector3D AB = Cross(point-GetA(),point-GetB());
     Vector3D BD = Cross(point-GetB(),point-GetD());
@@ -163,13 +171,13 @@ Sheet::PointSheetCheck(Point3D point){
     return 0;
 }
 
-bool
+bool //Checks if 3 numbers are all positive
 Sheet::SignCompare(double A, double B, double C){
     if((A>=0 && B>=0 && C>=0) || (A<0 && B<0 && C<0)) return 1;
     return 0;
 }
 
-Point3D
+Point3D //Returns centre point of a sheet
 Sheet::Centre(){
     return A + ((B-A)/2) + ((C-A)/2);
 }

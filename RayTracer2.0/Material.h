@@ -26,11 +26,11 @@ public:
     
     void SetConcentration(double c);
     
-    void ReadData(bool evenspaced); //Reads Absorption/Emission Data for material from files.
+    void ReadData(bool evenspaced);
     
-    void SetInitialAbsorbLength(Photon* P); //Gets absorption length from photon wavelength and material concentration.
+    void SetInitialAbsorbLength(Photon* P);
     
-    void AbsorptionEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath); //Absorption event.
+    void AbsorptionEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath);
     
     void SetPhotonInside(bool inside);
     

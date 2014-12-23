@@ -21,55 +21,31 @@ class Photon{
     
 public:
     Photon();
-    
     Photon(const Vector3D& M, const Point3D& P);
-    
     Photon(const Photon& P);
-    
     ~Photon();
     
     void SetMomentum(const Vector3D& M);
-    
     void SetPosition(const Point3D& P);
-    
     void SetPolarisation(const Vector3D& P);
-    
     void SetWavelength(const double& W);
-    
     void SetAbsorblength(const double& P);
-    
     Vector3D& GetMomentum();
-    
     Point3D& GetPosition();
-    
     Vector3D& GetPolarisation();
-    
     double& GetWavelength();
-    
     double& GetAbsorbLength();
-    
     void SetRandomPolarisation();
-    
     bool& PhotonAliveCheck();
-    
     void PhotonKill();
-    
     void SetInside();
-    
     void Addabsorption();
-    
     bool& GetInside();
-    
     int& GetAbsorptions();
-    
     void SetExit();
-    
     bool& GetExit();
-    
     void SetQYLoss();
-    
     bool& GetQYLoss();
-    
     void Progress(double& distance);
 };
 

@@ -1,6 +1,6 @@
 #include "Process.h"
 
-void
+void //Reads data from files
 Process::ReadData(bool evenspaced){
     if(!evenspaced){
         Wavelengthvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_lambda.txt");
@@ -24,14 +24,14 @@ Process::ReadData(bool evenspaced){
     }
 }
 
-double
+double //Gets extinction rates
 Process::GetExtinctionRate(double &wavelength){
     double i = data.GetAfromB(wavelength, ExtinctionRateValues, Wavelengths);
    //cout<<i<<endl;
     return i;
 }
 
-double
+double //gets path lengths
 Process::GetPathLength(double &wavelength, double &concentration){
     double beta = concentration*GetExtinctionRate(wavelength);
     //cout<<beta<<endl;
@@ -41,12 +41,12 @@ Process::GetPathLength(double &wavelength, double &concentration){
     return 0;
 }
 
-double
+double //gets wavelength of emission
 Process::GetEmissionWavelength(){
     return data.GetAfromB(calc.Random(1), Wavelengthvalues, ProbabilityValues);
 }
 
-bool
+bool //checks if reemitted
 Process::QuantumYieldCheck(double &Wavelength){
  //   int i = data.findNearestNeighbourIndex(Wavelength, Wavelengthvalues);
     if(calc.Random(1)<=0.8) return 1;

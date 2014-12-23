@@ -1,6 +1,8 @@
 #include "Functions.h"
 
-double
+
+
+double //Returns minimum value from a vector of numbers
 Functions::GetVectorMin(vector<double> a){
     double min = DBL_MAX;
     for(int i=0; i<a.size(); i++){
@@ -10,7 +12,7 @@ Functions::GetVectorMin(vector<double> a){
     return min;
 }
 
-double
+double //Generates random number between 0 and a
 Functions::Random(double a){
     return (a * ((double) rand() / (RAND_MAX)));
 }

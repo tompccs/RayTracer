@@ -1,5 +1,7 @@
 #include "Vector2D.h"
 
+//Definitions of a Vector
+
 Vector2D::Vector2D(){}
 
 Vector2D::Vector2D(double r, double s){

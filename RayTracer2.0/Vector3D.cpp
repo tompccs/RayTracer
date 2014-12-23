@@ -1,5 +1,7 @@
 #include "Vector3D.h"
 
+//Definitions of a vector
+
 Vector3D::Vector3D(){}
 
 Vector3D::Vector3D(double r, double s, double t)

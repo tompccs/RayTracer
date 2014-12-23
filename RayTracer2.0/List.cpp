@@ -32,7 +32,7 @@ List::auconvert(vector <double> &input){
     return out;
 }
 
-vector <double> //Input Old X vector Y vector, and new X vector, returns Y vector.
+vector <double> //Input Old X vector Y vector, and new X vector, returns Y vector. Linear interpolation
 List::interp1(vector< double > &x, vector< double > &y, vector< double > &x_new){
     vector< double > y_new;
     y_new.reserve( x_new.size() );
@@ -68,7 +68,7 @@ List::interp1(vector< double > &x, vector< double > &y, vector< double > &x_new)
     return y_new;
 }
 
-int
+int //Gives nearest Neigbhour Index value
 List::findNearestNeighbourIndex(double value, vector<double> &x){
     double dist = DBL_MAX;
     int idx = -1;
@@ -83,7 +83,7 @@ List::findNearestNeighbourIndex(double value, vector<double> &x){
     return idx;
 }
 
-double
+double // Gives first index lower
 List::findFirstIndexLower(double &value, vector<double> &ydata){
     for(int i=0; i<ydata.size(); i++){
         if(ydata[i]>=value){
@@ -93,7 +93,7 @@ List::findFirstIndexLower(double &value, vector<double> &ydata){
     return ydata.size()-1;
 }
 
-double
+double // Looks up value
 List::GetAfromB(double yvalue, vector<double> &xdata, vector<double> &ydata){
     double indexlower = findFirstIndexLower(yvalue, ydata);
     double dx = xdata[indexlower+1]-xdata[indexlower];
@@ -101,7 +101,7 @@ List::GetAfromB(double yvalue, vector<double> &xdata, vector<double> &ydata){
     return xdata[indexlower] + (factor * dx);
 }
 
-vector<double>
+vector<double> //Resizes Xcalue
 List::newxdata(vector<double> &xdata){
     vector<double> data;
     double max = xdata.size()-1;

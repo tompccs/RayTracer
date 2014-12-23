@@ -1,5 +1,7 @@
 #include "Point3D.h"
 
+//Definitions of a point
+
 Point3D::Point3D()
 {}
 
