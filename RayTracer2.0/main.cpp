@@ -5,6 +5,8 @@
 #include <vector>
 #include "MultipleObjects.h"
 #include "MATLABPrint.h"
+#include "Spherical3D.h"
+
 
 using namespace std;
 
@@ -208,6 +210,14 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
 }
 
+void test(){
+    Vector3D test1(1,1,1);
+    Spherical3D* test2 = new Spherical3D(test1);
+    
+    test2->Print();
+}
+
 int main(int argc, const char * argv[]){    
-    run(1000,1,350,520,0,0);
+    //run(1000,1,350,520,0,0);
+    test();
 }
