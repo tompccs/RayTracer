@@ -6,6 +6,7 @@
 #include "MultipleObjects.h"
 #include "MATLABPrint.h"
 #include "Spherical3D.h"
+#include "matrix.h"
 
 
 using namespace std;
@@ -217,7 +218,23 @@ void test(){
     test2->Print();
 }
 
+void matrixtest(){
+    matrix<double> mat1(3, 3, 3);
+
+    mat1(0,2)=0;
+    
+    matrix<double> mat3 = mat1.transpose();
+    
+    for (int i=0; i<mat3.get_rows(); i++) {
+        for (int j=0; j<mat3.get_cols(); j++) {
+            cout << mat3(i,j) << ", ";
+        }
+        cout << endl;
+    }
+}
+
 int main(int argc, const char * argv[]){    
     //run(1000,1,350,520,0,0);
-    test();
+    //test();
+    matrixtest();
 }

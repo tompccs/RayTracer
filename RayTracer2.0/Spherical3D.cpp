@@ -12,7 +12,7 @@ Spherical3D::Spherical3D(Vector3D& cartesian){
     
     r = sqrt(cartesian.x*cartesian.x + cartesian.y*cartesian.y + cartesian.z*cartesian.z);
     
-    theta = acos(cartesian.y/this->r);
+    theta = acos(cartesian.y/r);
     
     phi = atan2(cartesian.y, cartesian.x);
     

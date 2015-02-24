@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C24701A84F0FF0074FFD6 /* matrix.cpp */; };
 		C60C844A1990171C00F302FF /* List.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C84481990171C00F302FF /* List.cpp */; };
 		C62CBCB41990D4FD004FE771 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB21990D4FD004FE771 /* Material.cpp */; };
 		C62CBCB71990D512004FE771 /* Process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB51990D512004FE771 /* Process.cpp */; };
@@ -21,6 +22,7 @@
 		C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C636ED4819B73882006AA281 /* MultipleObjects.cpp */; };
 		C6839AAD19BDC61E003F43BD /* MATLABPrint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6839AAB19BDC61E003F43BD /* MATLABPrint.cpp */; };
 		C6894CBC1A83D459001430D7 /* Spherical3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6894CBA1A83D459001430D7 /* Spherical3D.cpp */; };
+		C6A1AD7F1A9B6C00005288C7 /* anisotropic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */; };
 		C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23F9198BBBE500A64442 /* Functions.cpp */; };
 		C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FC198BBFD000A64442 /* Sheet.cpp */; };
 		C6BE2401198C014200A64442 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FF198C014200A64442 /* Box.cpp */; };
@@ -41,6 +43,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C60C24701A84F0FF0074FFD6 /* matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = matrix.cpp; sourceTree = "<group>"; };
+		C60C24711A84F0FF0074FFD6 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		C60C8441199016CD00F302FF /* absoption_lambda.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = absoption_lambda.txt; sourceTree = "<group>"; };
 		C60C8442199016CD00F302FF /* Absorption-Emission Data.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Absorption-Emission Data.txt"; sourceTree = "<group>"; };
 		C60C8443199016CD00F302FF /* absorption_extinctionrate.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = absorption_extinctionrate.txt; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 		C6839AAC19BDC61E003F43BD /* MATLABPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MATLABPrint.h; sourceTree = "<group>"; };
 		C6894CBA1A83D459001430D7 /* Spherical3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spherical3D.cpp; sourceTree = "<group>"; };
 		C6894CBB1A83D459001430D7 /* Spherical3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spherical3D.h; sourceTree = "<group>"; };
+		C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = anisotropic.cpp; sourceTree = "<group>"; };
+		C6A1AD7E1A9B6C00005288C7 /* anisotropic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = anisotropic.h; sourceTree = "<group>"; };
 		C6BE23F9198BBBE500A64442 /* Functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cpp; sourceTree = "<group>"; };
 		C6BE23FA198BBBE500A64442 /* Functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Functions.h; sourceTree = "<group>"; };
 		C6BE23FC198BBFD000A64442 /* Sheet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sheet.cpp; sourceTree = "<group>"; };
@@ -141,6 +147,9 @@
 				C632C878198B7C19006430D8 /* Vector2D.cpp */,
 				C632C87B198B82AC006430D8 /* Point2D.cpp */,
 				C632C87E198B85C4006430D8 /* Point3D.cpp */,
+				C60C24701A84F0FF0074FFD6 /* matrix.cpp */,
+				C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */,
+				C6A1AD7E1A9B6C00005288C7 /* anisotropic.h */,
 				C632C881198B85EE006430D8 /* Vector3D.cpp */,
 				C6894CBA1A83D459001430D7 /* Spherical3D.cpp */,
 				C6BE23F9198BBBE500A64442 /* Functions.cpp */,
@@ -148,6 +157,7 @@
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
 				C6894CBB1A83D459001430D7 /* Spherical3D.h */,
+				C60C24711A84F0FF0074FFD6 /* matrix.h */,
 				C6839AAC19BDC61E003F43BD /* MATLABPrint.h */,
 				C636ED4919B73882006AA281 /* MultipleObjects.h */,
 				C6DD74C019ACD3B2009D8EAA /* FresnelJackson.h */,
@@ -228,11 +238,13 @@
 				C632C886198B8E00006430D8 /* Test.cpp in Sources */,
 				C6DD74C119ACD3B2009D8EAA /* FresnelJackson.cpp in Sources */,
 				C632C883198B85EE006430D8 /* Vector3D.cpp in Sources */,
+				C6A1AD7F1A9B6C00005288C7 /* anisotropic.cpp in Sources */,
 				C632C87D198B82AC006430D8 /* Point2D.cpp in Sources */,
 				C6894CBC1A83D459001430D7 /* Spherical3D.cpp in Sources */,
 				C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */,
 				C60C844A1990171C00F302FF /* List.cpp in Sources */,
 				C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */,
+				C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */,
 				C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */,
 				C6839AAD19BDC61E003F43BD /* MATLABPrint.cpp in Sources */,
 				C6BE2401198C014200A64442 /* Box.cpp in Sources */,

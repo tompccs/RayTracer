@@ -19,7 +19,6 @@ public:
     Spherical3D& Get();
     void Print();
     
-    
 };
 
 #endif
