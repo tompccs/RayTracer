@@ -6,7 +6,7 @@
 #include "MultipleObjects.h"
 #include "MATLABPrint.h"
 #include "Spherical3D.h"
-#include "matrix.h"
+#include "anisotropic.h"
 
 
 using namespace std;
@@ -212,29 +212,25 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
 }
 
 void test(){
-    Vector3D test1(1,1,1);
+    Vector3D test1(0,1,0);
     Spherical3D* test2 = new Spherical3D(test1);
     
     test2->Print();
 }
 
 void matrixtest(){
-    matrix<double> mat1(3, 3, 3);
-
-    mat1(0,2)=0;
+    anisotropic vector;
+    matrix<double> matrix = vector.genvector();
     
-    matrix<double> mat3 = mat1.transpose();
-    
-    for (int i=0; i<mat3.get_rows(); i++) {
-        for (int j=0; j<mat3.get_cols(); j++) {
-            cout << mat3(i,j) << ", ";
-        }
-        cout << endl;
+    for(int i=0; i<100; i++){
+        vector.pointlookup(matrix).Print();
     }
+    
+    
 }
 
 int main(int argc, const char * argv[]){    
-    //run(1000,1,350,520,0,0);
+    //run(10000,1,350,520,0,0);
     //test();
-    matrixtest();
+    //matrixtest();
 }

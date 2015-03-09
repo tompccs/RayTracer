@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <iostream>
 
 
 using namespace std;
@@ -48,6 +49,8 @@ public:
     // Access the row and column sizes
     unsigned get_rows() const;
     unsigned get_cols() const;
+    
+    unsigned Print();
     
 };
 

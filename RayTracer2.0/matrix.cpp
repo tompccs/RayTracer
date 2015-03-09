@@ -260,4 +260,17 @@ unsigned matrix<T>::get_cols() const {
     return this->cols;
 }
 
+template<typename T>
+unsigned matrix<T>::Print(){
+    for (int i=0; i<this->get_rows(); i++) {
+        for (int j=0; j<this->get_cols(); j++) {
+            cout << this->mat[i][j] << ", ";
+        }
+        cout << endl;
+    }
+    
+    cout<<endl;
+    return 0;
+}
+
 #endif
