@@ -93,8 +93,27 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     double hits = 0;
     double photons = 0;
     
+    //Lists storing output files
+    
     vector<double> output;
     vector<Point3D> dyeabs;
+    
+    vector<double> inside;
+    
+    vector<double> d_zero;
+    vector<double> d_one;
+    vector<double> d_two;
+    vector<double> d_three;
+    vector<double> d_four;
+    vector<double> d_five;
+    vector<double> d_morethanfive;
+    
+    vector<double> QYLossData;
+    vector<double> ExitData;
+    
+    vector<double> Reflected;
+    vector<double> NotAbsorbedInside;
+    vector<double> InsideAbsorbedExit;
     
     //Loop for each wavelength. Set wavelength Range here.
     
@@ -103,11 +122,27 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
         double thisphotons = 0;
         double thishits = 0;
         
+        double thisinside = 0;
+        double QYLoss = 0;
+        double Exit = 0;
+        double zero = 0;
+        double one = 0;
+        double two = 0;
+        double three = 0;
+        double four = 0;
+        double five = 0;
+        double morethanfive = 0;
+        double reflected = 0;
+        double notabsorbedinside = 0;
+        double insideabsorbedexit = 0;
+
+        
         //Loop for individual wavelength.
         
         for(int i = 0; i<runs; i++){
             
             vector<Point3D> photonpath;
+            
             
             //New photon settings
             Photon* photon = new Photon;
@@ -178,6 +213,20 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
             
             //Counters
             
+            if(photon->GetInside()) thisinside++;
+            if(photon->GetAbsorptions()==0) zero++;
+            if(photon->GetAbsorptions()==1) one++;
+            if(photon->GetAbsorptions()==2) two++;
+            if(photon->GetAbsorptions()==3) three++;
+            if(photon->GetAbsorptions()==4) four++;
+            if(photon->GetAbsorptions()==5) five++;
+            if(photon->GetAbsorptions()>5) morethanfive++;
+            if(photon->GetQYLoss()==1) QYLoss++;
+            if(photon->GetExit()==1) Exit++;
+            if(!photon->GetInside()) reflected++;
+            if(photon->GetAbsorptions()==0 && photon->GetInside()) notabsorbedinside++;
+            if(photon->GetInside()&&photon->GetAbsorptions()!=0&&photon->GetExit()) insideabsorbedexit++;
+            
             //Deletes photon.
             
             world->SetPhotonInside(0);
@@ -190,12 +239,42 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
         //Adds value for individual wavelengths to vector.
         
         output.push_back(100*thishits/thisphotons);
+  
+        inside.push_back(100*thisinside/thisphotons);
+        d_zero.push_back(100*zero/thisphotons);
+        d_one.push_back(100*one/thisphotons);
+        d_two.push_back(100*two/thisphotons);
+        d_three.push_back(100*three/thisphotons);
+        d_four.push_back(100*four/thisphotons);
+        d_five.push_back(100*five/thisphotons);
+        d_morethanfive.push_back(100*morethanfive/thisphotons);
+        QYLossData.push_back(100*QYLoss/thisphotons);
+        ExitData.push_back(100*Exit/thisphotons);
+        Reflected.push_back(100*reflected/thisphotons);
+        NotAbsorbedInside.push_back(100*notabsorbedinside/thisphotons);
+        InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
+
         
     }
     
     //Prints vectors to files for individual wavelengths.
     
     print->PrintVectorFile(output, "output.txt");
+    
+    print->PrintVectorFile(inside, "inside.txt");
+    print->PrintVectorFile(d_zero, "0.txt");
+    print->PrintVectorFile(d_one, "1.txt");
+    print->PrintVectorFile(d_two, "2.txt");
+    print->PrintVectorFile(d_three, "3.txt");
+    print->PrintVectorFile(d_four, "4.txt");
+    print->PrintVectorFile(d_five, "5.txt");
+    print->PrintVectorFile(d_morethanfive, "morethan5.txt");
+    print->PrintVectorFile(QYLossData, "qyloss.txt");
+    print->PrintVectorFile(ExitData, "exit.txt");
+    print->PrintVectorFile(Reflected, "reflected.txt");
+    print->PrintVectorFile(NotAbsorbedInside, "nai.txt");
+    print->PrintVectorFile(InsideAbsorbedExit, "iae.txt");
+
     
     //Calculates total efficiency and prints as 'result'
     
@@ -230,7 +309,7 @@ void matrixtest(){
 }
 
 int main(int argc, const char * argv[]){    
-    //run(10000,1,350,520,0,0);
+    run(10000,1,350,520,0,0);
     //test();
     //matrixtest();
 }
