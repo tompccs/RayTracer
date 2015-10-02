@@ -29,7 +29,6 @@ Sheet::Get(){
     return (*this);
 }
 
-
 //Sets
 void
 Sheet::SetA(const Point3D &a){
