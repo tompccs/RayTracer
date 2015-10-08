@@ -7,6 +7,7 @@
 #include "MATLABPrint.h"
 #include "Spherical3D.h"
 #include "anisotropic.h"
+#include "ellipse.hpp"
 
 
 using namespace std;
@@ -17,7 +18,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
     //Creates environment
     
-    Material* world = new Material; //Creates new world box.
+    Material* world = new Material; //Creates new world box.    
     
     FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
     Functions* calc = new Functions; //Used for random number generation
@@ -291,25 +292,28 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
 }
 
 void test(){
-    Vector3D test1(0,1,0);
-    Spherical3D* test2 = new Spherical3D(test1);
+    Point3D centre(0,0,0);
+    ellipse test(centre,3,2);
+    Point3D out(1.6641,1.6641,0);
+    if(test.pointcheck(out)){cout<<"Test is true."<<endl;} else{cout<<"Fail."<<endl;};
     
-    test2->Print();
-}
-
-void matrixtest(){
-    anisotropic vector;
-    matrix<double> matrix = vector.genvector();
+    Photon testphoton;
+    testphoton.SetPosition(Point3D(-2.9,-1,0));
+    testphoton.SetMomentum(Point3D(0,10,0));
     
-    for(int i=0; i<100; i++){
-        vector.pointlookup(matrix).Print();
+    if(test.ellipselineintersectcheck(testphoton)){
+        cout<<"Intersection"<<endl;
     }
+    else{
+        cout<<"No Intersection"<<endl;
+    };
+
     
     
 }
 
-int main(int argc, const char * argv[]){    
-    run(1,1,350,520,0,0);
-    //test();
+int main(int argc, const char * argv[]){
+    //run(1,1,350,520,0,0);
+    test();
     //matrixtest();
 }
