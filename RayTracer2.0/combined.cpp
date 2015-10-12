@@ -21,3 +21,13 @@ Point3D
 combined::GetPoint(){
     return point;
 }
+
+void
+combined::SetPoint2(Point3D set){
+    point2 = set;
+}
+
+Point3D
+combined::GetPoint2(){
+    return point2;
+}

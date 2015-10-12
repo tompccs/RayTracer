@@ -18,8 +18,9 @@ public:
     ellipse(Point3D centre, double a, double b);
     bool pointcheck(Point3D& point);
     bool ellipselineintersectcheck(Photon& photon);
-    Point3D firstintersectpoint(Photon& photon);
-    combined
+    combined photonellipseintersect(Photon& photon);
+    Point3D nextpoint(Photon& photon, combined& checker);
+    Point3D nextpoint3D(Photon& photon);
     
 };
 

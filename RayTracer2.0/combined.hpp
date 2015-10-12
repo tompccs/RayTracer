@@ -7,6 +7,7 @@
 class combined{
     bool check;
     Point3D point;
+    Point3D point2;
     
     
 public:
@@ -18,6 +19,8 @@ public:
     bool GetCheck();
     void SetPoint(Point3D set);
     Point3D GetPoint();
+    void SetPoint2(Point3D set);
+    Point3D GetPoint2();
     
 };
 

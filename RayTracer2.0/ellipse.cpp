@@ -153,8 +153,171 @@ ellipse::ellipselineintersectcheck(Photon &photon){ //checks if ellipse and line
     return false;
 }
 
-Point3D
-ellipse::firstintersectpoint(Photon& photon){
+combined //this method checks for intersection, and saves points of intersection.
+ellipse::photonellipseintersect(Photon& photon){
     
-    return Point3D(0,0,0);
-};
+    //Set default values.
+    combined checkpoint;
+    checkpoint.SetCheck(0);
+    checkpoint.SetPoint(Point3D(0,0,0));
+    checkpoint.SetPoint2(Point3D(0,0,0));
+    
+    double h = this->centre.x;
+    double k = this->centre.y;
+
+    
+    //first rearrange position/momentum of photon (in 2D) to y=mx + c form
+    
+    double m;
+    double c;
+    
+    //case 1: check for x=C (vertical line in 2D)
+    
+    
+    double dybydx = (photon.GetMomentum().y/photon.GetMomentum().x);
+    
+    if(dybydx<=1e5){ //If line is not x = C. Checks intersection simply
+        m = dybydx;
+    } else {
+        double x = photon.GetPosition().x;
+        if(fabs(x)<=a){
+            checkpoint.SetCheck(1);
+            double y1 = k + sqrt(k*k + b*b* sqrt((1-(x-h)*(x-h)/a*a)));
+            double y2 = k - sqrt(k*k + b*b* sqrt((1-(x-h)*(x-h)/a*a)));
+            checkpoint.SetPoint(Point3D(x,y1,0));
+            checkpoint.SetPoint2(Point3D(x,y2,0));
+            return checkpoint;
+        }else{
+            return checkpoint;
+        }
+    }
+    
+    c = photon.GetPosition().y-(photon.GetPosition().x*m);
+
+    //case 2: h = 0; k = 0; c = 0.
+    if(h==0&&k==0&&c==0){
+        double denom = sqrt(a*a*m*m + b*b);
+        double x1_num = a*b;
+        double x2_num = 0 - a*b;
+        double y1_num = a*b*m;
+        double y2_num = 0- a*b*m;
+        
+        double x1 = x1_num/denom;
+        double x2 = x2_num/denom;
+        double y1 = y1_num/denom;
+        double y2 = y2_num/denom;
+        
+        Point3D point1(x1,y1,0);
+        Point3D point2(x2,y2,0);
+        
+        if (pointcheck(point1)){
+            checkpoint.SetCheck(1);
+            checkpoint.SetPoint(point1);
+            if(pointcheck(point2)){
+                checkpoint.SetCheck(1);
+                checkpoint.SetPoint2(point2);
+            }
+        } else{
+            return checkpoint;
+        }
+    }
+    
+    //case 3: h=0; k=0; c!=0.
+    
+    if(h==0&&k==0&&c!=0){
+        double denom = a*a*m*m + b*b;
+        double x1_num = 0 - a*a*m*c + a*b*sqrt(a*a*m*m + b*b - c*c);
+        double x2_num = 0 - a*a*m*c - a*b*sqrt(a*a*m*m + b*b - c*c);
+        double y1_num = b*b*c + a*b*m*sqrt(a*a*m*m + b*b - c*c);
+        double y2_num = b*b*c - a*b*m*sqrt(a*a*m*m + b*b - c*c);
+        
+        double x1 = x1_num/denom;
+        double x2 = x2_num/denom;
+        double y1 = y1_num/denom;
+        double y2 = y2_num/denom;
+        
+        
+        Point3D point1(x1,y1,0);
+        Point3D point2(x2,y2,0);
+        
+        if (pointcheck(point1)){
+            checkpoint.SetCheck(1);
+            checkpoint.SetPoint(point1);
+            if(pointcheck(point2)){
+                checkpoint.SetCheck(1);
+                checkpoint.SetPoint2(point2);
+            }
+            return checkpoint;
+        }
+        else{
+            return checkpoint;
+        }
+    }
+    
+    //case 4: h!= 0; k!= 0; c!= 0;
+    
+    double eps = c-k;
+    double delta = c + (m*h);
+    
+    double x1, x2, y1, y2;
+    
+    double x1_num = h*b*b - eps*a*a*m + a*b*sqrt(a*a*m*m + b*b - delta*delta - k*k + 2*delta*k);
+    double x2_num = h*b*b - eps*a*a*m*m - a*b*m*sqrt(a*a*m*m + b*b - delta*delta - k*k + 2*delta*k);
+    double x_den = a*a*m*m + b*b;
+    
+    x1 = x1_num/x_den;
+    x2 = x2_num/x_den;
+    
+    double y1_num = b*b*delta + k*a*a*m*m + a*b*m*sqrt(a*a*m*m+b*b-delta*delta-k*k+2*delta*k);
+    double y2_num = b*b*delta + k*a*a*m*m - a*b*m*sqrt(a*a*m*m+b*b-delta*delta-k*k+2*delta*k);
+    double y_den = a*a*m*m + b*b;
+    
+    y1 = y1_num/y_den;
+    y2 = y2_num/y_den;
+    
+    Point3D point1(x1,y1,0);
+    Point3D point2(x2,y2,0);
+    
+    
+    if(pointcheck(point1)){
+        checkpoint.SetCheck(1);
+        checkpoint.SetPoint(point1);
+        if(pointcheck(point2)){
+            checkpoint.SetCheck(1);
+            checkpoint.SetPoint2(point2);
+        }
+        return checkpoint;
+    }
+    
+    return checkpoint;
+}
+
+Point3D
+ellipse::nextpoint(Photon &photon, combined &checker){
+    Point3D current = photon.GetPosition();
+    
+    double distance = current.distancetopoint(checker.GetPoint());
+    double distance2 = current.distancetopoint(checker.GetPoint2());
+    
+    if(distance <= distance2 ){
+        return checker.GetPoint();
+    }
+    
+    if(distance>=distance2){
+        return checker.GetPoint2();
+    }
+    
+    return current;
+}
+
+Point3D
+ellipse::nextpoint3D(Photon& photon){
+    combined ellipsefind = photonellipseintersect(photon); //Finds points on 2D space where ellipse is crossed
+    Point3D A = nextpoint(photon, ellipsefind); //Finds which point comes first
+    Point3D X2D = Point3D(photon.GetPosition().x,photon.GetPosition().y,0); //position of photon in 2d space
+    Vector3D XA = A-X2D; //vector from position to point of intersection in 2d space
+    double magXA = Magnitude(XA);
+    double XAdotXB = Dot(XA,photon.GetMomentum());
+    double distancetoB = magXA*magXA/XAdotXB;
+    return (photon.GetPosition()+(photon.GetMomentum()*distancetoB));
+}
