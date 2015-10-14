@@ -183,3 +183,37 @@ void //Progress photon by distance
 Photon::Progress(double& distance){
     Position = Position + Momentum*distance;
 }
+
+bool //Check that point is on the line with the direction of the Photon
+Photon::PointInline(Point3D &point){
+    Point3D P0 = Position;
+    Point3D P1 = Position + Momentum;
+    
+    // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
+    
+    if(P0.distancetopoint(P1) + P1.distancetopoint(point) == P0.distancetopoint(point)){
+        return true;
+    }
+    
+    else if (P0.distancetopoint(point) + P1.distancetopoint(point) == P0.distancetopoint(P1)){
+        return true;
+    }
+    return false;
+}
+
+bool //Check that point is on the line with the direction of the Photon (in 2D)
+Photon::PointInline2D(Point2D &point){
+    Point2D P0(Position.x, Position.y);
+    Point2D P1(Position.x + Momentum.x, Position.y + Momentum.y);
+    
+    // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
+    
+    if(P0.distancetopoint(P1) + P1.distancetopoint(point) == P0.distancetopoint(point)){
+        return true;
+    }
+    
+    else if (P0.distancetopoint(point) + P1.distancetopoint(point) == P0.distancetopoint(P1)){
+        return true;
+    }
+    return false;
+}

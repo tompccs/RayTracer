@@ -15,18 +15,20 @@ ellipse::pointcheck(Point3D& point){ //check if a point falls on an ellipse
     
     // double z = point.z;
     
-    double eps = 1e-6;
+    double eps = 1e-6; //needs calculation for how large this actually needs to be
+    
+    //eps is the margin of error. this allows for rounding errors in the calculation
+    //tests needed for how large this margin of error should be. can be calculated (see numerical methods notes)
     
     double h = this->centre.x;
     double k = this->centre.y;
     
+    double lhs = ((x-h)*(x-h)/(a*a))+((y-k)*(y-k)/(b*b)); //calculates lhs of (x-h)^2/a^2 + (y-k)^2/b^2 = 1 (Ellipse equation.)
     
-    if (((x-h)*(x-h)/(a*a))+(y-k)*(y-k)/(b*b)<=(1+eps)&&((x-h)*(x-h)/(a*a))+(y-k)*(y-k)/(b*b)>=(1-eps)) {
+    if (fabs(1-lhs)<eps){ //calculates difference between 1 and LHS of ellipse
         return true;
-    } else {
-        return false;
     }
-    
+    return false;
 }
 
 bool
@@ -36,7 +38,6 @@ ellipse::ellipselineintersectcheck(Photon &photon){ //checks if ellipse and line
     
     double m;
     double c;
-    
     
     //check for infinite m values (Line x=C)
     
@@ -151,6 +152,90 @@ ellipse::ellipselineintersectcheck(Photon &photon){ //checks if ellipse and line
     };
     
     return false;
+}
+
+bool
+ellipse::LineOnEllipseIntersection(Photon &photon){
+    bool result = false;
+    Point2D intersection (0,0);
+    
+    Vector3D P0 = photon.GetPosition();
+    Vector3D P1 = photon.GetPosition()+photon.GetMomentum();
+    
+    //used for quadratic
+    
+    double aa = 0, bb = 0, cc = 0, m = 0;
+    
+    double a = this->a;
+    double b = this->b;
+    
+    //case where m is not equal to infinity
+    if (P0.x != P1.x){
+        Vector3D slope = photon.GetMomentum();
+        double m = slope.y/slope.x;
+        double c = P0.y - m*P0.x;
+        
+        aa = b*b + a*a*m*m;
+        bb = 2*a*a*c*m - a*a*centre.y*m-2*centre.x*b*b;
+        cc = b*b*centre.x*centre.x + a*a*c*c - 2*a*a*centre.y*c + a*a*centre.y*centre.y - a*a*b*b;
+    }
+    
+    //case where m = infinity
+    
+    else{
+        aa = a*a;
+        bb = -2*centre.y*a*a;
+        cc = -a*a*b*b + b*b*(P0.x - centre.x)*(P0.x-centre.x);
+    }
+    
+    //Calculates the determinant d
+    double d = bb*bb - 4*aa*cc;
+    
+    //If d > 0. we have intersections.
+    
+    Point2D intersection1;
+    Point2D intersection2;
+    
+    if (d > 0.0){
+        if (P0.x != P1.x){
+            double x1 = (-bb + sqrt(d)) / (2*aa);
+            double y1 = P0.y + m*(x1 - P0.x);
+            intersection1 = Point2D(x1, y1);
+            
+            double x2 = (-bb - sqrt(d)) / (2 * aa);
+            double y2 = P0.y + m * (x2 - P0.x);
+            intersection2 = Point2D(x2, y2);
+        }
+        
+        else{
+            double y1 = (-bb + sqrt(d)) / (2 * aa);
+            intersection1 = Point2D(P0.x,y1);
+            double y2 = (-bb - sqrt(d)) / (2 * aa);
+            intersection2 = Point2D(P0.x,y2);
+        }
+        
+        //Determine closest point to P0
+        double distance1 = (intersection1.x - P0.x)*(intersection1.x - P0.x) + (intersection1.y - P0.y)*(intersection1.y - P0.y);
+        double distance2 = (intersection2.x - P0.x)*(intersection2.x - P0.x) + (intersection2.y - P0.y)*(intersection2.y - P0.y);
+        
+        Point2D closestPoint(0,0);
+        
+        if (distance1 <= distance2){
+            closestPoint = intersection1;
+        }
+        else{
+            closestPoint = intersection2;
+        }
+        
+        //Determine if the closest point is on the line.
+        if (photon.PointInline2D(closestPoint)){
+            result = true;
+            intersection = closestPoint;
+        }
+    }
+    
+    return result;
+    
 }
 
 combined //this method checks for intersection, and saves points of intersection.
@@ -320,4 +405,34 @@ ellipse::nextpoint3D(Photon& photon){
     double XAdotXB = Dot(XA,photon.GetMomentum());
     double distancetoB = magXA*magXA/XAdotXB;
     return (photon.GetPosition()+(photon.GetMomentum()*distancetoB));
+}
+
+void
+ellipse::SetCentre(Point3D &centre){
+    this->centre = centre;
+}
+
+void
+ellipse::SetA(double A){
+    a = A;
+}
+
+void
+ellipse::SetB(double B){
+    b = B;
+}
+
+Point3D
+ellipse::GetCentre(){
+    return centre;
+}
+
+double
+ellipse::GetA(){
+    return a;
+}
+
+double
+ellipse::GetB(){
+    return b;
 }

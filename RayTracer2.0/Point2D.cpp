@@ -71,3 +71,14 @@ Point2D::operator /(double t) const
     double f = 1.0F / t;
     return (Point2D(x * f, y * f));
 }
+
+double // Calculates the difference between two points.
+Point2D::distancetopoint(Point2D point){
+    
+    double xdif = x - point.x;
+    double ydif = y - point.y;
+    
+    double distance = sqrt(xdif*xdif + ydif*ydif);
+    
+    return distance;
+}

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C24701A84F0FF0074FFD6 /* matrix.cpp */; };
 		C60C844A1990171C00F302FF /* List.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C84481990171C00F302FF /* List.cpp */; };
+		C621CBB61BCBA8C9008EA7B3 /* arc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C621CBB41BCBA8C9008EA7B3 /* arc.cpp */; settings = {ASSET_TAGS = (); }; };
 		C62CBCB41990D4FD004FE771 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB21990D4FD004FE771 /* Material.cpp */; };
 		C62CBCB71990D512004FE771 /* Process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB51990D512004FE771 /* Process.cpp */; };
 		C63249621BC67BB000F910B8 /* combined.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C63249601BC67BB000F910B8 /* combined.cpp */; settings = {ASSET_TAGS = (); }; };
@@ -28,6 +29,7 @@
 		C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23F9198BBBE500A64442 /* Functions.cpp */; };
 		C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FC198BBFD000A64442 /* Sheet.cpp */; };
 		C6BE2401198C014200A64442 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FF198C014200A64442 /* Box.cpp */; };
+		C6DB680D1BCE536C0081E896 /* unittests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6DB680B1BCE536C0081E896 /* unittests.cpp */; settings = {ASSET_TAGS = (); }; };
 		C6DD74C119ACD3B2009D8EAA /* FresnelJackson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +58,8 @@
 		C60C8447199016CD00F302FF /* emission_quantumyield.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emission_quantumyield.txt; sourceTree = "<group>"; };
 		C60C84481990171C00F302FF /* List.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = List.cpp; sourceTree = "<group>"; };
 		C60C84491990171C00F302FF /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
+		C621CBB41BCBA8C9008EA7B3 /* arc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arc.cpp; sourceTree = "<group>"; };
+		C621CBB51BCBA8C9008EA7B3 /* arc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = arc.hpp; sourceTree = "<group>"; };
 		C62CBCB21990D4FD004FE771 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		C62CBCB31990D4FD004FE771 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		C62CBCB51990D512004FE771 /* Process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Process.cpp; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 		C6BE23FD198BBFD000A64442 /* Sheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sheet.h; sourceTree = "<group>"; };
 		C6BE23FF198C014200A64442 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
 		C6BE2400198C014200A64442 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
+		C6DB680B1BCE536C0081E896 /* unittests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unittests.cpp; sourceTree = "<group>"; };
+		C6DB680C1BCE536C0081E896 /* unittests.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unittests.hpp; sourceTree = "<group>"; };
 		C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FresnelJackson.cpp; sourceTree = "<group>"; };
 		C6DD74C019ACD3B2009D8EAA /* FresnelJackson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FresnelJackson.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,8 +155,8 @@
 				C62CBCB21990D4FD004FE771 /* Material.cpp */,
 				C632C884198B8E00006430D8 /* Test.cpp */,
 				C60C84481990171C00F302FF /* List.cpp */,
-				C632C887198B9221006430D8 /* Photon.cpp */,
 				C632C878198B7C19006430D8 /* Vector2D.cpp */,
+				C632C887198B9221006430D8 /* Photon.cpp */,
 				C632C87B198B82AC006430D8 /* Point2D.cpp */,
 				C632C87E198B85C4006430D8 /* Point3D.cpp */,
 				C60C24701A84F0FF0074FFD6 /* matrix.cpp */,
@@ -158,11 +164,15 @@
 				C632C881198B85EE006430D8 /* Vector3D.cpp */,
 				C6894CBA1A83D459001430D7 /* Spherical3D.cpp */,
 				C65066301BBE8C9F007A57E1 /* ellipse.cpp */,
+				C6DB680B1BCE536C0081E896 /* unittests.cpp */,
+				C621CBB41BCBA8C9008EA7B3 /* arc.cpp */,
 				C63249601BC67BB000F910B8 /* combined.cpp */,
 				C6BE23F9198BBBE500A64442 /* Functions.cpp */,
 				C6BE23FC198BBFD000A64442 /* Sheet.cpp */,
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
+				C6DB680C1BCE536C0081E896 /* unittests.hpp */,
+				C621CBB51BCBA8C9008EA7B3 /* arc.hpp */,
 				C63249611BC67BB000F910B8 /* combined.hpp */,
 				C6A1AD7E1A9B6C00005288C7 /* anisotropic.h */,
 				C6894CBB1A83D459001430D7 /* Spherical3D.h */,
@@ -239,6 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6DB680D1BCE536C0081E896 /* unittests.cpp in Sources */,
 				C632C87A198B7C19006430D8 /* Vector2D.cpp in Sources */,
 				C62CBCB41990D4FD004FE771 /* Material.cpp in Sources */,
 				C632C889198B9221006430D8 /* Photon.cpp in Sources */,
@@ -257,6 +268,7 @@
 				C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */,
 				C63249621BC67BB000F910B8 /* combined.cpp in Sources */,
 				C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */,
+				C621CBB61BCBA8C9008EA7B3 /* arc.cpp in Sources */,
 				C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */,
 				C6839AAD19BDC61E003F43BD /* MATLABPrint.cpp in Sources */,
 				C6BE2401198C014200A64442 /* Box.cpp in Sources */,

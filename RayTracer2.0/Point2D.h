@@ -29,6 +29,9 @@ public:
     Point2D operator *(double t) const;
     
     Point2D operator /(double t) const;
+    
+    double distancetopoint(Point2D point);
+
 };
 
 struct Origin2D_

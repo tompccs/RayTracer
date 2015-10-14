@@ -7,7 +7,8 @@
 #include "MATLABPrint.h"
 #include "Spherical3D.h"
 #include "anisotropic.h"
-#include "ellipse.hpp"
+#include "arc.hpp"
+#include "unittests.hpp"
 
 
 using namespace std;
@@ -291,13 +292,13 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
 }
 
-void test(){
+void flexitest(){
     Point3D centre(10,10,2);
     ellipse test(centre,3,2);
     
     Photon testphoton;
-    testphoton.SetPosition(Point3D(0,0,0));
-    testphoton.SetMomentum(Point3D(1,1,-2));
+    testphoton.SetPosition(Point3D(10,10,0));
+    testphoton.SetMomentum(Point3D(10,0,-2));
     
     combined trial = test.photonellipseintersect(testphoton);
     
@@ -313,10 +314,23 @@ void test(){
     
     print->PrintPoint(point3);
     
+    Point3D arctestpoint(10+3*cos(M_PI_4/2),(10+2*sin(M_PI_4/2)),2);
+    
+    arc testarc(test,-M_PI_4,M_PI_4);
+    //print->PrintBool(testarc.pointonarc(arctestpoint));
+    
+    testarc.photonarcintersect(testphoton);
+    
 }
+
+void testing(){
+    unittest tester;
+    tester.ellipse_pointcheck();
+}
+
 
 int main(int argc, const char * argv[]){
     //run(1,1,350,520,0,0);
-    test();
-    //matrixtest();
+    //flexitest();
+    testing();
 }
