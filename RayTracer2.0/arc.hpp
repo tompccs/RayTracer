@@ -18,7 +18,7 @@ public:
     arc(ellipse& elps, double start, double end);
     arc(Point3D& centre, double a, double b, double start, double end);
     bool pointonarc(Point3D& point);
-    bool photonarcintersect(Photon& photon);
+    //bool photonarcintersect(Photon& photon);
 };
 
 

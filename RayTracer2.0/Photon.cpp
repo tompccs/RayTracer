@@ -208,11 +208,21 @@ Photon::PointInline2D(Point2D &point){
     
     // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
     
-    if(P0.distancetopoint(P1) + P1.distancetopoint(point) == P0.distancetopoint(point)){
+    cout<<"P0->P1= "<<P0.distancetopoint(P1)<<endl;
+    cout<<"P1->PX= "<<P1.distancetopoint(point)<<endl;
+    cout<<"P0->PX= "<<P0.distancetopoint(point)<<endl;
+
+    
+    if(fabs(P0.distancetopoint(P1) + P1.distancetopoint(point) - P0.distancetopoint(point))<=1e-6){
+        
         return true;
     }
     
-    else if (P0.distancetopoint(point) + P1.distancetopoint(point) == P0.distancetopoint(P1)){
+    else if (fabs(P0.distancetopoint(point) + P1.distancetopoint(point) - P0.distancetopoint(P1))<=1e-6){
+        return true;
+    }
+    
+    else if (fabs(P0.distancetopoint(P1) + P0.distancetopoint(point) - P1.distancetopoint(point))<=1e-6){
         return true;
     }
     return false;

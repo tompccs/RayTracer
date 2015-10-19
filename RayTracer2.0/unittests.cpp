@@ -21,3 +21,24 @@ unittest::ellipse_pointcheck(){
     }
     
 }
+
+void
+unittest::LineOnEllipseIntersection(){
+    
+    Point3D centre(13,5,0);
+    double a = 3;
+    double b = 2;
+    
+    ellipse e(centre, a, b);
+    
+    Point3D position(13,1,0);
+    Vector3D momentum(0,1,0);
+    
+    Photon testphoton;
+    testphoton.SetPosition(position);
+    testphoton.SetMomentum(momentum);
+    
+    e.LineOnEllipseIntersection(testphoton);
+    
+    
+}

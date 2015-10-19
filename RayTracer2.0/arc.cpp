@@ -44,7 +44,7 @@ arc::pointonarc(Point3D &point){
     return false;
 }
 
-bool
+/*bool
 arc::photonarcintersect(Photon &photon){
     combined findpoints = e.photonellipseintersect(photon);
     Point3D p1 = findpoints.GetPoint();
@@ -66,4 +66,4 @@ arc::photonarcintersect(Photon &photon){
 
     cout<<"No points on the arc! Return false!"<<endl;
     return false;
-}
+}*/
