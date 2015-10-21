@@ -31,8 +31,8 @@ unittest::LineOnEllipseIntersection(){
     
     ellipse e(centre, a, b);
     
-    Point3D position(13,1,0);
-    Vector3D momentum(0,1,0);
+    Point3D position(1,3.005,0);
+    Vector3D momentum(1,0,0);
     
     Photon testphoton;
     testphoton.SetPosition(position);
@@ -40,5 +40,30 @@ unittest::LineOnEllipseIntersection(){
     
     e.LineOnEllipseIntersection(testphoton);
     
+    
+}
+
+void
+unittest::Ellipse_Points3D(){
+    
+    Point3D centre(13,5,0);
+    double a = 3;
+    double b = 2;
+    
+    ellipse e(centre, a, b);
+    
+    Point3D position(2,2,0);
+    Vector3D momentum(11,3,-1);
+    
+    Photon testphoton;
+    testphoton.SetPosition(position);
+    testphoton.SetMomentum(momentum);
+    
+    e.points3D(testphoton);
+    
+    Test reader;
+    
+    reader.PrintPoint(e.GetStorage().GetPoint());
+    reader.PrintPoint(e.GetStorage().GetPoint2());
     
 }

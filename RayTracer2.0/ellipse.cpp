@@ -157,7 +157,7 @@ ellipse::ellipselineintersectcheck(Photon &photon){ //checks if ellipse and line
 bool
 ellipse::LineOnEllipseIntersection(Photon &photon){
     
-    Test reader;
+    //Test reader;
     
     bool result = false;
     Point2D intersection (0,0);
@@ -168,8 +168,6 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
     //reader.PrintPoint(P0);
     //reader.PrintPoint(P1);
     
-    combined storage;
-    
     //used for quadratic
     
     double aa = 0, bb = 0, cc = 0, M = 0;
@@ -179,7 +177,8 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
     
     //case where m is not equal to infinity
     
-    if (fabs(P0.x-P1.x)>=1e-6){ cout<<"not vertical line"<<endl;
+    if (fabs(P0.x-P1.x)>=1e-6){
+        //cout<<"not vertical line"<<endl;
         Vector3D slope = photon.GetMomentum();
         M = slope.y/slope.x;
         //cout<<"M (gradient) is equal to: "<<M<<endl;
@@ -193,7 +192,8 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
     
     //case where M = infinity
     
-    else{ cout<<"Vertical line"<<endl;
+    else{
+        //cout<<"Vertical line"<<endl;
         aa = a*a;
         bb = -2*centre.y*a*a;
         cc = -a*a*b*b + b*b*(P0.x - centre.x)*(P0.x-centre.x);
@@ -214,7 +214,7 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
     //cout<<"P0.x:"<<P0.x<<" and P1.x:"<<P1.x<<endl;
     
     if (d > 0.0){
-        if (fabs(P0.x-P1.x)>=1e-6){
+        if (fabs(P0.x-P1.x)>1e-6){
             //cout<<"P0.x != P1.x"<<endl;
             double x1 = (-bb + sqrt(d)) / (2*aa);
             double y1 = P0.y + M*(x1 - P0.x);
@@ -232,14 +232,29 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
         }
         
         else{
-            double y1 = (-bb + sqrt(d)) / (2 * aa);
+            double k = centre.y;
+            double h = centre.x;
+            
+            double y1 = k + b* sqrt(1 - ((P0.x-h)*(P0.x-h)/(a*a)));
+            double y2 = k - b* sqrt(1 - ((P0.x-h)*(P0.x-h)/(a*a)));
+            
+            /*cout<<" k= "<<k<<" b= "<<b<<" P0.x ="<<P0.x<<" h= "<<h<<" a= "<<a<<endl;
+            cout<<"y1 = "<<y1;
+            cout<<"y2 = "<<y2; */
+            
+            intersection1.x = P0.x;
+            intersection1.y = y1;
+            intersection2.x = P0.x;
+            intersection2.y = y2;
+            
+            /*double y1 = (-bb + sqrt(d)) / (2 * aa);
             cout<<"y1 = "<<y1<<endl;
             intersection1.x = P0.x;
             intersection1.y = y1;
             double y2 = (-bb - sqrt(d)) / (2 * aa);
             cout<<"y2 = "<<y2<<endl;
             intersection2.x = P0.x;
-            intersection2.y = y2;
+            intersection2.y = y2;*/
         }
         
         //Determine closest point to P0
@@ -262,23 +277,46 @@ ellipse::LineOnEllipseIntersection(Photon &photon){
             intersection = closestPoint;
         }
     }
-    cout<<"Intersection point 1 is: ";
+    /*cout<<"Intersection point 1 is: ";
     reader.Print2DPoint(intersection1);
     cout<<"Intersection point 2 is: ";
     reader.Print2DPoint(intersection2);
     cout<<"Test for line-ellipse intersection returns: ";
     reader.PrintBool(result);
+     */
     
-    cout<<"Test that points 1 and 2 are on the curve."<<endl;
+    //cout<<"Test that points 1 and 2 are on the curve."<<endl;
     
     Point3D check1(intersection1.x, intersection1.y, 0);
     Point3D check2(intersection2.x, intersection2.y, 0);
     
-    reader.PrintBool(pointcheck(check1));
-    reader.PrintBool(pointcheck(check2));
+    //reader.PrintBool(pointcheck(check1));
+    //reader.PrintBool(pointcheck(check2));
+    
+    storage.SetCheck(result);
+    storage.SetPoint(check1);
+    storage.SetPoint2(check2);
     
     return result;
     
+}
+
+bool
+ellipse::DirectionCheck(Photon &photon, Point3D& point){
+    
+    Point3D P0 = photon.GetPosition();
+    Point3D P1 = photon.GetPosition()+photon.GetMomentum();
+    
+    if(fabs(P0.distancetopoint(P1) + P1.distancetopoint(point) - P0.distancetopoint(point)) < 1e-6){
+        return true;
+    }
+    
+    return false;
+}
+
+combined
+ellipse::GetStorage(){
+    return storage;
 }
 
 /* combined //this method checks for intersection, and saves points of intersection.
@@ -438,17 +476,31 @@ ellipse::nextpoint(Photon &photon, combined &checker){
     return current;
 }
 
-Point3D
-ellipse::nextpoint3D(Photon& photon){
-    combined ellipsefind = photonellipseintersect(photon); //Finds points on 2D space where ellipse is crossed
-    Point3D A = nextpoint(photon, ellipsefind); //Finds which point comes first
+*/
+ 
+int
+ellipse::points3D(Photon& photon){
+    
+    LineOnEllipseIntersection(photon); //Finds points of intersection (if any) in 2D space)
+    
+    Point3D A = storage.GetPoint();
     Point3D X2D = Point3D(photon.GetPosition().x,photon.GetPosition().y,0); //position of photon in 2d space
     Vector3D XA = A-X2D; //vector from position to point of intersection in 2d space
+    
     double magXA = Magnitude(XA);
     double XAdotXB = Dot(XA,photon.GetMomentum());
     double distancetoB = magXA*magXA/XAdotXB;
-    return (photon.GetPosition()+(photon.GetMomentum()*distancetoB));
-} */
+    storage.SetPoint((photon.GetPosition()+(photon.GetMomentum()*distancetoB)));
+    
+    Point3D A2 = storage.GetPoint2();
+    Vector3D XA2 = A2-X2D; //vector from position to point of intersection in 2d space
+    double magXA2 = Magnitude(XA2);
+    double XA2dotXB = Dot(XA2,photon.GetMomentum());
+    double distancetoB2 = magXA2*magXA2/XA2dotXB;
+    storage.SetPoint2((photon.GetPosition()+(photon.GetMomentum()*distancetoB2)));
+    
+    return 0;
+}
 
 void
 ellipse::SetCentre(Point3D &centre){

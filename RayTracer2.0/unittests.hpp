@@ -11,6 +11,7 @@ public:
     
     void ellipse_pointcheck();
     void LineOnEllipseIntersection();
+    void Ellipse_Points3D();
     
 };
 

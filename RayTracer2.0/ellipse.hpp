@@ -11,7 +11,7 @@ class ellipse{
     Point3D centre;
     double a;
     double b;
-    combined intersectValues;
+    combined storage;
     
 public:
     
@@ -20,13 +20,14 @@ public:
     bool pointcheck(Point3D point);
 //  bool ellipselineintersectcheck(Photon& photon);
     bool LineOnEllipseIntersection(Photon& photon);
+    bool DirectionCheck(Photon& photon, Point3D& point);
+    
+    combined GetStorage(); 
     
 /*  combined photonellipseintersect(Photon& photon);
-    Point3D nextpoint(Photon& photon, combined& checker);
-    Point3D nextpoint3D(Photon& photon); */
-    
-    combined SaveLineIntersection();
-    
+    Point3D nextpoint(Photon& photon, combined& checker); */
+   
+    int points3D(Photon& photon);
     void SetCentre(Point3D& centre);
     void SetA(double A);
     void SetB(double B);

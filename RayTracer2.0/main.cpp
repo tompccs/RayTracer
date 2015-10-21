@@ -326,12 +326,13 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
 void testing(){
     unittest tester;
     //tester.ellipse_pointcheck();
-    tester.LineOnEllipseIntersection();
+    //tester.LineOnEllipseIntersection();
+    tester.Ellipse_Points3D();
 }
 
 
 int main(int argc, const char * argv[]){
-    //run(1,1,350,520,0,0);
+    //run(10000,1,350,520,0,0);
     //flexitest();
     testing();
 }
