@@ -327,7 +327,8 @@ void testing(){
     unittest tester;
     //tester.ellipse_pointcheck();
     //tester.LineOnEllipseIntersection();
-    tester.Ellipse_Points3D();
+    //tester.Ellipse_Points3D();
+    tester.arctest();
 }
 
 

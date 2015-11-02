@@ -26,7 +26,9 @@ Inside(0),
 Absorptions(0),
 Exit(0),
 QYLoss(0)
-{}
+{
+    Momentum = Momentum.Normalise();
+}
 
 Photon::Photon(const Photon& P):
 Momentum(P.Momentum),
@@ -191,11 +193,11 @@ Photon::PointInline(Point3D &point){
     
     // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
     
-    if(P0.distancetopoint(P1) + P1.distancetopoint(point) == P0.distancetopoint(point)){
+    if(fabs(P0.distancetopoint(P1) + P1.distancetopoint(point) - P0.distancetopoint(point))<1e-6){
         return true;
     }
     
-    else if (P0.distancetopoint(point) + P1.distancetopoint(point) == P0.distancetopoint(P1)){
+    else if (fabs(P0.distancetopoint(point) + P1.distancetopoint(point) - P0.distancetopoint(P1))<1e-6){
         return true;
     }
     return false;

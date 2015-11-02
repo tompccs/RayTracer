@@ -4,14 +4,18 @@
 #include <stdio.h>
 #include "arc.hpp"
 #include "Test.h"
+#include "arc.hpp"
 
 class unittest{
+    
+    combined arc_storage;
     
 public:
     
     void ellipse_pointcheck();
     void LineOnEllipseIntersection();
     void Ellipse_Points3D();
+    void arctest();
     
 };
 
