@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "ellipse.hpp"
+#include "FresnelJackson.h"
 
 class arc: public ellipse{
     ellipse e;
@@ -35,6 +36,7 @@ public:
     Vector3D OutsideNormalVector(Point3D& p);
     bool IntersectionConcave(Photon& photon);
     Vector3D GetNormalVector(Photon& photon);
+    
     
     
 };

@@ -22,5 +22,8 @@ public:
     void Out(Photon* photon, Material* material2, Material* material1, bool& debug, MultipleObjects* objects);
 
     Vector3D ProjectionOnPlane(Vector3D plane_normal, Vector3D vector);
+    
+    Vector3D GetNewMomentum();
+    Vector3D GetNewPolarisation();
 };
 #endif

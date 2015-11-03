@@ -160,6 +160,7 @@ arc::InsideNormalVector(Point3D &p){
     Vector3D normal(NAN,NAN,NAN);
     if(pointonarc(p)){
         normal = e.GetCentre()-p;
+        normal.z = 0;
         normal.Normalise();
     }
     return normal;
@@ -170,6 +171,7 @@ arc::OutsideNormalVector(Point3D &p){
     Vector3D normal(NAN,NAN,NAN);
     if(pointonarc(p)){
         normal = p - e.GetCentre();
+        normal.z = 0;
         normal.Normalise();
     }
     return normal;
@@ -212,8 +214,8 @@ arc::GetNormalVector(Photon &photon){
     Point3D nextpoint = GetNextPoint(photon);
     
     if(photonarcintersect(photon) && IntersectionConcave(photon)){
-        return InsideNormalVector(nextpoint);
+        return OutsideNormalVector(nextpoint);
     }
-    return OutsideNormalVector(nextpoint);
+    return InsideNormalVector(nextpoint);
     
 }

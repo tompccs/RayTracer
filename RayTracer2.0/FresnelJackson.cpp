@@ -29,6 +29,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
         NewPolarisation = -OldPolarisation + theFacetNormal*(2*EdotN);
         Transmitted = 0;
+        //cout<<"Reflected"<<endl;
         
     }
     else{
@@ -83,6 +84,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             NewPolarisation = ProjectionOnPlane(NewMomentum, NewPolarisation);
         
             Transmitted = 0;
+            //cout<<"Reflected"<<endl;
         }
         
         else{
@@ -106,6 +108,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             }
   
                 Transmitted = 1;
+            //cout<<"Transmitted"<<endl;
         }
     }
 }
@@ -176,4 +179,14 @@ Vector3D //projects a vector onto a plane
 FresnelJackson::ProjectionOnPlane(Vector3D plane_normal, Vector3D vector){
     plane_normal.Normalise();
     return (vector - Dot(vector,plane_normal)*(plane_normal));
+}
+
+Vector3D
+FresnelJackson::GetNewMomentum(){
+    return NewMomentum;
+}
+
+Vector3D
+FresnelJackson::GetNewPolarisation(){
+    return NewPolarisation;
 }

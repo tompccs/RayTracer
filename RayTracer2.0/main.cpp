@@ -333,7 +333,7 @@ void testing(){
 
 
 int main(int argc, const char * argv[]){
-    //run(10000,1,350,520,0,0);
+    //run(1000,1,350,520,0,0);
     //flexitest();
     testing();
 }

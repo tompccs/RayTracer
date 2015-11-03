@@ -1,5 +1,6 @@
 #include "unittests.hpp"
 
+
 //Method tests for a point, to see if it lies on an ellipse.
 //Check negative values
 
@@ -78,8 +79,8 @@ unittest::arctest(){
     
     ellipse e(centre, a, b);
     
-    Point3D position(15.9,1,0);
-    Point3D momentum(0,1,0);
+    Point3D position(20,9,0);
+    Point3D momentum(-1,-1,-1);
     
     Photon photon(momentum,position);
     
@@ -102,7 +103,25 @@ unittest::arctest(){
     
     //testarc.IntersectionConcave(photon);
     
-    reader.PrintVector(testarc.GetNormalVector(photon));
+    //reader.PrintVector(testarc.GetNormalVector(photon));
+    
+    photon.SetRandomPolarisation();
+    
+    Vector3D normal = testarc.GetNormalVector(photon);
+    
+    reader.PrintVector(normal);
+    
+    double i = 1;
+    double j = 1.5;
+    
+    reader.PrintVector(photon.GetMomentum());
+    
+    
+    jackson.Calculate(photon.GetMomentum(), photon.GetPolarisation(), normal, i, j);
+    
 
+    reader.PrintVector(jackson.GetNewMomentum().Normalise());
+    
+    
     
 }

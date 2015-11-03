@@ -5,10 +5,12 @@
 #include "arc.hpp"
 #include "Test.h"
 #include "arc.hpp"
+#include "FresnelJackson.h"
 
 class unittest{
     
     combined arc_storage;
+    FresnelJackson jackson;
     
 public:
     
@@ -16,6 +18,9 @@ public:
     void LineOnEllipseIntersection();
     void Ellipse_Points3D();
     void arctest();
+    
+    
+    
     
 };
 
