@@ -14,6 +14,8 @@ public:
     
     void PrintPoint(const Point3D& point);
     
+    void Print2DPoint(const Point2D& point);
+    
     void PrintVector(const Vector3D& vector);
     
     void PrintBool(const bool& b);

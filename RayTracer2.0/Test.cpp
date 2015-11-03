@@ -12,6 +12,16 @@ Test::PrintPoint(const Point3D& point){
     cout<<endl;
 }
 
+void //Prints 2D Point
+Test::Print2DPoint(const Point2D& point){
+    cout<<"(";
+    cout<<point.x;
+    cout<<",";
+    cout<<point.y;
+    cout<<")";
+    cout<<endl;
+}
+
 void //Prints Vector
 Test::PrintVector(const Vector3D& vector){
     cout<<"(";

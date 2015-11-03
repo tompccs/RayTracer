@@ -90,5 +90,16 @@ Point3D::operator &(const Vector3D& v) const
     return (Point3D(x * v.x, y * v.y, z * v.z));
 }
 
+double // Calculates the difference between two points.
+Point3D::distancetopoint(Point3D point){
+    double xdif = x - point.x;
+    double ydif = y - point.y;
+    double zdif = z - point.z;
+    
+    double distance = sqrt(xdif*xdif + ydif*ydif + zdif*zdif);
+    
+    return distance;
+}
+
 
 Origin3D_ Origin3D;

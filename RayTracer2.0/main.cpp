@@ -7,6 +7,8 @@
 #include "MATLABPrint.h"
 #include "Spherical3D.h"
 #include "anisotropic.h"
+#include "arc.hpp"
+#include "unittests.hpp"
 
 
 using namespace std;
@@ -17,7 +19,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
     //Creates environment
     
-    Material* world = new Material; //Creates new world box.
+    Material* world = new Material; //Creates new world box.    
     
     FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
     Functions* calc = new Functions; //Used for random number generation
@@ -290,26 +292,48 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     
 }
 
-void test(){
-    Vector3D test1(0,1,0);
-    Spherical3D* test2 = new Spherical3D(test1);
+/*void flexitest(){
+    Point3D centre(10,10,2);
+    ellipse test(centre,3,2);
     
-    test2->Print();
-}
+    Photon testphoton;
+    testphoton.SetPosition(Point3D(10,10,0));
+    testphoton.SetMomentum(Point3D(10,0,-2));
+    
+    //combined trial = test.photonellipseintersect(testphoton);
+    
+    Test* print = new Test; //Used to output debug lines
 
-void matrixtest(){
-    anisotropic vector;
-    matrix<double> matrix = vector.genvector();
+    //Point3D point3 = test.nextpoint3D(testphoton);
     
-    for(int i=0; i<100; i++){
-        vector.pointlookup(matrix).Print();
+    if(trial.GetCheck()){
+        cout<<"Intersection"<<endl;
+    }else{
+        cout<<"No intersection."<<endl;
     }
     
+    print->PrintPoint(point3);
     
+    Point3D arctestpoint(10+3*cos(M_PI_4/2),(10+2*sin(M_PI_4/2)),2);
+    
+    arc testarc(test,-M_PI_4,M_PI_4);
+    //print->PrintBool(testarc.pointonarc(arctestpoint));
+    
+    //testarc.photonarcintersect(testphoton);
+    
+}*/
+
+void testing(){
+    unittest tester;
+    //tester.ellipse_pointcheck();
+    //tester.LineOnEllipseIntersection();
+    //tester.Ellipse_Points3D();
+    tester.arctest();
 }
 
-int main(int argc, const char * argv[]){    
-    run(1,1,350,520,0,0);
-    //test();
-    //matrixtest();
+
+int main(int argc, const char * argv[]){
+    //run(1000,1,350,520,0,0);
+    //flexitest();
+    testing();
 }

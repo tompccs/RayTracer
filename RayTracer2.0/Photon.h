@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Point3D.h"
+#include "Point2D.h"
 #include <cfloat>
 
 
@@ -47,6 +48,8 @@ public:
     void SetQYLoss();
     bool& GetQYLoss();
     void Progress(double& distance);
+    bool PointInline(Point3D& point);
+    bool PointInline2D(Point2D& point);
 };
 
 #endif

@@ -33,6 +33,9 @@ public:
     Point3D operator /(float t) const;
     
     Point3D operator &(const Vector3D& v) const;
+    
+    double distancetopoint(Point3D point);
+    
 };
 
 inline Point3D operator *(float t, const Point3D& p)
