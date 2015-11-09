@@ -31,7 +31,7 @@ public:
     void SetCentre(Point3D& centre);
     void SetA(double A);
     void SetB(double B);
-    Point3D GetCentre();
+    Point3D& GetCentre();
     double GetA();
     double GetB();
     

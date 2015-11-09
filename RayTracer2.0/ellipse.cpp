@@ -517,7 +517,7 @@ ellipse::SetB(double B){
     b = B;
 }
 
-Point3D
+Point3D&
 ellipse::GetCentre(){
     return centre;
 }

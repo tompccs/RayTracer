@@ -126,6 +126,26 @@ arc::GetNextPoint(Photon& photon){
     return Point3D(NAN,NAN,NAN);
 }
 
+void
+arc::setstartangle(double startangle){
+    this->startangle = startangle;
+}
+
+void
+arc::setendangle(double endangle){
+    this->endangle = endangle;
+}
+
+double&
+arc::getstartangle(){
+    return startangle;
+}
+
+double&
+arc::getendangle(){
+    return endangle;
+}
+
 double
 arc::IntersectDistance(Photon &photon){
     return photon.GetPosition().distancetopoint(GetNextPoint(photon));

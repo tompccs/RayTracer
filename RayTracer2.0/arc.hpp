@@ -24,6 +24,11 @@ public:
     combined GetStorage();
     Point3D GetNextPoint(Photon& photon);
     
+    void setstartangle(double startangle);
+    void setendangle(double endangle);
+    
+    double& getstartangle();
+    double& getendangle();
     
     
     double IntersectDistance(Photon& photon);

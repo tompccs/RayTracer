@@ -114,3 +114,13 @@ long&
 Material::GetMaterialNumber(){
     return Materialnumber;
 }
+
+void
+Material::SetCurved(bool yesno){
+    Curved = yesno;
+}
+
+bool&
+Material::GetCurved(){
+    return Curved;
+}
