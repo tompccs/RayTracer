@@ -13,7 +13,7 @@ class Box : public Sheet{
     Sheet base, top, left, right, front, back;
     double height, refractiveindex;
     Functions* calc = new Functions;
- 
+    
 public:
     
     Box();
@@ -27,7 +27,7 @@ public:
     Box& Set(Sheet* sheet, const double& h);
     
     double GetVolume();
-
+    
     double& GetRefractiveIndex();
     
     void SetRefractiveIndex(const double& n);
@@ -54,7 +54,7 @@ public:
     
     Sheet& GetInterfaceSheet(Photon* photon);
     
-
+    
 };
 
 #endif

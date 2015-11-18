@@ -298,6 +298,6 @@ Vector3D::GetRandomUnitVector(){
     double px = sint*cosp;
     double py = sint*sinp;
     double pz = cost;
-
+    
     return Vector3D(px,py,pz);
 }

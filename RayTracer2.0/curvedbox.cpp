@@ -3,7 +3,7 @@
 #include "Sheet.h"
 
 curvedbox::curvedbox():
-    insidearc(), outsidearc(), startsheet(), endsheet(), topplane(), bottomplane(), refractiveindex()
+insidearc(), outsidearc(), startsheet(), endsheet(), topplane(), bottomplane(), refractiveindex()
 {}
 
 curvedbox::curvedbox(arc& central, double height, double width, double refractiveindex){
@@ -20,24 +20,24 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
     double outside_a;
     double outside_b;
     
-    inside_a = central.GetA()-W_2;
-    outside_a = central.GetA()+W_2;
+    inside_a = central.GetE().GetA()-W_2;
+    outside_a = central.GetE().GetA()+W_2;
     
-    double H_2 = (central.GetB()/central.GetA()) * W_2;
-    inside_b = central.GetB()-H_2;
-    outside_b = central.GetB()+H_2;
+    double H_2 = (central.GetE().GetB()/central.GetE().GetA()) * W_2;
+    inside_b = central.GetE().GetB()-H_2;
+    outside_b = central.GetE().GetB()+H_2;
     
-    insidearc.SetA(inside_a);
-    insidearc.SetB(inside_b);
-    outsidearc.SetA(outside_a);
-    outsidearc.SetB(outside_b);
+    insidearc.GetE().SetA(inside_a);
+    insidearc.GetE().SetB(inside_b);
+    outsidearc.GetE().SetA(outside_a);
+    outsidearc.GetE().SetB(outside_b);
     
-    insidearc.SetCentre(central.GetCentre());
-    outsidearc.SetCentre(central.GetCentre());
+    insidearc.GetE().SetCentre(central.GetE().GetCentre());
+    outsidearc.GetE().SetCentre(central.GetE().GetCentre());
     
     insidearc.setstartangle(central.getstartangle());
     insidearc.setendangle(central.getendangle());
-   
+    
     outsidearc.setstartangle(central.getstartangle());
     outsidearc.setendangle(central.getendangle());
     
@@ -48,23 +48,23 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
     double sin_start = sin(insidearc.getstartangle());
     double sin_end = sin(insidearc.getendangle());
     
-    double h = central.GetCentre().x;
-    double k = central.GetCentre().y;
+    double h = central.GetE().GetCentre().x;
+    double k = central.GetE().GetCentre().y;
     
     double x1_in = h + (inside_a * cos_start);
-    double y1_in = k + (inside_a * sin_start);
+    double y1_in = k + (inside_a * fabs(sin_start));
     
     
     double x1_out = h + (outside_a * cos_start);
-    double y1_out = k + (outside_a * sin_start);
-
-    double x2_in = h + (inside_a * cos_end);
-    double y2_in = k + (inside_a * sin_end);
-
-    double x2_out = h + (outside_a * cos_end);
-    double y2_out = k + (outside_a * sin_end);
+    double y1_out = k + (outside_a * fabs(sin_start));
     
-    double z_low = central.GetCentre().z;
+    double x2_in = h + (inside_a * cos_end);
+    double y2_in = k - (inside_a * sin_end);
+    
+    double x2_out = h + (outside_a * cos_end);
+    double y2_out = k - (outside_a * sin_end);
+    
+    double z_low = central.GetE().GetCentre().z;
     double z_high = z_low + height;
     
     Point3D bi_start(x1_in,y1_in,z_low);
@@ -82,14 +82,370 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
     //Build (rectangular) side sheets. Note that top and bottom planes will be used as infinite planes. Distance to intersection
     //needs to be calculated carefully baring this in mind.
     
-    Sheet start(bi_start,ti_start,bo_start);
+    Sheet start(bi_start,bo_start,ti_start);
     Sheet end(bo_end, bi_end, to_end);
-    Sheet top(to_start,to_end,ti_start);
-    Sheet bottom(bi_end, bi_start, bo_end);
-
+    Sheet top(ti_start,to_start,ti_end);
+    Sheet bottom(bi_end, bo_end, bi_start);
+    
     startsheet = start;
     endsheet = end;
     topplane = top;
     bottomplane = bottom;
     
+    startsheet.OverrideNormal();
+    endsheet.OverrideNormal();
+    topplane.OverrideNormal();
+    bottomplane.OverrideNormal();
+    
+}
+
+double
+curvedbox::DToStartSheet(Photon& photon){
+    
+    Photon* p = new Photon;
+    p = &photon;
+    
+    bool test = 0;
+    
+    if(startsheet.GetIntersectionTest(&photon)){
+        test = 1;
+    }
+    
+    if(test == 1){
+        return startsheet.IntersectionDistance(&photon);
+    }
+    
+    return INFINITY;
+}
+
+double
+curvedbox::DToEndSheet(Photon& photon){
+    Photon* p = new Photon;
+    p = &photon;
+    
+    bool test = 0;
+    
+    if(endsheet.GetIntersectionTest(&photon)){
+        test = 1;
+    }
+    
+    
+    if(test == 1){
+        return endsheet.IntersectionDistance(&photon);
+    }
+    
+    return INFINITY;
+}
+
+double
+curvedbox::DToInsideArc(Photon &photon){
+    bool value = 0;
+    
+    //cout<<"Check for collisions on Inside Arc"<<endl;
+    
+    
+    if(insidearc.photonarcintersect(photon)){
+        value = 1;
+    }
+    
+    //cout<<"Test value ="<<value<<endl;
+    
+    if(value ==1){
+        double distance = insidearc.IntersectDistance(photon);
+        if(distance >= 1e-5){
+            return distance;
+        }
+    }
+    
+    
+    return INFINITY;
+}
+
+
+double
+curvedbox::DToOutsideArc(Photon &photon){
+    bool test = 0;
+    
+    if(outsidearc.photonarcintersect(photon)){
+        test = 1;
+    }
+    
+    if(test ==1){
+        double distance = outsidearc.IntersectDistance(photon);
+        if(distance >= 1e-5){
+            return distance;
+        }
+    }
+    
+    return INFINITY;
+}
+
+double
+curvedbox::DToTopSheet(Photon& photon){
+    
+    double intdistance = topplane.IntersectionDistance(&photon);
+    
+    return intdistance;
+}
+
+double
+curvedbox::DToBottomSheet(Photon& photon){
+    
+    double intdistance = bottomplane.IntersectionDistance(&photon);
+    
+    return intdistance;
+}
+
+
+bool //checks if a point lies on the curved 2d thick arc shape defined at the top or bottom of an LSC.
+curvedbox::TopBottomSheetPointCheck(Point3D& point){
+    
+    //cout<<endl<<endl<<"Checking if a point lies on the top or bottom sheets: "<<endl;
+    
+    Test reader;
+    reader.PrintPoint(point);
+    
+    
+    
+    bool test = 0;
+    bool test2 = 0;
+    bool test3 = 0;
+    bool finaltest = 0;
+    
+    
+    if(outsidearc.GetE().PointInsideEllipse(point)){
+        test = 1;
+    }
+    
+    if(!insidearc.GetE().PointInsideEllipse(point)){
+        test2 = 1;
+    }
+    
+    double Y = fabs(insidearc.GetE().GetCentre().y - point.y);
+    double X = fabs(insidearc.GetE().GetCentre().x - point.x);
+    
+    double angle = 0;
+    
+    if(X!=0){
+        angle = atan(Y/X);
+    }
+    
+    if(X==0){
+        angle = M_PI_2;
+    }
+    
+    if(angle > insidearc.getstartangle() && angle< insidearc.getendangle()){
+        test3 = 1;
+    }
+    
+    if(test){
+        finaltest = 1;
+    }
+    
+    
+    return finaltest;
+}
+
+void
+curvedbox::Set(arc central, double height, double width, double refractiveindex){
+    //copy refractive indeces
+    
+    this->refractiveindex = refractiveindex;
+    
+    //First build arcs for both inside plane and outside plane.
+    
+    double W_2 = width/2;
+    double inside_a;
+    double inside_b;
+    double outside_a;
+    double outside_b;
+    
+    inside_a = central.GetE().GetA()-W_2;
+    outside_a = central.GetE().GetA()+W_2;
+    
+    double H_2 = (central.GetE().GetB()/central.GetE().GetA()) * W_2;
+    inside_b = central.GetE().GetB()-H_2;
+    outside_b = central.GetE().GetB()+H_2;
+    
+    insidearc.GetE().SetA(inside_a);
+    insidearc.GetE().SetB(inside_b);
+    outsidearc.GetE().SetA(outside_a);
+    outsidearc.GetE().SetB(outside_b);
+    
+    insidearc.GetE().SetCentre(central.GetE().GetCentre());
+    outsidearc.GetE().SetCentre(central.GetE().GetCentre());
+    
+    insidearc.setstartangle(central.getstartangle());
+    insidearc.setendangle(central.getendangle());
+    
+    outsidearc.setstartangle(central.getstartangle());
+    outsidearc.setendangle(central.getendangle());
+    
+    //Set up sheets. First build points for edge sheets.
+    
+    double cos_start = cos(insidearc.getstartangle());
+    double cos_end = cos(insidearc.getendangle());
+    double sin_start = sin(insidearc.getstartangle());
+    double sin_end = sin(insidearc.getendangle());
+    
+    double h = central.GetE().GetCentre().x;
+    double k = central.GetE().GetCentre().y;
+    
+    double x1_in = h + (inside_a * cos_start);
+    double y1_in = k + (inside_a * fabs(sin_start));
+    
+    
+    double x1_out = h + (outside_a * cos_start);
+    double y1_out = k + (outside_a * fabs(sin_start));
+    
+    double x2_in = h + (inside_a * cos_end);
+    double y2_in = k - (inside_a * sin_end);
+    
+    double x2_out = h + (outside_a * cos_end);
+    double y2_out = k - (outside_a * sin_end);
+    
+    double z_low = central.GetE().GetCentre().z;
+    double z_high = z_low + height;
+    
+    Point3D bi_start(x1_in,y1_in,z_low);
+    Point3D ti_start(x1_in,y1_in,z_high);
+    
+    Point3D bi_end(x2_in,y2_in,z_low);
+    Point3D ti_end(x2_in,y2_in,z_high);
+    
+    Point3D bo_start(x1_out,y1_out,z_low);
+    Point3D to_start(x1_out,y1_out,z_high);
+    
+    Point3D bo_end(x2_out,y2_out,z_low);
+    Point3D to_end(x2_out,y2_out,z_high);
+    
+    //Build (rectangular) side sheets. Note that top and bottom planes will be used as infinite planes. Distance to intersection
+    //needs to be calculated carefully baring this in mind.
+    
+    Sheet start(bi_start,bo_start,ti_start);
+    Sheet end(bo_end, bi_end, to_end);
+    Sheet top(ti_start,to_start,ti_end);
+    Sheet bottom(bi_end, bo_end, bi_start);
+    
+    startsheet = start;
+    endsheet = end;
+    topplane = top;
+    bottomplane = bottom;
+    
+    startsheet.OverrideNormal();
+    endsheet.OverrideNormal();
+    topplane.OverrideNormal();
+    bottomplane.OverrideNormal();
+}
+
+int
+curvedbox::NextInterface(Photon &photon){
+    double nextdistance = INFINITY;
+    int sheetnumber = 7;
+    
+    double d[6];
+    
+    
+    d[0] = DToStartSheet(photon);
+    d[1] = DToEndSheet(photon);
+    d[2] = DToInsideArc(photon);
+    d[3] = DToOutsideArc(photon);
+    d[4] = DToTopSheet(photon);
+    d[5] = DToBottomSheet(photon);
+    
+    /*for (int i=0; i<6; i++){
+     if (d[i] != INFINITY){
+     cout<<"Distance to sheet "<<i<<" is "<<d[i]<<endl;
+     }
+     }*/
+    
+    for (int i=0; i<6; i++) {
+        if(d[i]<nextdistance) {
+            nextdistance = d[i];
+            sheetnumber = i;
+        }
+    }
+    
+    //cout<<"Next distance is:"<< nextdistance<<endl;
+    //cout<<"Sheetnumber is:"<<sheetnumber<<endl;
+    
+    return sheetnumber;
+    
+}
+
+double
+curvedbox::NextInterfaceDistance(Photon &photon){
+    double nextdistance = INFINITY;
+    
+    int sheetnumber = NextInterface(photon);
+    
+    switch(sheetnumber){
+        case 0:
+            return DToStartSheet(photon);
+            break;
+        case 1:
+            return DToEndSheet(photon);
+            break;
+        case 2:
+            return DToInsideArc(photon);
+            break;
+        case 3:
+            return DToOutsideArc(photon);
+            break;
+        case 4:
+            return DToTopSheet(photon);
+            break;
+        case 5:
+            return DToBottomSheet(photon);
+            break;
+    }
+    
+    return nextdistance;
+}
+
+Vector3D
+curvedbox::GetNextNormal(Photon &photon){
+    
+    int sheetnumber = NextInterface(photon);
+    
+    switch(sheetnumber){
+        case 0:
+            return startsheet.GetNormal();
+            break;
+        case 1:
+            return endsheet.GetNormal();
+            break;
+        case 2:
+            return insidearc.GetNormalVector(photon);
+            break;
+        case 3:
+            return outsidearc.GetNormalVector(photon);
+            break;
+        case 4:
+            return topplane.GetNormal();
+            break;
+        case 5:
+            return bottomplane.GetNormal();
+            break;
+    }
+    
+    return Vector3D(NAN,NAN,NAN);
+}
+
+double&
+curvedbox::GetRefractiveIndex(){
+    return refractiveindex;
+}
+
+
+//Indicator that Material has a photon inside
+void
+curvedbox::SetPhotonInside(bool inside){
+    PhotonInside = inside;
+}
+
+//Returns PhotonInside Indicator
+bool
+curvedbox::GetPhotonInside(){
+    return PhotonInside;
 }

@@ -10,7 +10,7 @@ class Sheet{
     Point3D A,B,C;
     Vector3D normal;
     bool obtainednormal;
-
+    
 public:
     Sheet();
     Sheet(const Point3D& a, const Point3D& b, const Point3D& c);
@@ -30,6 +30,7 @@ public:
     double GetACLength();
     double GetArea();
     Vector3D GetNormal();
+    Vector3D OverrideNormal();
     bool PhotonPlaneCheck(Photon* photon);
     Point3D IntersectionPoint(Photon* photon);
     double IntersectionDistance(Photon* photon);

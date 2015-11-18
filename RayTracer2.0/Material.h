@@ -48,6 +48,6 @@ public:
     bool& GetCurved();
     
     
-    };
+};
 
 #endif

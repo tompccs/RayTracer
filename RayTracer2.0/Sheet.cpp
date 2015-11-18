@@ -94,6 +94,15 @@ Sheet::GetNormal(){
     return normal;
 }
 
+//Overrides Normal vector
+Vector3D
+Sheet::OverrideNormal(){
+    normal = Cross((B-A),(C-A)).Normalise();
+    obtainednormal = 1;
+    
+    return normal;
+}
+
 //Checks if photon will intersect plane
 bool
 Sheet::PhotonPlaneCheck(Photon *photon){
@@ -120,10 +129,17 @@ Sheet::IntersectionPoint(Photon *photon){
 
 double //Returns distance until intersection
 Sheet::IntersectionDistance(Photon *photon){
+    double t = INFINITY;
     double a = GetNormal()*GetA();
     double b = GetNormal()*photon->GetPosition();
     double c = GetNormal()*photon->GetMomentum();
-    double t = (a-b)/c;
+    
+    double value = (a-b)/c;
+    
+    if(value>0){
+        t = value;
+    }
+    
     return t;
 }
 
@@ -136,7 +152,7 @@ Sheet::PointonSheetTest(const Point3D &p){
     
     if (AB == BD && BD == DC && DC == CA) return true;
     return false;
-
+    
 }
 
 bool //Checks if photon will intersect sheet
@@ -165,7 +181,7 @@ Sheet::PointSheetCheck(Point3D point){
     Vector3D CA = Cross(point-GetC(),point-GetA());
     
     if(SignCompare(Dot(AB,BD), Dot(BD,DC), Dot(DC,CA))) return 1;
-
+    
     
     return 0;
 }

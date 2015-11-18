@@ -3,22 +3,22 @@
 
 #include <stdio.h>
 #include "ellipse.hpp"
-#include "FresnelJackson.h"
 
-class arc: public ellipse{
+class arc{
     ellipse e;
     double startangle;
     double endangle;
     combined storage;
     Test reader;
     
-//XThetaAngles Range between 0 and Pi
-//YThetaAngles Range between -Pi/2 and Pi/2
+    //XThetaAngles Range between 0 and Pi
+    //YThetaAngles Range between -Pi/2 and Pi/2
     
 public:
     arc();
     arc(ellipse& elps, double start, double end);
     arc(Point3D& centre, double a, double b, double start, double end);
+    arc(double cx, double cy, double cz, double a, double b, double s, double e);
     bool pointonarc(Point3D& point);
     bool photonarcintersect(Photon& photon);
     combined GetStorage();
@@ -42,7 +42,11 @@ public:
     bool IntersectionConcave(Photon& photon);
     Vector3D GetNormalVector(Photon& photon);
     
+    void SetE(ellipse& ell);
+    ellipse& GetE();
     
+    bool directioncheck(Vector3D& v, Vector3D& m);
+    bool pointonpath(Point3D& point, Photon& photon);
     
 };
 

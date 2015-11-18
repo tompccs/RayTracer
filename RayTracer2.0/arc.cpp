@@ -3,7 +3,7 @@
 arc::arc(){}
 
 arc::arc(ellipse& elps, double start, double end){
-    e = elps;
+    SetE(elps);
     startangle = start;
     endangle = end;
 }
@@ -15,6 +15,11 @@ arc::arc(Point3D& centre, double a, double b, double start, double end){
     startangle = start;
     endangle = end;
 }
+
+arc::arc(double cx, double cy, double cz, double a, double b, double st, double en){
+    
+}
+
 
 bool
 arc::pointonarc(Point3D &point){
@@ -47,35 +52,48 @@ arc::pointonarc(Point3D &point){
 bool
 arc::photonarcintersect(Photon &photon){
     
+    //cout<<"Checking!"<<endl;
+    
     e.points3D(photon);
     combined e_info = e.GetStorage();
     Point3D p1 = e_info.GetPoint();
     Point3D p2 = e_info.GetPoint2();
     
+    bool po1 = 0;
+    bool po2 = 0;
+    
+    if(pointonpath(p1, photon)){
+        po1 = 1;
+    }
+    
+    if(pointonpath(p2, photon)){
+        po2 = 1;
+    }
+    
     //cout<<"Printpoint!!!!"<<endl;
     //reader.PrintPoint(p1);
     //reader.PrintPoint(p2);
-
     
-    if(pointonarc(p1)&&pointonarc(p2)){
+    
+    if(pointonarc(p1)&&pointonarc(p2)&&po1&&po2){
         //cout<<"Both points are on the arc! Return true!"<<endl;
         SetStoragePoint1(p1);
         SetStoragePoint2(p2);
         return true;
     }
     
-    if(pointonarc(p1)){
+    if(pointonarc(p1)&&po1){
         //cout<<"Point is on arc! Return true!"<<endl;
         SetStoragePoint1(p1);
         return true;
     }
-
-    if(pointonarc(p2)){
+    
+    if(pointonarc(p2)&&po2){
         //cout<<"Point 2 is on arc! Return true!"<<endl;
         SetStoragePoint2(p2);
         return true;
     }
-
+    
     //cout<<"No points on the arc! Return false!"<<endl;
     return false;
 }
@@ -87,7 +105,8 @@ arc::GetStorage(){
 
 Point3D //finds next point of intersection on arc. Perhaps need direction check.
 arc::GetNextPoint(Photon& photon){
-    bool check = photonarcintersect(photon);
+    bool check = 0;
+    check = photonarcintersect(photon);
     Point3D point1 = GetStorage().GetPoint();
     Point3D point2 = GetStorage().GetPoint2();
     
@@ -148,7 +167,9 @@ arc::getendangle(){
 
 double
 arc::IntersectDistance(Photon &photon){
-    return photon.GetPosition().distancetopoint(GetNextPoint(photon));
+    //cout<<"H"<<endl;
+    double distance = photon.GetPosition().distancetopoint(GetNextPoint(photon));
+    return distance;
 }
 
 double
@@ -197,45 +218,95 @@ arc::OutsideNormalVector(Point3D &p){
     return normal;
 }
 
-bool //Checks if intersection is on concave or convex part of arc. assumes intersection will happen. Returns true for concave.
-arc::IntersectionConcave(Photon &photon){
-    double distance = IntersectDistance(photon);
-    //cout<<"distance is "<<distance<<endl;
-    Point3D position = photon.GetPosition();
-    Vector3D momentum = photon.GetMomentum();
+//Check if intersection is concave or convec for part. (i.e. if the photon is inside or outside the ellipse.)
+bool
+arc::IntersectionConcave(Photon& photon){
+    bool test = 0;
     
-    Point3D point1 = position + momentum*(0.99999*distance);
-    Point3D point2 = position + momentum*(1.00001*distance);
-    //reader.PrintPoint(point1);
-    //reader.PrintPoint(point2);
-
-    Point2D c(e.GetCentre().x, e.GetCentre().y);
+    Point3D& pos = photon.GetPosition();
     
-    Point2D p1(point1.x, point1.y);
-    Point2D p2(point2.x, point2.y);
-    //reader.Print2DPoint(c);
-    //reader.Print2DPoint(p1);
-    //reader.Print2DPoint(p2);
-    double d1 = distancetocentre(point1);
-    double d2 = distancetocentre(point2);
+    test = GetE().PointInsideEllipse(pos);
     
-
-    if(d1<d2){
-        //cout<<"Concave"<<endl;
-        return true;
-    }
-    //cout<<"Convex"<<endl;
-    
-    return false;
+    return test;
 }
+
+/*bool //Checks if intersection is on concave or convex part of arc. assumes intersection will happen. Returns true for concave.
+ arc::IntersectionConcave(Photon &photon){
+ double distance = IntersectDistance(photon);
+ //cout<<"distance is "<<distance<<endl;
+ Point3D position = photon.GetPosition();
+ Vector3D momentum = photon.GetMomentum();
+ 
+ Point3D point1 = position + momentum*(0.99999*distance);
+ Point3D point2 = position + momentum*(1.00001*distance);
+ //reader.PrintPoint(point1);
+ //reader.PrintPoint(point2);
+ 
+ Point2D c(e.GetCentre().x, e.GetCentre().y);
+ 
+ Point2D p1(point1.x, point1.y);
+ Point2D p2(point2.x, point2.y);
+ //reader.Print2DPoint(c);
+ //reader.Print2DPoint(p1);
+ //reader.Print2DPoint(p2);
+ double d1 = distancetocentre(point1);
+ double d2 = distancetocentre(point2);
+ 
+ 
+ if(d1<d2){
+ //cout<<"Concave"<<endl;
+ return true;
+ }
+ //cout<<"Convex"<<endl;
+ 
+ return false;
+ }*/
 
 Vector3D //If photon intersects arc, and intersection is concave, returns normal vector.
 arc::GetNormalVector(Photon &photon){
     Point3D nextpoint = GetNextPoint(photon);
     
     if(photonarcintersect(photon) && IntersectionConcave(photon)){
-        return OutsideNormalVector(nextpoint);
+        return InsideNormalVector(nextpoint);
     }
-    return InsideNormalVector(nextpoint);
+    return OutsideNormalVector(nextpoint);
     
+}
+
+void
+arc::SetE(ellipse &ell){
+    e = ell;
+}
+
+ellipse&
+arc::GetE(){
+    return e;
+}
+
+bool
+arc::directioncheck(Vector3D &v, Vector3D &m){ //checks that two vectors are in the same direction
+    bool test = 0;
+    double dot = Dot(v,m);
+    double mag_A = Magnitude(v);
+    double mag_B = Magnitude(m);
+    double costheta = dot / (mag_A)*(mag_B);
+    
+    if(fabs(1-costheta)<1e-5){
+        test = 1;
+    }
+    
+    return test;
+}
+
+bool //checks that a point is on the path of a photon
+arc::pointonpath(Point3D &point, Photon& photon){
+    
+    Point3D& position = photon.GetPosition();
+    Vector3D momentum = photon.GetMomentum();
+    
+    Vector3D path = point-position;
+    
+    bool check = directioncheck(path, momentum);
+    
+    return check;
 }

@@ -103,7 +103,7 @@
 		C6DB680B1BCE536C0081E896 /* unittests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unittests.cpp; sourceTree = "<group>"; };
 		C6DB680C1BCE536C0081E896 /* unittests.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unittests.hpp; sourceTree = "<group>"; };
 		C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FresnelJackson.cpp; sourceTree = "<group>"; };
-		C6DD74C019ACD3B2009D8EAA /* FresnelJackson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FresnelJackson.h; sourceTree = "<group>"; };
+		C6DD74C019ACD3B2009D8EAA /* FresnelJackson.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FresnelJackson.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,10 +157,10 @@
 				C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */,
 				C62CBCB21990D4FD004FE771 /* Material.cpp */,
 				C632C884198B8E00006430D8 /* Test.cpp */,
-				C60C84481990171C00F302FF /* List.cpp */,
 				C632C878198B7C19006430D8 /* Vector2D.cpp */,
 				C632C887198B9221006430D8 /* Photon.cpp */,
 				C632C87B198B82AC006430D8 /* Point2D.cpp */,
+				C60C84481990171C00F302FF /* List.cpp */,
 				C632C87E198B85C4006430D8 /* Point3D.cpp */,
 				C60C24701A84F0FF0074FFD6 /* matrix.cpp */,
 				C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */,
@@ -184,7 +184,7 @@
 				C60C24711A84F0FF0074FFD6 /* matrix.h */,
 				C6839AAC19BDC61E003F43BD /* MATLABPrint.h */,
 				C636ED4919B73882006AA281 /* MultipleObjects.h */,
-				C6DD74C019ACD3B2009D8EAA /* FresnelJackson.h */,
+				C6DD74C019ACD3B2009D8EAA /* FresnelJackson.hpp */,
 				C62CBCB31990D4FD004FE771 /* Material.h */,
 				C62CBCB61990D512004FE771 /* Process.h */,
 				C632C885198B8E00006430D8 /* Test.h */,

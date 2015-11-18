@@ -12,7 +12,7 @@ MATLABPrint::CentrePoint(Material* box){
     ostringstream buffer;
     buffer<<"["<<centre.x/100<<","<<centre.y/100<<","<<centre.z/100<<"]";
     return buffer.str();
-
+    
 }
 
 string //returns string '[x,y,z]' for size of box
@@ -64,16 +64,16 @@ MATLABPrint::DyeAbsorbPrint(vector<Point3D> points){
     
     for(int i=0; i<points.size(); i++){
         if(points[i].x >0 && points[i].y >0 && points[i].z >0){
-        x.push_back(points[i].x);
-        y.push_back(points[i].y);
-        z.push_back(points[i].z);
+            x.push_back(points[i].x);
+            y.push_back(points[i].y);
+            z.push_back(points[i].z);
         }
     }
     
     print->PrintVectorFile(x, "dyeabsorb_x.txt");
     print->PrintVectorFile(y, "dyeabsorb_y.txt");
     print->PrintVectorFile(z, "dyeabsorb_z.txt");
-
+    
 }
 
 void //prints path of photon into files

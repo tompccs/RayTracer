@@ -2,7 +2,7 @@
 
 
 /*This method generates a matrix full of probabilities. It has xlength 'thetalength
-and ylength 'philength'. The distribution is normal with values centred about theta = 0
+ and ylength 'philength'. The distribution is normal with values centred about theta = 0
  or pi, and is independant of phi. the number of random rolls is 'rolls'.
  */
 matrix<double>
@@ -17,14 +17,14 @@ anisotropic::probs(int thetalength, int philength, int rolls, int deviation){
     
     default_random_engine generator;
     normal_distribution<double> distribution(mean,stddeviation);
-
+    
     double* p = new double[thetalength/2];
     
     for (int i=0; i<rolls; ++i) {
         double number = abs(distribution(generator));
         if ((number>=0.0)&&(number<thetalength/2)) ++p[int(number)];
     }
-
+    
     
     for (int i=0; i<thetalength/2; i++) {
         values(i,0)=((p[i]/nrolls)/philength)/2;
@@ -34,13 +34,13 @@ anisotropic::probs(int thetalength, int philength, int rolls, int deviation){
         values(i,0)=((p[thetalength-i-1]/nrolls)/philength)/2;
     }
     
-   for (int i=0; i<thetalength; i++){
+    for (int i=0; i<thetalength; i++){
         for(int j=0; j<philength; j++){
             values(i,j) = values(i,0);
         }
     }
     
-
+    
     double total=0;
     
     for(int i=0; i<thetalength; i++){
@@ -51,7 +51,7 @@ anisotropic::probs(int thetalength, int philength, int rolls, int deviation){
     
     cout<<"Total probability is: "<<total<<endl;
     
-
+    
     
     return values;
 }
@@ -62,7 +62,7 @@ anisotropic::probs(int thetalength, int philength, int rolls, int deviation){
 matrix<double>
 anisotropic::cumulative(matrix<double> &oldmatrix){
     matrix<double> newmatrix(oldmatrix);
-   
+    
     for(int i=0; i<newmatrix.get_rows();i++){
         if(i>0){
             newmatrix(i,0)= newmatrix(i,0) + newmatrix(i-1,newmatrix.get_cols()-1);
@@ -82,7 +82,7 @@ Spherical3D
 anisotropic::pointlookup(matrix<double> &probabilities){
     Functions random;
     double value3 = random.Random(1);
-
+    
     cout<<value3<<endl;
     
     int col =0;
@@ -115,7 +115,7 @@ anisotropic::pointlookup(matrix<double> &probabilities){
     
     theta = (M_PI*col)/probabilities.get_cols();
     phi = (2*M_PI*row)/probabilities.get_rows();
-
+    
     return Spherical3D(r,theta,phi);
 }
 

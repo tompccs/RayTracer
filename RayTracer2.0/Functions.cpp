@@ -14,5 +14,6 @@ Functions::GetVectorMin(vector<double> a){
 
 double //Generates random number between 0 and a
 Functions::Random(double a){
-    return (a * ((double) rand() / (RAND_MAX)));
+    double number = (a * ((double) rand() / (RAND_MAX)));
+    return number ;
 }

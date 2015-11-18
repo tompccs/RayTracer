@@ -3,20 +3,20 @@
 vector <double>
 List::read(string filename){
     fstream file;
-	vector <double> list; // 1D Vector to store list.
+    vector <double> list; // 1D Vector to store list.
     
-	// Read file
-	file.open(filename, ios::in); // Open file
-	if (file.is_open()) { // If file has correctly opened...
-		// Dynamically store data into array
-		while (file.good()) { // ... and while there are no errors,
+    // Read file
+    file.open(filename, ios::in); // Open file
+    if (file.is_open()) { // If file has correctly opened...
+        // Dynamically store data into array
+        while (file.good()) { // ... and while there are no errors,
             double newdata;
             file >> newdata;
-			list.push_back(newdata); // add a new row,
+            list.push_back(newdata); // add a new row,
         }
     }
-	else cout << "Unable to open file." << endl;
-	file.close();
+    else cout << "Unable to open file." << endl;
+    file.close();
     return list;
 }
 

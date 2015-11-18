@@ -5,7 +5,7 @@
 #include "arc.hpp"
 #include "Test.h"
 #include "arc.hpp"
-#include "FresnelJackson.h"
+#include "FresnelJackson.hpp"
 
 class unittest{
     

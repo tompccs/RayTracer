@@ -119,7 +119,7 @@ unittest::arctest(){
     
     jackson.Calculate(photon.GetMomentum(), photon.GetPolarisation(), normal, i, j);
     
-
+    
     reader.PrintVector(jackson.GetNewMomentum().Normalise());
     
     

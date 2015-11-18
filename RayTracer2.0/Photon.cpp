@@ -104,7 +104,7 @@ Photon::SetRandomPolarisation(){
     
     Vector3D orthogonal;
     double min_len = 1e-3;
-        
+    
     Vector3D tmp_vec = Momentum % Vector3D(1,0,0);
     Vector3D output;
     
@@ -117,16 +117,16 @@ Photon::SetRandomPolarisation(){
         output = Momentum % tmp_vec;
         output.Normalise();
     }
-
+    
     Vector3D orth_vec1 = output;
     Vector3D orth_vec2 = output % orth_vec1;
-        
+    
     double phi = ((double) rand() / (RAND_MAX))*2*M_PI;
     double sinp = sin(phi);
     double cosp = cos(phi);
-        
+    
     Vector3D out_vec = orth_vec1*cosp + orth_vec2*sinp;
-        
+    
     out_vec.Normalise();
     SetPolarisation(out_vec);
 }
@@ -211,10 +211,10 @@ Photon::PointInline2D(Point2D &point){
     // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
     
     /*cout<<"P0->P1= "<<P0.distancetopoint(P1)<<endl;
-    cout<<"P1->PX= "<<P1.distancetopoint(point)<<endl;
-    cout<<"P0->PX= "<<P0.distancetopoint(point)<<endl;
+     cout<<"P1->PX= "<<P1.distancetopoint(point)<<endl;
+     cout<<"P0->PX= "<<P0.distancetopoint(point)<<endl;
      */
-
+    
     
     if(fabs(P0.distancetopoint(P1) + P1.distancetopoint(point) - P0.distancetopoint(point))<=1e-6){
         
