@@ -69,7 +69,7 @@ unittest::Ellipse_Points3D(){
     
 }
 
-void
+/*void
 unittest::arctest(){
     Test reader;
     
@@ -117,11 +117,11 @@ unittest::arctest(){
     reader.PrintVector(photon.GetMomentum());
     
     
-    jackson.Calculate(photon.GetMomentum(), photon.GetPolarisation(), normal, i, j);
+    jackson.Calculate(photon.GetMomentum(), photon.GetPolarisation(), normal, i, j, debug);
     
     
     reader.PrintVector(jackson.GetNewMomentum().Normalise());
     
     
     
-}
+}*/

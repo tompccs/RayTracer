@@ -1,15 +1,17 @@
 #include "FresnelJackson.hpp"
 
 void //calculates new momentum  vector
-FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2){
+FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2, bool debug){
     
-    /*cout<<"Momentum vector is:"<<endl;
+    if(debug){
+    cout<<"Momentum vector is:"<<endl;
      print.PrintVector(OldMomentum);
      cout<<"Polarisation vector is"<<endl;
      print.PrintVector(OldPolarisation);
      cout<<"Normal vector is"<<endl;
      print.PrintVector(theFacetNormal);
-     cout<<"Refractive index 1 is: "<<Rindex1<<" and 2 is: "<<Rindex2<<endl;*/
+     cout<<"Refractive index 1 is: "<<Rindex1<<" and 2 is: "<<Rindex2<<endl;
+    }
     
     double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
     
@@ -34,12 +36,16 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
     
     if(sinr >= 1.0){ //Total Internal Reflection
         
-        //cout<<"Total internal reflection."<<endl;
+        if(debug){
+            cout<<"Total internal reflection."<<endl;
+        }
         
         NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
         NewPolarisation = -OldPolarisation + theFacetNormal*(2*EdotN);
         Transmitted = 0;
-        //cout<<"Reflected"<<endl;
+        if(debug){
+            cout<<"Reflected"<<endl;
+        }
         
     }
     else{
@@ -69,7 +75,9 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         
         double genrand = calc.Random(1);
         
-        //cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;
+        if(debug){
+          cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;  
+        }
         
         if(genrand>TransCoeff){ //Reflection
             
@@ -96,7 +104,9 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             NewPolarisation = ProjectionOnPlane(NewMomentum, NewPolarisation);
             
             Transmitted = 0;
-            //cout<<"Reflected"<<endl;
+            if(debug){
+                cout<<"Reflected"<<endl;
+            }
         }
         
         else{
@@ -120,7 +130,9 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             }
             
             Transmitted = 1;
-            //cout<<"Transmitted"<<endl;
+            if(debug){
+                cout<<"Transmitted"<<endl;
+            }
         }
     }
 }
@@ -130,7 +142,7 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     
     Vector3D N = (lsc->GetInterfaceSheet(photon).GetNormal());
     
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), lsc->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), lsc->GetRefractiveIndex(), debug);
     
     photon->SetPosition(lsc->GetInterfacePoint(photon));
     photon->SetMomentum(NewMomentum);
@@ -160,7 +172,7 @@ FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bo
     Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
     double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
     
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, material1->GetRefractiveIndex(), material2->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, material1->GetRefractiveIndex(), material2->GetRefractiveIndex(), debug);
     
     photon->SetPosition(material1->GetInterfacePoint(photon));
     photon->SetMomentum(NewMomentum);
@@ -206,11 +218,11 @@ FresnelJackson::GetNewPolarisation(){
 void //entrance event
 FresnelJackson::CurvedIn(Photon *photon, Material *world, curvedbox *FLSC, bool &debug){
     
-    Vector3D N = (FLSC->GetNextNormal(*photon));
+    Vector3D N = (FLSC->GetNextNormal(*photon, debug));
     
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), FLSC->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), FLSC->GetRefractiveIndex(), debug);
     
-    photon->SetPosition(photon->GetPosition()+photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon));
+    photon->SetPosition(photon->GetPosition()+photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon,debug));
     photon->SetMomentum(NewMomentum);
     photon->SetPolarisation(NewPolarisation);
     
@@ -235,22 +247,22 @@ FresnelJackson::CurvedIn(Photon *photon, Material *world, curvedbox *FLSC, bool 
 
 void
 FresnelJackson::CurvedOut(Photon *photon, curvedbox *FLSC, Material *world, bool &debug){
-    int surface = FLSC->NextInterface(*photon);
+    int surface = FLSC->NextInterface(*photon,debug);
     Vector3D N;
     if(surface!=2 && surface!=3){
-        N = -FLSC->GetNextNormal(*photon);
+        N = -FLSC->GetNextNormal(*photon, debug);
         
     }
     else{
-        N = FLSC->GetNextNormal(*photon);
+        N = FLSC->GetNextNormal(*photon, debug);
     }
     
     
-    double value = photon->GetAbsorbLength() - FLSC->NextInterfaceDistance(*photon);
+    double value = photon->GetAbsorbLength() - FLSC->NextInterfaceDistance(*photon,debug);
     
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, FLSC->GetRefractiveIndex(), world->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, FLSC->GetRefractiveIndex(), world->GetRefractiveIndex(), debug);
     
-    photon->SetPosition(photon->GetPosition() + photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon));
+    photon->SetPosition(photon->GetPosition() + photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon,debug));
     photon->SetMomentum(NewMomentum);
     photon->SetPolarisation(NewPolarisation);
     

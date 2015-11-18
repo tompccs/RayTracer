@@ -16,7 +16,7 @@ class FresnelJackson{
     Functions calc;
     Test print;
 public:
-    void Calculate(Vector3D& OldMomentum, Vector3D& OldPolarisation, Vector3D& theFacetNormal, double& Rindex1, double& Rindex2);
+    void Calculate(Vector3D& OldMomentum, Vector3D& OldPolarisation, Vector3D& theFacetNormal, double& Rindex1, double& Rindex2, bool debug);
     
     void In(Photon* photon, Material* world, Material* lsc, bool& debug);
     

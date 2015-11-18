@@ -339,12 +339,36 @@ curvedbox::Set(arc central, double height, double width, double refractiveindex)
 }
 
 int
-curvedbox::NextInterface(Photon &photon){
+curvedbox::NextInterface(Photon &photon, bool debug){
+    
+    if(debug){
+        cout<<"Running NextInterface method."<<endl;
+    }
+    
+    NextInterfaceValue = 7;
+    
+    NextInterfaceDistance(photon, debug);
+    
+    if(debug){
+        cout<<"Returning sheetnumber "<<NextInterfaceValue<<endl<<endl;
+    }
+    
+    return NextInterfaceValue;
+    
+    
+}
+
+double
+curvedbox::NextInterfaceDistance(Photon &photon, bool debug){
+    
+    if(debug){
+        cout<<"Running NextInterfaceDistance method."<<endl;
+    }
+    
     double nextdistance = INFINITY;
     int sheetnumber = 7;
     
     double d[6];
-    
     
     d[0] = DToStartSheet(photon);
     d[1] = DToEndSheet(photon);
@@ -353,60 +377,32 @@ curvedbox::NextInterface(Photon &photon){
     d[4] = DToTopSheet(photon);
     d[5] = DToBottomSheet(photon);
     
-    /*for (int i=0; i<6; i++){
-     if (d[i] != INFINITY){
-     cout<<"Distance to sheet "<<i<<" is "<<d[i]<<endl;
-     }
-     }*/
+    if(debug){
+        for (int i = 0; i<6; i++){
+            cout<<"Distance to sheet "<<i<<" is "<<d[i]<<endl;
+        }
+    }
     
-    for (int i=0; i<6; i++) {
-        if(d[i]<nextdistance) {
+    for(int i = 0; i<6; i++){
+        if(d[i] != INFINITY && d[i]<nextdistance){
             nextdistance = d[i];
             sheetnumber = i;
         }
     }
     
-    //cout<<"Next distance is:"<< nextdistance<<endl;
-    //cout<<"Sheetnumber is:"<<sheetnumber<<endl;
+    NextInterfaceValue = sheetnumber;
     
-    return sheetnumber;
-    
-}
-
-double
-curvedbox::NextInterfaceDistance(Photon &photon){
-    double nextdistance = INFINITY;
-    
-    int sheetnumber = NextInterface(photon);
-    
-    switch(sheetnumber){
-        case 0:
-            return DToStartSheet(photon);
-            break;
-        case 1:
-            return DToEndSheet(photon);
-            break;
-        case 2:
-            return DToInsideArc(photon);
-            break;
-        case 3:
-            return DToOutsideArc(photon);
-            break;
-        case 4:
-            return DToTopSheet(photon);
-            break;
-        case 5:
-            return DToBottomSheet(photon);
-            break;
+    if(debug){
+        cout<<"Shortest distance is "<<nextdistance<<endl<<endl;
     }
-    
+            
     return nextdistance;
 }
 
 Vector3D
-curvedbox::GetNextNormal(Photon &photon){
+curvedbox::GetNextNormal(Photon &photon, bool debug){
     
-    int sheetnumber = NextInterface(photon);
+    int sheetnumber = NextInterface(photon, debug);
     
     switch(sheetnumber){
         case 0:
