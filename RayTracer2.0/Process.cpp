@@ -7,7 +7,7 @@ Process::ReadData(bool evenspaced){
         QuantumYieldValues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_quantumyield.txt");
         vector<double> yvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_AU.txt");
         ProbabilityValues = data.auconvert(yvalues);
-    
+        
         vector<double> xvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absoption_lambda.txt");
         vector<double> newyvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absorption_extinctionrate.txt");
         Wavelengths = data.newxdata(xvalues);
@@ -27,7 +27,7 @@ Process::ReadData(bool evenspaced){
 double //Gets extinction rates
 Process::GetExtinctionRate(double &wavelength){
     double i = data.GetAfromB(wavelength, ExtinctionRateValues, Wavelengths);
-   //cout<<i<<endl;
+    //cout<<i<<endl;
     return i;
 }
 
@@ -48,9 +48,9 @@ Process::GetEmissionWavelength(){
 
 bool //checks if reemitted
 Process::QuantumYieldCheck(double &Wavelength){
- //   int i = data.findNearestNeighbourIndex(Wavelength, Wavelengthvalues);
+    //   int i = data.findNearestNeighbourIndex(Wavelength, Wavelengthvalues);
     if(calc.Random(1)<=0.8) return 1;
     //if(calc.Random(1)<=QuantumYieldValues[i]) return 1; //ADD FILE WITH ALL QY VALUES
     else return 0;
-
+    
 }

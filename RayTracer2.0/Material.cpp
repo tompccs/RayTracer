@@ -65,18 +65,18 @@ Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Poin
     }
     
     if(Events.QuantumYieldCheck(P->GetWavelength())){ //If QY = 1
-            Vector3D a; //Reemit particle
-            P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
-            P->SetMomentum(a.GetRandomUnitVector());
-            P->SetWavelength(Events.GetEmissionWavelength());
-            P->SetRandomPolarisation();
-            SetInitialAbsorbLength(P);
+        Vector3D a; //Reemit particle
+        P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
+        P->SetMomentum(a.GetRandomUnitVector());
+        P->SetWavelength(Events.GetEmissionWavelength());
+        P->SetRandomPolarisation();
+        SetInitialAbsorbLength(P);
         
         if(debug){
             cout<<"and reemitted."<<endl;
             print.PhotonPrint(P);
         }
-
+        
     }
     else{
         if(debug) cout<<"but not reemitted."<<endl<<endl;
@@ -113,4 +113,14 @@ Material::SetMaterialNumber(long n){
 long&
 Material::GetMaterialNumber(){
     return Materialnumber;
+}
+
+void
+Material::SetCurved(bool yesno){
+    Curved = yesno;
+}
+
+bool&
+Material::GetCurved(){
+    return Curved;
 }

@@ -254,7 +254,7 @@ unsigned matrix<T>::get_rows() const {
     return this->rows;
 }
 
-// Get the number of columns of the matrix                                                                                                                                    
+// Get the number of columns of the matrix
 template<typename T>
 unsigned matrix<T>::get_cols() const {
     return this->cols;

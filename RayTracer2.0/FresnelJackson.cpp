@@ -1,7 +1,17 @@
-#include "FresnelJackson.h"
+#include "FresnelJackson.hpp"
 
 void //calculates new momentum  vector
-FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2){
+FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2, bool debug){
+    
+    if(debug){
+    cout<<"Momentum vector is:"<<endl;
+     print.PrintVector(OldMomentum);
+     cout<<"Polarisation vector is"<<endl;
+     print.PrintVector(OldPolarisation);
+     cout<<"Normal vector is"<<endl;
+     print.PrintVector(theFacetNormal);
+     cout<<"Refractive index 1 is: "<<Rindex1<<" and 2 is: "<<Rindex2<<endl;
+    }
     
     double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
     
@@ -16,26 +26,32 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
     
     if(abs(cosi) < 1.0 - kCarTolerance){
         
-         sini = sqrt(1.-cosi*cosi);
-         sinr = sini*Rindex1/Rindex2;
+        sini = sqrt(1.-cosi*cosi);
+        sinr = sini*Rindex1/Rindex2;
     }
     else{
-             sini = 0.0;
-             sinr = 0.0;
+        sini = 0.0;
+        sinr = 0.0;
     }
-
+    
     if(sinr >= 1.0){ //Total Internal Reflection
+        
+        if(debug){
+            cout<<"Total internal reflection."<<endl;
+        }
         
         NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
         NewPolarisation = -OldPolarisation + theFacetNormal*(2*EdotN);
         Transmitted = 0;
-        //cout<<"Reflected"<<endl;
+        if(debug){
+            cout<<"Reflected"<<endl;
+        }
         
     }
     else{
         
         if(cosi > 0.0)
-           cosr =  sqrt(1.-sinr*sinr);
+            cosr =  sqrt(1.-sinr*sinr);
         if (sini > 0.0){
             A_trans = -Cross(OldMomentum,theFacetNormal).Normalise();
             A_paral_inc = Cross(OldMomentum,A_trans).Normalise();
@@ -59,6 +75,10 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         
         double genrand = calc.Random(1);
         
+        if(debug){
+          cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;  
+        }
+        
         if(genrand>TransCoeff){ //Reflection
             
             if (sini > 0.0){
@@ -69,46 +89,50 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
                 E2_abs    = sqrt(E2_total);
                 C_parl    = E2_parl/E2_abs;
                 C_perp    = E2_perp/E2_abs;
-            
-            NewPolarisation = C_parl*A_paral + C_perp*A_trans;
+                
+                NewPolarisation = C_parl*A_paral + C_perp*A_trans;
                 
             }
             
             else{
                 
                 NewMomentum = -OldMomentum;
-                    if (Rindex2 > Rindex1) NewPolarisation = -OldPolarisation;
-                    else NewPolarisation =   OldPolarisation;
-                }
+                if (Rindex2 > Rindex1) NewPolarisation = -OldPolarisation;
+                else NewPolarisation =   OldPolarisation;
+            }
             
             NewPolarisation = ProjectionOnPlane(NewMomentum, NewPolarisation);
-        
+            
             Transmitted = 0;
-            //cout<<"Reflected"<<endl;
+            if(debug){
+                cout<<"Reflected"<<endl;
+            }
         }
         
         else{
             
             if(sini > 0.0){
                 
-            double alpha = cosi - cosr*(Rindex2/Rindex1);
-            NewMomentum = OldMomentum - alpha*theFacetNormal.Normalise();
-            
-            A_paral    = Cross(NewMomentum,A_trans).Normalise();
-            E2_abs     = sqrt(E2_total);
-            C_parl     = E2_parl/E2_abs;
-            C_perp     = E2_perp/E2_abs;
-            
-            NewPolarisation = C_parl*A_paral + C_perp*A_trans;
-            
+                double alpha = cosi - cosr*(Rindex2/Rindex1);
+                NewMomentum = OldMomentum - alpha*theFacetNormal.Normalise();
+                
+                A_paral    = Cross(NewMomentum,A_trans).Normalise();
+                E2_abs     = sqrt(E2_total);
+                C_parl     = E2_parl/E2_abs;
+                C_perp     = E2_perp/E2_abs;
+                
+                NewPolarisation = C_parl*A_paral + C_perp*A_trans;
+                
             }
             else{
                 NewMomentum = OldMomentum;
                 NewPolarisation = OldPolarisation;
             }
-  
-                Transmitted = 1;
-            //cout<<"Transmitted"<<endl;
+            
+            Transmitted = 1;
+            if(debug){
+                cout<<"Transmitted"<<endl;
+            }
         }
     }
 }
@@ -118,12 +142,12 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     
     Vector3D N = (lsc->GetInterfaceSheet(photon).GetNormal());
     
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), lsc->GetRefractiveIndex());
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), lsc->GetRefractiveIndex(), debug);
     
     photon->SetPosition(lsc->GetInterfacePoint(photon));
     photon->SetMomentum(NewMomentum);
     photon->SetPolarisation(NewPolarisation);
-
+    
     if(Transmitted){
         lsc->SetPhotonInside(1);
         lsc->SetInitialAbsorbLength(photon);
@@ -147,9 +171,9 @@ void //exit event
 FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects){
     Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
     double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
-
-    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, material1->GetRefractiveIndex(), material2->GetRefractiveIndex());
-
+    
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, material1->GetRefractiveIndex(), material2->GetRefractiveIndex(), debug);
+    
     photon->SetPosition(material1->GetInterfacePoint(photon));
     photon->SetMomentum(NewMomentum);
     photon->SetPolarisation(NewPolarisation);
@@ -189,4 +213,75 @@ FresnelJackson::GetNewMomentum(){
 Vector3D
 FresnelJackson::GetNewPolarisation(){
     return NewPolarisation;
+}
+
+void //entrance event
+FresnelJackson::CurvedIn(Photon *photon, Material *world, curvedbox *FLSC, bool &debug){
+    
+    Vector3D N = (FLSC->GetNextNormal(*photon, debug));
+    
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), FLSC->GetRefractiveIndex(), debug);
+    
+    photon->SetPosition(photon->GetPosition()+photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon,debug));
+    photon->SetMomentum(NewMomentum);
+    photon->SetPolarisation(NewPolarisation);
+    
+    if(Transmitted){
+        FLSC->SetPhotonInside(1);
+        FLSC->SetInitialAbsorbLength(photon);
+        photon->SetInside();
+        
+        if(debug){
+            cout<<"Entrance boundary event. Refraction:"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
+    else{
+        if(debug){
+            cout<<"Entrance boundary event. Reflection (No entrance):"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+}
+
+void
+FresnelJackson::CurvedOut(Photon *photon, curvedbox *FLSC, Material *world, bool &debug){
+    int surface = FLSC->NextInterface(*photon,debug);
+    Vector3D N;
+    if(surface!=2 && surface!=3){
+        N = -FLSC->GetNextNormal(*photon, debug);
+        
+    }
+    else{
+        N = FLSC->GetNextNormal(*photon, debug);
+    }
+    
+    
+    double value = photon->GetAbsorbLength() - FLSC->NextInterfaceDistance(*photon,debug);
+    
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, FLSC->GetRefractiveIndex(), world->GetRefractiveIndex(), debug);
+    
+    photon->SetPosition(photon->GetPosition() + photon->GetMomentum()*FLSC->NextInterfaceDistance(*photon,debug));
+    photon->SetMomentum(NewMomentum);
+    photon->SetPolarisation(NewPolarisation);
+    
+    if(!Transmitted){
+        photon->SetAbsorblength(value);
+        if(debug){
+            cout<<"Exit boundary event. Reflection (No exit):"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
+    else{
+        FLSC->SetPhotonInside(0);
+        photon->SetExit();
+        photon->SetAbsorblength(DBL_MAX);
+        if(debug){
+            cout<<"Exit boundary event. Refraction:"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
 }

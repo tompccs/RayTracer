@@ -12,6 +12,7 @@ class Material: public Box{
     bool PhotonInside;
     long Materialnumber;
     Test print;
+    bool Curved;
 public:
     
     Process& GetProcess();
@@ -42,7 +43,11 @@ public:
     
     long& GetMaterialNumber();
     
+    void SetCurved(bool yesno);
     
-    };
+    bool& GetCurved();
+    
+    
+};
 
 #endif
