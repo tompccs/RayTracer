@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint){
+void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint, bool wavelengthprint){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
@@ -57,16 +57,16 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
     Point3D D (1,1,1);
     Point3D E (6,1,1);
     Point3D F (1,6,1);
-    double h2 = 0.4;
+    double h2 = 0.5;
     
     Point3D J (1,1,2);
     Point3D K (11,1,2);
     Point3D L (1,11,2);
     double h3 = 0.5;
     
-    Point3D G (1,1,9);
-    Point3D H (6,1,9);
-    Point3D I (1,6,9);
+    Point3D G (3,3,9);
+    Point3D H (4,3,9);
+    Point3D I (3,4,9);
     
     Sheet* source = new Sheet;
     
@@ -256,8 +256,13 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint)
         NotAbsorbedInside.push_back(100*notabsorbedinside/thisphotons);
         InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
         
-        
+        if(wavelengthprint){
+            cout<<"Wavelength "<<wavelength<<" done."<<endl;
+        }
+
     }
+    
+    
     
     //Prints vectors to files for individual wavelengths.
     
@@ -323,21 +328,21 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
     
     //LSC dimensions and parameters
     
-    Point3D centrepoint(6,8,0);
-    ellipse e(centrepoint,2,1);
-    e.SetA(3);
-    e.SetB(5);
-    arc arcy(e,-M_PI_4,M_PI_4);
+    Point3D centrepoint(-3000,10,0);
+    ellipse e(centrepoint,3010,3000);
+    e.SetA(3010);
+    e.SetB(3000);
+    arc arcy(e,-tan(2.5/3010),tan(2.5/3010));
     
     
-    curvedbox* LSC = new curvedbox(arcy,6,0.5,1.495);
+    curvedbox* LSC = new curvedbox(arcy,5,0.5,1.495);
     LSC->ReadData(1);
     LSC->SetConcentration(1e-4);
-    LSC->Set(arcy, 6, 0.5, 1.495);
+    LSC->Set(arcy, 5, 0.5, 1.495);
     
-    Point3D SourceA (1,6.8,0);
-    Point3D SourceB (1,9.8,0);
-    Point3D SourceC (1,6.8,6);
+    Point3D SourceA (1,9.5,2.5);
+    Point3D SourceB (1,10.5,2.5);
+    Point3D SourceC (1,9.5,3.5);
     
     Sheet* source = new Sheet;
     
@@ -556,8 +561,9 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
 
 
 int main(int argc, const char * argv[]){
-    flexirun(100, 0, 350, 520, 0, 0, 0, 1);
-    //run(1000,1,350,520,0,0);
+    //run(10000,1,350,520,0,0,1);
+    flexirun(10000, 0, 350, 520, 0, 0, 0, 1);
+
     //flexitest();
     //testing();
 }
