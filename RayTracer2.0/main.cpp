@@ -259,7 +259,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint,
         if(wavelengthprint){
             cout<<"Wavelength "<<wavelength<<" done."<<endl;
         }
-
+        
     }
     
     
@@ -328,14 +328,22 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
     
     //LSC dimensions and parameters
     
-    Point3D centrepoint(-3000,10,0);
-    ellipse e(centrepoint,3010,3000);
-    e.SetA(3010);
-    e.SetB(3000);
-    arc arcy(e,-tan(2.5/3010),tan(2.5/3010));
     
     
-    curvedbox* LSC = new curvedbox(arcy,5,0.5,1.495);
+    //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
+    
+    double r = 10000; //radius of curvature
+    double l = 5; //length of lsc
+    double height = 5; //height of lsc
+    double width = 0.5; //width of lsc
+    Point3D centrepoint(-(r-10),10,0);
+    ellipse e(centrepoint,r,r);
+    e.SetA(r);
+    e.SetB(r);
+    arc arcy(e,-tan(l/(2*r)),tan(l/(2*r)));
+    
+    
+    curvedbox* LSC = new curvedbox(arcy,height,width,1.495);
     LSC->ReadData(1);
     LSC->SetConcentration(1e-4);
     LSC->Set(arcy, 5, 0.5, 1.495);
@@ -563,7 +571,5 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
 int main(int argc, const char * argv[]){
     //run(10000,1,350,520,0,0,1);
     flexirun(10000, 0, 350, 520, 0, 0, 0, 1);
-
-    //flexitest();
-    //testing();
+    
 }

@@ -182,8 +182,11 @@ curvedbox::DToOutsideArc(Photon &photon){
 
 double
 curvedbox::DToTopSheet(Photon& photon){
+    double intdistance = INFINITY;
     
-    double intdistance = topplane.IntersectionDistance(&photon);
+    if(PhotonInside){
+        intdistance = topplane.IntersectionDistance(&photon);
+    }
     
     return intdistance;
 }
@@ -191,7 +194,11 @@ curvedbox::DToTopSheet(Photon& photon){
 double
 curvedbox::DToBottomSheet(Photon& photon){
     
-    double intdistance = bottomplane.IntersectionDistance(&photon);
+    double intdistance = INFINITY;
+    
+    if(PhotonInside){
+        intdistance = bottomplane.IntersectionDistance(&photon);
+    }
     
     return intdistance;
 }
