@@ -50,6 +50,8 @@ public:
     
     bool GetPhotonInside();
     
+    void Intersection(Photon& photon);
+    
     
 };
 

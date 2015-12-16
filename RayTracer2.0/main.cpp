@@ -332,7 +332,278 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
     
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
-    double r = 10000; //radius of curvature
+    double r = 110; //radius of curvature
+    double l = 5; //length of lsc
+    double height = 5; //height of lsc
+    double width = 0.5; //width of lsc
+    Point3D centrepoint(-(r-10),10,0);
+    ellipse e(centrepoint,r,r);
+    e.SetA(r);
+    e.SetB(r);
+    arc arcy(e,-tan(l/(2*r)),tan(l/(2*r)));
+    
+    
+    curvedbox* LSC = new curvedbox(arcy,height,width,1.495);
+    LSC->ReadData(1);
+    LSC->SetConcentration(1e-4);
+    LSC->Set(arcy, 5, 0.5, 1.495);
+    
+    Point3D SourceA (1,9.5,2.5);
+    Point3D SourceB (1,10.5,2.5);
+    Point3D SourceC (1,9.5,3.5);
+    
+    Sheet* source = new Sheet;
+    
+    source->Set(SourceA,SourceB,SourceC);
+    
+    
+    double hits = 0;
+    double photons = 0;
+    
+    //Lists storing output files
+    
+    vector<double> output;
+    vector<Point3D> dyeabs;
+    
+    vector<double> inside;
+    
+    vector<double> d_zero;
+    vector<double> d_one;
+    vector<double> d_two;
+    vector<double> d_three;
+    vector<double> d_four;
+    vector<double> d_five;
+    vector<double> d_morethanfive;
+    
+    vector<double> QYLossData;
+    vector<double> ExitData;
+    
+    vector<double> Reflected;
+    vector<double> NotAbsorbedInside;
+    vector<double> InsideAbsorbedExit;
+    
+    //Loop for each wavelength. Set wavelength Range here.
+    
+    for(int wavelength = start; wavelength<= end; wavelength++){
+        
+        
+        double thisphotons = 0;
+        double thishits = 0;
+        
+        double thisinside = 0;
+        double QYLoss = 0;
+        double Exit = 0;
+        double zero = 0;
+        double one = 0;
+        double two = 0;
+        double three = 0;
+        double four = 0;
+        double five = 0;
+        double morethanfive = 0;
+        double reflected = 0;
+        double notabsorbedinside = 0;
+        double insideabsorbedexit = 0;
+        
+        
+        //Loop for individual wavelength.
+        
+        for(int i = 0; i<runs; i++){
+            
+            vector<Point3D> photonpath;
+            
+            
+            //New photon settings
+            Photon* photon = new Photon;
+            
+            photons++;
+            thisphotons++;
+            
+            double sy, sz;
+            
+            sy = source->GetA().y + calc->Random(1) * source->GetABLength();
+            sz = source->GetA().z + calc->Random(1) * source->GetACLength();
+            
+            photon->SetPosition(Point3D(20,sy,sz));
+            photon->SetMomentum(Vector3D(-1,0,0));
+            photon->SetWavelength(wavelength);
+            photon->SetRandomPolarisation();
+            
+            world->CorrectPhotonInside(photon);
+            
+            if(debug) {
+                cout<<"New photon:"<<endl<<endl;
+                print->PhotonPrint(photon);
+            }
+            
+            while(world->ReturnPhotonInside() & photon->PhotonAliveCheck()){ //While photon is inside world and alive.
+                if(!LSC->GetPhotonInside()){ //If photon is not in a LSC.
+                    if(fulldebug){
+                        cout<<"World Exit Distance is "<<world->GetInterfaceDistance(photon)<<"."<<endl;
+                    }
+                    
+                    if(world->GetInterfaceDistance(photon)<LSC->NextInterfaceDistance(*photon,fulldebug)){ //If next boundary is exit.
+                        photon->PhotonKill();
+                        photon->SetExit();
+                        world->SetPhotonInside(0);
+                        if(debug) {
+                            cout<<"World exit."<<endl<<endl;
+                        }
+                    }
+                    
+                    else{
+                        inout->CurvedIn(photon, world, LSC, debug); //Else, entrance reflect/refract event.
+                        if(matlabprint && LSC->GetPhotonInside()) photonpath.push_back(photon->GetPosition());
+                    }
+                }
+                
+                
+                else while(LSC->GetPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
+                    
+                    if(photon->GetAbsorbLength()<=LSC->NextInterfaceDistance(*photon,fulldebug)){ //If absorption = next event.
+                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
+                    }
+                    
+                    else{ //If boundary is next event.
+                        
+                        int nextinterface = LSC->NextInterface(*photon,fulldebug);
+                        
+                        if((nextinterface!=2 && nextinterface!=3)){
+                            photon->PhotonKill(); //If sheet is not inside or outside. Kill photon + add counters.
+                            hits++;
+                            thishits++;
+                            if(debug){
+                                cout<<"Hit on sheet "<<nextinterface<<" at interface point: ";
+                                print->PrintPoint(photon->GetPosition()+photon->GetMomentum()*LSC->NextInterfaceDistance(*photon,fulldebug));
+                                cout<<endl;
+                            }
+                        }
+                        else{
+                            inout->CurvedOut(photon, LSC, world, debug); //Otherwise exit reflect/refract event.
+                            if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
+                            
+                        }
+                    }
+                }
+            }
+            
+            //Counters
+            
+            if(photon->GetInside()) thisinside++;
+            if(photon->GetAbsorptions()==0) zero++;
+            if(photon->GetAbsorptions()==1) one++;
+            if(photon->GetAbsorptions()==2) two++;
+            if(photon->GetAbsorptions()==3) three++;
+            if(photon->GetAbsorptions()==4) four++;
+            if(photon->GetAbsorptions()==5) five++;
+            if(photon->GetAbsorptions()>5) morethanfive++;
+            if(photon->GetQYLoss()==1) QYLoss++;
+            if(photon->GetExit()==1) Exit++;
+            if(!photon->GetInside()) reflected++;
+            if(photon->GetAbsorptions()==0 && photon->GetInside() && photon->GetExit()) notabsorbedinside++;
+            if(photon->GetInside()&&photon->GetAbsorptions()!=0&&photon->GetExit()) insideabsorbedexit++;
+            
+            //Deletes photon.
+            
+            world->SetPhotonInside(0);
+            LSC->SetPhotonInside(0);
+            paths.push_back(photonpath);
+            delete photon;
+            
+        }
+        
+        //Adds value for individual wavelengths to vector.
+        
+        output.push_back(100*thishits/thisphotons);
+        
+        inside.push_back(100*thisinside/thisphotons);
+        d_zero.push_back(100*zero/thisphotons);
+        d_one.push_back(100*one/thisphotons);
+        d_two.push_back(100*two/thisphotons);
+        d_three.push_back(100*three/thisphotons);
+        d_four.push_back(100*four/thisphotons);
+        d_five.push_back(100*five/thisphotons);
+        d_morethanfive.push_back(100*morethanfive/thisphotons);
+        QYLossData.push_back(100*QYLoss/thisphotons);
+        ExitData.push_back(100*Exit/thisphotons);
+        Reflected.push_back(100*reflected/thisphotons);
+        NotAbsorbedInside.push_back(100*notabsorbedinside/thisphotons);
+        InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
+        
+        if(wavelengthprint){
+            cout<<"Wavelength "<<wavelength<<"nm done."<<endl;
+        }
+        
+        
+    }
+    
+    //Prints vectors to files for individual wavelengths.
+    
+    print->PrintVectorFile(output, "output.txt");
+    
+    print->PrintVectorFile(inside, "inside.txt");
+    print->PrintVectorFile(d_zero, "0.txt");
+    print->PrintVectorFile(d_one, "1.txt");
+    print->PrintVectorFile(d_two, "2.txt");
+    print->PrintVectorFile(d_three, "3.txt");
+    print->PrintVectorFile(d_four, "4.txt");
+    print->PrintVectorFile(d_five, "5.txt");
+    print->PrintVectorFile(d_morethanfive, "morethan5.txt");
+    print->PrintVectorFile(QYLossData, "qyloss.txt");
+    print->PrintVectorFile(ExitData, "exit.txt");
+    print->PrintVectorFile(Reflected, "reflected.txt");
+    print->PrintVectorFile(NotAbsorbedInside, "nai.txt");
+    print->PrintVectorFile(InsideAbsorbedExit, "iae.txt");
+    
+    
+    //Calculates total efficiency and prints as 'result'
+    
+    double result = 100 * hits/photons;
+    vector<double> finalresult;
+    finalresult.push_back(result);
+    print->PrintVectorFile(finalresult,"efficiency.txt");
+    
+    if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
+    cout<<"Total Optical Efficiency: "<<result<<"%"<<endl;
+    
+    if(matlabprint) matlab->PhotonPathPrint(paths);
+}
+
+void flexirun2(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint){
+    
+    //Main algorithm. runs = runs per wavelength. debug = debug mode.
+    
+    //Creates environment
+    
+    Material* world = new Material; //Creates new world box.
+    
+    FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
+    Functions* calc = new Functions; //Used for random number generation
+    Test* print = new Test; //Used to output debug lines
+    
+    MATLABPrint* matlab = new MATLABPrint;
+    
+    vector<vector<Point3D>> paths;
+    
+    //World dimensions and settings
+    Point3D A (0,0,0);
+    Point3D B (20,0,0);
+    Point3D C (0,20,0);
+    double h = 20;
+    
+    Sheet* worldbase = new Sheet;
+    worldbase->Set(A,B,C);
+    
+    world->SetRefractiveIndex(1);
+    world->SetConcentration(0);
+    world->Set(worldbase, h);
+    
+    //LSC dimensions and parameters
+    
+    
+    
+    //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
+    
+    double r = 12; //radius of curvature
     double l = 5; //length of lsc
     double height = 5; //height of lsc
     double width = 0.5; //width of lsc
@@ -443,6 +714,7 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
                     
                     if(world->GetInterfaceDistance(photon)<LSC->NextInterfaceDistance(*photon,fulldebug)){ //If next boundary is exit.
                         photon->PhotonKill();
+                        photon->SetExit();
                         world->SetPhotonInside(0);
                         if(debug) {
                             cout<<"World exit."<<endl<<endl;
@@ -498,7 +770,7 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
             if(photon->GetQYLoss()==1) QYLoss++;
             if(photon->GetExit()==1) Exit++;
             if(!photon->GetInside()) reflected++;
-            if(photon->GetAbsorptions()==0 && photon->GetInside()) notabsorbedinside++;
+            if(photon->GetAbsorptions()==0 && photon->GetInside() && photon->GetExit()) notabsorbedinside++;
             if(photon->GetInside()&&photon->GetAbsorptions()!=0&&photon->GetExit()) insideabsorbedexit++;
             
             //Deletes photon.
@@ -529,7 +801,7 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
         InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
         
         if(wavelengthprint){
-            cout<<"Wavelength "<<wavelength<<" done."<<endl;
+            cout<<"Wavelength "<<wavelength<<"nm done."<<endl;
         }
         
         
@@ -569,7 +841,10 @@ void flexirun(double runs,int lscs, int start, int end, bool debug, bool matlabp
 
 
 int main(int argc, const char * argv[]){
-    //run(10000,1,350,520,0,0,1);
-    flexirun(10000, 0, 350, 520, 0, 0, 0, 1);
     
+    //double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint
+    //run(20000,1,350,520,0,0,1);
+    //flexirun(1000, 1, 350, 520, 1, 0, 1, 1);
+    
+    flexirun2(20, 350, 520, 0, 1, 1, 1);
 }

@@ -15,6 +15,7 @@ class FresnelJackson{
     bool Transmitted;
     Functions calc;
     Test print;
+    bool err;
 public:
     void Calculate(Vector3D& OldMomentum, Vector3D& OldPolarisation, Vector3D& theFacetNormal, double& Rindex1, double& Rindex2, bool debug);
     
