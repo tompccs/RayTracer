@@ -102,16 +102,7 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
 double
 curvedbox::DToStartSheet(Photon& photon){
     
-    Photon* p = new Photon;
-    p = &photon;
-    
-    bool test = 0;
-    
-    if(startsheet.GetIntersectionTest(&photon)){
-        test = 1;
-    }
-    
-    if(test == 1){
+    if(startsheet.GetIntersectionTest(&photon)&&PhotonInside){
         return startsheet.IntersectionDistance(&photon);
     }
     
@@ -120,17 +111,8 @@ curvedbox::DToStartSheet(Photon& photon){
 
 double
 curvedbox::DToEndSheet(Photon& photon){
-    Photon* p = new Photon;
-    p = &photon;
     
-    bool test = 0;
-    
-    if(endsheet.GetIntersectionTest(&photon)){
-        test = 1;
-    }
-    
-    
-    if(test == 1){
+    if(endsheet.GetIntersectionTest(&photon)&&PhotonInside){
         return endsheet.IntersectionDistance(&photon);
     }
     
@@ -182,8 +164,11 @@ curvedbox::DToOutsideArc(Photon &photon){
 
 double
 curvedbox::DToTopSheet(Photon& photon){
+    double intdistance = INFINITY;
     
-    double intdistance = topplane.IntersectionDistance(&photon);
+    if(PhotonInside){
+        intdistance = topplane.IntersectionDistance(&photon);
+    }
     
     return intdistance;
 }
@@ -191,7 +176,11 @@ curvedbox::DToTopSheet(Photon& photon){
 double
 curvedbox::DToBottomSheet(Photon& photon){
     
-    double intdistance = bottomplane.IntersectionDistance(&photon);
+    double intdistance = INFINITY;
+    
+    if(PhotonInside){
+        intdistance = bottomplane.IntersectionDistance(&photon);
+    }
     
     return intdistance;
 }
@@ -208,8 +197,8 @@ curvedbox::TopBottomSheetPointCheck(Point3D& point){
     
     
     bool test = 0;
-    bool test2 = 0;
-    bool test3 = 0;
+    //bool test2 = 0;
+    //bool test3 = 0;
     bool finaltest = 0;
     
     
@@ -217,7 +206,7 @@ curvedbox::TopBottomSheetPointCheck(Point3D& point){
         test = 1;
     }
     
-    if(!insidearc.GetE().PointInsideEllipse(point)){
+    /*if(!insidearc.GetE().PointInsideEllipse(point)){
         test2 = 1;
     }
     
@@ -236,7 +225,7 @@ curvedbox::TopBottomSheetPointCheck(Point3D& point){
     
     if(angle > insidearc.getstartangle() && angle< insidearc.getendangle()){
         test3 = 1;
-    }
+    }*/
     
     if(test){
         finaltest = 1;

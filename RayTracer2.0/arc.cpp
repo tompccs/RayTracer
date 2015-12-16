@@ -130,16 +130,22 @@ arc::GetNextPoint(Photon& photon){
         bool bool1 = pointonarc (point1);
         bool bool2 = pointonarc (point2);
         
-        if(bool1 && !bool2){
+        Vector3D motion1 = point1 - photon.GetPosition();
+        Vector3D motion2 = point2 - photon.GetPosition();
+        
+        bool bool3 = directioncheck(photon.GetMomentum(), motion1);
+        bool bool4 = directioncheck(photon.GetMomentum(), motion2);
+        
+        if(bool1 && !bool2 && bool3){
             return point1;
         }
         
-        if(bool2 && !bool1){
+        if(bool2 && !bool1 && bool4){
             return point2;
         }
         
-        if(distance1<=distance2 && bool1) return point1;
-        if(distance2<distance1 && bool2) return point2;
+        if(distance1<=distance2 && bool1 && bool3) return point1;
+        if(distance2<distance1 && bool2 && bool4) return point2;
         
     }
     return Point3D(NAN,NAN,NAN);
@@ -167,7 +173,7 @@ arc::getendangle(){
 
 double
 arc::IntersectDistance(Photon &photon){
-    //cout<<"H"<<endl;
+    
     double distance = photon.GetPosition().distancetopoint(GetNextPoint(photon));
     return distance;
 }
@@ -286,12 +292,9 @@ arc::GetE(){
 bool
 arc::directioncheck(Vector3D &v, Vector3D &m){ //checks that two vectors are in the same direction
     bool test = 0;
-    double dot = Dot(v,m);
-    double mag_A = Magnitude(v);
-    double mag_B = Magnitude(m);
-    double costheta = dot / (mag_A)*(mag_B);
+    double dot = Dot(v.Normalise(),m.Normalise());
     
-    if(fabs(1-costheta)<1e-5){
+    if(fabs(1-dot)<1e-6){
         test = 1;
     }
     

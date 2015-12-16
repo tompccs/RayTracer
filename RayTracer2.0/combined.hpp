@@ -10,6 +10,7 @@ class combined{
     Point3D point2;
     
     
+    
 public:
     
     combined();

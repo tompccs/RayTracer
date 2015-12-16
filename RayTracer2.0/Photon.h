@@ -19,6 +19,7 @@ class Photon{
     int Absorptions;
     bool Exit;
     bool QYLoss;
+    bool err;
     
 public:
     Photon();
