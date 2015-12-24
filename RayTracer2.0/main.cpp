@@ -349,9 +349,9 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
     LSC->SetConcentration(1e-4);
     LSC->Set(arcy, height, width, 1.495);
     
-    Point3D SourceA (30,9.5,4.5);
-    Point3D SourceB (30,10.5,4.5);
-    Point3D SourceC (30,9.5,5.5);
+    Point3D SourceA (30,9,4);
+    Point3D SourceB (30,11,4);
+    Point3D SourceC (30,9,6);
     
     Sheet* source = new Sheet;
     
@@ -424,8 +424,8 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
             sy = source->GetA().y + calc->Random(1) * source->GetABLength();
             sz = source->GetA().z + calc->Random(1) * source->GetACLength();
             
-            photon->SetPosition(Point3D(0,sy,sz));
-            photon->SetMomentum(Vector3D(1,0,0));
+            photon->SetPosition(Point3D(50,sy,sz));
+            photon->SetMomentum(Vector3D(-1,0,0));
             photon->SetWavelength(wavelength);
             photon->SetRandomPolarisation();
             
@@ -586,10 +586,10 @@ void clearfibre(double runs, int start, int end, bool matlabprint, bool debug, b
     vector<vector<Point3D>> paths;
     
     //World dimensions and settings
-    Point3D A (-50,-50,-50);
-    Point3D B (50,-50,-50);
-    Point3D C (-50,50,-50);
-    double h = 100;
+    Point3D A (-10000,-10000,-10000);
+    Point3D B (10000,-10000,-10000);
+    Point3D C (-10000,10000,-10000);
+    double h = 20000;
     
     Sheet* worldbase = new Sheet;
     worldbase->Set(A,B,C);
@@ -604,10 +604,10 @@ void clearfibre(double runs, int start, int end, bool matlabprint, bool debug, b
     
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
-    double r = 10; //radius of curvature
+    double r = 3000; //radius of curvature
     //double l = 10; //length of lsc
-    double height = 0.098/sqrt(2); //height of lsc
-    double width = 0.098/sqrt(2); //width of lsc/thickness
+    double height = 9.8/sqrt(2); //height of lsc
+    double width = 9.8/sqrt(2); //width of lsc/thickness
     Point3D centrepoint(0,0,0);
     ellipse e(centrepoint,r,r);
     e.SetA(r);
@@ -696,6 +696,9 @@ void clearfibre(double runs, int start, int end, bool matlabprint, bool debug, b
             
             world->CorrectPhotonInside(photon);
             
+            photon->SetInside();
+            LSC->SetPhotonInside(1);
+            
             if(debug) {
                 cout<<"New photon:"<<endl<<endl;
                 print->PhotonPrint(photon);
@@ -724,16 +727,11 @@ void clearfibre(double runs, int start, int end, bool matlabprint, bool debug, b
                 
                 
                 else while(LSC->GetPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
-                    
-                    if(photon->GetAbsorbLength()<=LSC->NextInterfaceDistance(*photon,fulldebug)){ //If absorption = next event.
-                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
-                    }
-                    
-                    else{ //If boundary is next event.
+                    //If boundary is next event.
                         
                         int nextinterface = LSC->NextInterface(*photon,fulldebug);
                         
-                        if((nextinterface!=2 && nextinterface!=3)){
+                        if(nextinterface==1){
                             photon->PhotonKill(); //If sheet is not inside or outside. Kill photon + add counters.
                             hits++;
                             thishits++;
@@ -747,7 +745,6 @@ void clearfibre(double runs, int start, int end, bool matlabprint, bool debug, b
                             inout->CurvedOut(photon, LSC, world, debug); //Otherwise exit reflect/refract event.
                             if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
                             
-                        }
                     }
                 }
             }
@@ -1124,9 +1121,9 @@ int main(int argc, const char * argv[]){
     //double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint
     //run(1000,1,350,520,0,0,1);
     //(1000, 350, 520, 0, 0, 0, 1);
-    //clearfibre(2, 350, 520, 0, 1, 1, 1);
+    clearfibre(2, 350, 520, 1, 1, 1, 1);
     //FLEX(2,350,520,0,1,1,1);
-
-    flexirun(1000, 350, 520, 0, 0, 0, 1);
+    
+    //flexirun(3000, 350, 520, 0, 0, 0, 1);
 
 }

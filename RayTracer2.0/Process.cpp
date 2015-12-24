@@ -36,7 +36,8 @@ Process::GetPathLength(double &wavelength, double &concentration){
     double beta = concentration*GetExtinctionRate(wavelength);
     //cout<<beta<<endl;
     if(beta!=0){
-        return -(log(calc.Random(1))/beta);
+        double pathlength = -(log(calc.Random(1))/beta);
+        if(pathlength>1e-9) return pathlength;
     }
     return INFINITY;
 }

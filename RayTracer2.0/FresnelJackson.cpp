@@ -5,31 +5,19 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
     
     double kCarTolerance = 1e-8;
     
+    double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
+
+    
     double PdotN;
     double EdotN;
     double cosi;
-    double cosr;
-    double sini;
-    double sinr;
     
     Vector3D A_trans;
     Vector3D A_paral_inc;
     Vector3D A_paral;
-    double E1_perp;
-    double E1_parl;
-    double E2_perp;
-    double E2_parl;
-    double E2_total;
-    double E2_abs;
-    double C_parl;
-    double C_perp;
     
     double alpha;
     
-    double s1;
-    double s2;
-    
-    double TransCoeff;
     
     //Normalise all vectors
     
@@ -60,7 +48,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         //Simulate total internal reflection
         
         NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
-        NewPolarisation = - OldPolarisation + theFacetNormal*(2*EdotN);
+        NewPolarisation = -OldPolarisation + theFacetNormal*(2*EdotN);
         Transmitted = 0;
     }
     
@@ -92,7 +80,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         
         double genrand = calc.Random(1);
         
-        cout<<"TransCoeff is: "<<TransCoeff<<"and genrand is: "<<genrand<<endl;
+        cout<<"TransCoeff is: "<<TransCoeff<<" and genrand is: "<<genrand<<endl;
         
         if(genrand>TransCoeff){//Photon is reflected
             
@@ -174,7 +162,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
     
     double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
     
-    double kCarTolerance = 1e-8;
+    double kCarTolerance = 1e-3;
     
     Vector3D A_trans, A_paral_inc, A_paral;
     
@@ -239,10 +227,10 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
           cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;  
         }
         
-        /*if(TransCoeff <= 0){
+        if(TransCoeff <= 0){
             cout<<"Negative coefficient of reflection: "<<TransCoeff<< " Exit now."<<endl;
-            exit(2);
-        }*/
+            //exit(2);
+        }
         
         if(genrand>TransCoeff){ //Reflection
             

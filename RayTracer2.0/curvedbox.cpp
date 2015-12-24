@@ -138,7 +138,7 @@ curvedbox::DToInsideArc(Photon &photon, bool debug){
     
     if(value ==1){
         double distance = insidearc.IntersectDistance(photon, debug);
-        if(distance >= 1e-9){
+        if(distance > 1e-3){
             return distance;
         }
     }
@@ -168,7 +168,7 @@ curvedbox::DToOutsideArc(Photon &photon, bool debug){
     
     if(test ==1){
         double distance = outsidearc.IntersectDistance(photon, debug);
-        if(distance >= 1e-9){
+        if(distance > 1e-3){
             return distance;
         }
     }
@@ -211,36 +211,13 @@ curvedbox::TopBottomSheetPointCheck(Point3D& point){
     
     
     bool test = 0;
-    //bool test2 = 0;
-    //bool test3 = 0;
     bool finaltest = 0;
     
     
     if(outsidearc.GetE().PointInsideEllipse(point)){
         test = 1;
     }
-    
-    /*if(!insidearc.GetE().PointInsideEllipse(point)){
-        test2 = 1;
-    }
-    
-    double Y = fabs(insidearc.GetE().GetCentre().y - point.y);
-    double X = fabs(insidearc.GetE().GetCentre().x - point.x);
-    
-    double angle = 0;
-    
-    if(X!=0){
-        angle = atan(Y/X);
-    }
-    
-    if(X==0){
-        angle = M_PI_2;
-    }
-    
-    if(angle > insidearc.getstartangle() && angle< insidearc.getendangle()){
-        test3 = 1;
-    }*/
-    
+        
     if(test){
         finaltest = 1;
     }

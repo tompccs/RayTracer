@@ -136,7 +136,7 @@ Sheet::IntersectionDistance(Photon *photon){
     
     double value = (a-b)/c;
     
-    if(value>1e-5){
+    if(value>1e-6){
         t = value;
     }
     

@@ -69,38 +69,6 @@ arc::pointonarc(Point3D& point, bool debug){
 }
 
 
-/*bool
-arc::pointonarc(Point3D &point, bool debug){
-    if(e.pointcheck(point)){
-        if(debug){
-            cout<<endl;
-            cout<<"Running pointonarc check."<<endl<<endl;
-        }
-        
-        double thetaX = acos((point.x-e.GetCentre().x)/e.GetA()); //Gets into parametric form
-        
-        if(debug) cout<<"thetaX = "<<thetaX<<endl;
-        double thetaY = asin((point.y-e.GetCentre().y)/e.GetB());
-        if(debug) cout<<"thetaY = "<<thetaY<<endl;
-        if(fabs(fabs(thetaX)-fabs(thetaY))>=1e-3){
-            if(debug) cout<<"thetaX and thetaY differ too much"<<endl;
-            return false;
-        }
-        if(thetaY>=0){
-            if(thetaX<=endangle){
-                return true;
-            }
-        }
-        if(thetaY<=0){
-            if(thetaY>=startangle){
-                return true;
-            }
-        }
-    }
-    
-    return false;
-}*/
-
 bool
 arc::photonarcintersect(Photon &photon, bool debug){
     if(debug){
@@ -319,38 +287,6 @@ arc::IntersectionConcave(Photon& photon){
     return test;
 }
 
-/*bool //Checks if intersection is on concave or convex part of arc. assumes intersection will happen. Returns true for concave.
- arc::IntersectionConcave(Photon &photon){
- double distance = IntersectDistance(photon);
- //cout<<"distance is "<<distance<<endl;
- Point3D position = photon.GetPosition();
- Vector3D momentum = photon.GetMomentum();
- 
- Point3D point1 = position + momentum*(0.99999*distance);
- Point3D point2 = position + momentum*(1.00001*distance);
- //reader.PrintPoint(point1);
- //reader.PrintPoint(point2);
- 
- Point2D c(e.GetCentre().x, e.GetCentre().y);
- 
- Point2D p1(point1.x, point1.y);
- Point2D p2(point2.x, point2.y);
- //reader.Print2DPoint(c);
- //reader.Print2DPoint(p1);
- //reader.Print2DPoint(p2);
- double d1 = distancetocentre(point1);
- double d2 = distancetocentre(point2);
- 
- 
- if(d1<d2){
- //cout<<"Concave"<<endl;
- return true;
- }
- //cout<<"Convex"<<endl;
- 
- return false;
- }*/
-
 Vector3D //If photon intersects arc, and intersection is concave, returns normal vector.
 arc::GetNormalVector(Photon &photon, bool debug){
     Point3D nextpoint = GetNextPoint(photon, debug);
@@ -377,7 +313,7 @@ arc::directioncheck(Vector3D &v, Vector3D &m){ //checks that two vectors are in 
     bool test = 0;
     double dot = Dot(v.Normalise(),m.Normalise());
     
-    if(fabs(1-dot)<1e-6){
+    if(fabs(1.0-dot)<1e-3){
         test = 1;
     }
     
