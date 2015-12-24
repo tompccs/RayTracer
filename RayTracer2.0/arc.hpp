@@ -18,11 +18,16 @@ public:
     arc();
     arc(ellipse& elps, double start, double end);
     arc(Point3D& centre, double a, double b, double start, double end);
-    arc(double cx, double cy, double cz, double a, double b, double s, double e);
-    bool pointonarc(Point3D& point);
-    bool photonarcintersect(Photon& photon);
+    
+    
+    bool pointonarccheck(Point3D& point, bool debug);
+
+    bool pointonarc(Point3D& point, bool debug);
+    bool photonarcintersect(Photon& photon, bool debug);
     combined GetStorage();
-    Point3D GetNextPoint(Photon& photon);
+    Point3D GetNextPoint(Photon& photon, bool debug);
+    
+    
     
     void setstartangle(double startangle);
     void setendangle(double endangle);
@@ -31,22 +36,23 @@ public:
     double& getendangle();
     
     
-    double IntersectDistance(Photon& photon);
+    double IntersectDistance(Photon& photon, bool debug);
     double distancetocentre(Point3D& point);
     
     void SetStorageCheck(bool b);
     void SetStoragePoint1(Point3D p);
     void SetStoragePoint2(Point3D p);
-    Vector3D InsideNormalVector(Point3D& p);
-    Vector3D OutsideNormalVector(Point3D& p);
+    Vector3D InsideNormalVector(Point3D& p, bool debug);
+    Vector3D OutsideNormalVector(Point3D& p, bool debug);
     bool IntersectionConcave(Photon& photon);
-    Vector3D GetNormalVector(Photon& photon);
+    Vector3D GetNormalVector(Photon& photon, bool debug);
     
     void SetE(ellipse& ell);
     ellipse& GetE();
     
     bool directioncheck(Vector3D& v, Vector3D& m);
     bool pointonpath(Point3D& point, Photon& photon);
+        
     
 };
 

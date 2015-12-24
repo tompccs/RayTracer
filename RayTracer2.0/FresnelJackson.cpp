@@ -239,10 +239,10 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
           cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;  
         }
         
-        if(TransCoeff <= 0){
+        /*if(TransCoeff <= 0){
             cout<<"Negative coefficient of reflection: "<<TransCoeff<< " Exit now."<<endl;
-            //exit(2);
-        }
+            exit(2);
+        }*/
         
         if(genrand>TransCoeff){ //Reflection
             
@@ -456,6 +456,74 @@ FresnelJackson::CurvedOut(Photon *photon, curvedbox *FLSC, Material *world, bool
     
     else{
         FLSC->SetPhotonInside(0);
+        photon->SetAbsorblength(DBL_MAX);
+        if(debug){
+            cout<<"Exit boundary event. Refraction:"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
+}
+
+void //entrance event
+FresnelJackson::FlexiIn(Photon *photon, Material *world, flexi *FLSC, bool &debug){
+    
+    Vector3D N;
+        N = FLSC->GetNextNormal(*photon);
+        N.Normalise();
+    
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, world->GetRefractiveIndex(), FLSC->GetRefractiveIndex(), debug);
+    
+    photon->SetPosition(photon->GetPosition()+photon->GetMomentum()*FLSC->IntersectionDistance());
+    photon->SetMomentum(NewMomentum);
+    photon->SetPolarisation(NewPolarisation);
+    
+    if(Transmitted){
+        bool b = 1;
+        FLSC->SetPhotonInside(b);
+        FLSC->SetInitialAbsorbLength(photon);
+        photon->SetInside();
+        
+        if(debug){
+            cout<<"Entrance boundary event. Refraction:"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
+    else{
+        if(debug){
+            cout<<"Entrance boundary event. Reflection (No entrance):"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+}
+
+void
+FresnelJackson::FlexiOut(Photon *photon, flexi *FLSC, Material *world, bool &debug){
+    
+    Vector3D N = FLSC->GetNextNormal(*photon);
+    N.Normalise();
+    
+    
+    double value = photon->GetAbsorbLength() - FLSC->IntersectionDistance();
+    
+    Calculate(photon->GetMomentum(), photon->GetPolarisation(), N, FLSC->GetRefractiveIndex(), world->GetRefractiveIndex(), debug);
+    
+    photon->SetPosition(photon->GetPosition() + photon->GetMomentum()*FLSC->IntersectionDistance());
+    photon->SetMomentum(NewMomentum.Normalise());
+    photon->SetPolarisation(NewPolarisation.Normalise());
+    
+    if(!Transmitted){
+        photon->SetAbsorblength(value);
+        if(debug){
+            cout<<"Exit boundary event. Reflection (No exit):"<<endl;
+            print.PhotonPrint(photon);
+        }
+    }
+    
+    else{
+        bool b = 0;
+        FLSC->SetPhotonInside(b);
         photon->SetAbsorblength(DBL_MAX);
         if(debug){
             cout<<"Exit boundary event. Refraction:"<<endl;

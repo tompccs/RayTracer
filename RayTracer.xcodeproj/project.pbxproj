@@ -26,6 +26,7 @@
 		C65066321BBE8C9F007A57E1 /* ellipse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C65066301BBE8C9F007A57E1 /* ellipse.cpp */; };
 		C6839AAD19BDC61E003F43BD /* MATLABPrint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6839AAB19BDC61E003F43BD /* MATLABPrint.cpp */; };
 		C6894CBC1A83D459001430D7 /* Spherical3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6894CBA1A83D459001430D7 /* Spherical3D.cpp */; };
+		C69B47641C297860003A9831 /* flexi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C69B47621C297860003A9831 /* flexi.cpp */; };
 		C6A1AD7F1A9B6C00005288C7 /* anisotropic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */; };
 		C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23F9198BBBE500A64442 /* Functions.cpp */; };
 		C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE23FC198BBFD000A64442 /* Sheet.cpp */; };
@@ -92,6 +93,8 @@
 		C6839AAC19BDC61E003F43BD /* MATLABPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MATLABPrint.h; sourceTree = "<group>"; };
 		C6894CBA1A83D459001430D7 /* Spherical3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spherical3D.cpp; sourceTree = "<group>"; };
 		C6894CBB1A83D459001430D7 /* Spherical3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spherical3D.h; sourceTree = "<group>"; };
+		C69B47621C297860003A9831 /* flexi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flexi.cpp; sourceTree = "<group>"; };
+		C69B47631C297860003A9831 /* flexi.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = flexi.hpp; sourceTree = "<group>"; };
 		C6A1AD7D1A9B6C00005288C7 /* anisotropic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = anisotropic.cpp; sourceTree = "<group>"; };
 		C6A1AD7E1A9B6C00005288C7 /* anisotropic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = anisotropic.h; sourceTree = "<group>"; };
 		C6BE23F9198BBBE500A64442 /* Functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cpp; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 				C631456E1BEA428A00A07215 /* curvedbox.cpp */,
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
+				C69B47621C297860003A9831 /* flexi.cpp */,
 				C6DB680C1BCE536C0081E896 /* unittests.hpp */,
 				C631456F1BEA428A00A07215 /* curvedbox.hpp */,
 				C621CBB51BCBA8C9008EA7B3 /* arc.hpp */,
@@ -198,6 +202,7 @@
 				C6BE23FD198BBFD000A64442 /* Sheet.h */,
 				C6BE2400198C014200A64442 /* Box.h */,
 				C65066311BBE8C9F007A57E1 /* ellipse.hpp */,
+				C69B47631C297860003A9831 /* flexi.hpp */,
 				C632C871198B7BC0006430D8 /* RayTracer2_0.1 */,
 			);
 			path = RayTracer2.0;
@@ -273,6 +278,7 @@
 				C65066321BBE8C9F007A57E1 /* ellipse.cpp in Sources */,
 				C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */,
 				C63249621BC67BB000F910B8 /* combined.cpp in Sources */,
+				C69B47641C297860003A9831 /* flexi.cpp in Sources */,
 				C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */,
 				C621CBB61BCBA8C9008EA7B3 /* arc.cpp in Sources */,
 				C636ED4A19B73882006AA281 /* MultipleObjects.cpp in Sources */,

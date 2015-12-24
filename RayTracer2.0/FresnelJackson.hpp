@@ -9,6 +9,7 @@
 #include <cfloat>
 #include "MultipleObjects.h"
 #include "curvedbox.hpp"
+#include "flexi.hpp"
 
 class FresnelJackson{
     Vector3D NewMomentum, NewPolarisation;
@@ -31,5 +32,10 @@ public:
     void CurvedIn(Photon* photon, Material* world, curvedbox* FLSC, bool& debug);
     
     void CurvedOut(Photon* photon, curvedbox* FLSC, Material* world, bool& debug);
+    
+    void FlexiIn(Photon* photon, Material* world, flexi* FLSC, bool& debug);
+    
+    void FlexiOut(Photon* photon, flexi* FLSC, Material* world, bool& debug);
+
 };
 #endif

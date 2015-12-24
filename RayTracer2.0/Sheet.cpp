@@ -37,12 +37,12 @@ Sheet::SetA(const Point3D &a){
 
 void
 Sheet::SetB(const Point3D &b){
-    A = b;
+    B = b;
 }
 
 void
 Sheet::SetC(const Point3D &c){
-    A = c;
+    C = c;
 }
 
 //Returns

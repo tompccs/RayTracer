@@ -13,6 +13,16 @@ combined::GetCheck(){
 }
 
 void
+combined::SetCheck2(bool set){
+    check = set;
+}
+
+bool
+combined::GetCheck2(){
+    return check;
+}
+
+void
 combined::SetPoint(Point3D set){
     point = set;
 }

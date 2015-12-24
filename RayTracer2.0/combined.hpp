@@ -18,6 +18,8 @@ public:
     //Stores a bool, and a point together
     void SetCheck(bool set);
     bool GetCheck();
+    void SetCheck2(bool set);
+    bool GetCheck2();
     void SetPoint(Point3D set);
     Point3D GetPoint();
     void SetPoint2(Point3D set);

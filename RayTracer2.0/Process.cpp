@@ -38,7 +38,7 @@ Process::GetPathLength(double &wavelength, double &concentration){
     if(beta!=0){
         return -(log(calc.Random(1))/beta);
     }
-    return 0;
+    return INFINITY;
 }
 
 double //gets wavelength of emission

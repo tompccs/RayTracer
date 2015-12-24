@@ -17,4 +17,5 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedbox.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arc.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/ellipse.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/combined.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/combined.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/flexi.hpp

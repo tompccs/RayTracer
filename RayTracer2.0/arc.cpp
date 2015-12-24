@@ -16,24 +16,76 @@ arc::arc(Point3D& centre, double a, double b, double start, double end){
     endangle = end;
 }
 
-arc::arc(double cx, double cy, double cz, double a, double b, double st, double en){
+bool
+arc::pointonarc(Point3D& point, bool debug){
+
+    if(e.pointcheck(point)){
+        //Find angle relative to centre.
+        double angle = 0;
+        
+        Point3D c = this->e.GetCentre();
+        
+        double a = (point.x - c.x);
+        double o = (point.y - c.y);
+        
+        //cout<<"opposite is "<<o<<" and adjacent is "<<a<<endl;
+        
+        if(o==0){
+            if(a>0) angle = M_PI_2;
+            if(a<0) angle = -M_PI_2;
+        }
+        
+        if(a==0){
+            if(o>0) angle = 0;
+            if(o<0) angle = M_PI;
+        }
+        
+        if(a>0){
+            angle = atan(o/a);
+        }else{
+            if(o<0){
+                angle = - (M_PI_2 + atan(o/a));
+            }
+            else{
+                angle = M_PI_2 - atan(o/a);
+            }
+        }
+        
+        //cout<<"angle is"<<angle<<endl;
+        
+        if(angle >=startangle && angle<=endangle)
+            
+        {
+            return true;
+        }
+        
+        
+    }
     
+    
+
+    
+    return false;
 }
 
 
-bool
-arc::pointonarc(Point3D &point){
+/*bool
+arc::pointonarc(Point3D &point, bool debug){
     if(e.pointcheck(point)){
-        //cout<<"Point check confirmed."<<endl;
+        if(debug){
+            cout<<endl;
+            cout<<"Running pointonarc check."<<endl<<endl;
+        }
+        
         double thetaX = acos((point.x-e.GetCentre().x)/e.GetA()); //Gets into parametric form
-        //cout<<"thetaX = "<<thetaX<<endl;
+        
+        if(debug) cout<<"thetaX = "<<thetaX<<endl;
         double thetaY = asin((point.y-e.GetCentre().y)/e.GetB());
-        //cout<<"thetaY = "<<thetaY<<endl;
-        if(fabs(fabs(thetaX)-fabs(thetaY))>=1e-4){
-            //cout<<"thetaX and thetaY differ too much"<<endl;
+        if(debug) cout<<"thetaY = "<<thetaY<<endl;
+        if(fabs(fabs(thetaX)-fabs(thetaY))>=1e-3){
+            if(debug) cout<<"thetaX and thetaY differ too much"<<endl;
             return false;
         }
-        //cout<<"thetaY = "<<thetaY<<endl;
         if(thetaY>=0){
             if(thetaX<=endangle){
                 return true;
@@ -47,12 +99,13 @@ arc::pointonarc(Point3D &point){
     }
     
     return false;
-}
+}*/
 
 bool
-arc::photonarcintersect(Photon &photon){
-    
-    //cout<<"Checking!"<<endl;
+arc::photonarcintersect(Photon &photon, bool debug){
+    if(debug){
+       cout<<"Checking photonarcintersect!"<<endl;
+    }
     
     e.points3D(photon);
     combined e_info = e.GetStorage();
@@ -64,37 +117,54 @@ arc::photonarcintersect(Photon &photon){
     
     if(pointonpath(p1, photon)){
         po1 = 1;
+        if(debug){
+            cout<<"Po1 value is:"<<po1<<endl;
+        }
     }
     
     if(pointonpath(p2, photon)){
         po2 = 1;
+        if(debug){
+            cout<<"Po2 value is:"<<po2<<endl;
+        }
     }
     
-    //cout<<"Printpoint!!!!"<<endl;
-    //reader.PrintPoint(p1);
-    //reader.PrintPoint(p2);
+    if(debug){
+    cout<<"Printpoint - photonarcintersect!"<<endl;
+        reader.PrintPoint(p1);
+        reader.PrintPoint(p2);
+    }
+        
     
-    
-    if(pointonarc(p1)&&pointonarc(p2)&&po1&&po2){
-        //cout<<"Both points are on the arc! Return true!"<<endl;
+    if(pointonarc(p1, debug)&&pointonarc(p2, debug)&&po1&&po2){
+        if(debug){
+            cout<<"Both points are on the arc! Return true!"<<endl;
+        }
+        
         SetStoragePoint1(p1);
         SetStoragePoint2(p2);
         return true;
     }
     
-    if(pointonarc(p1)&&po1){
-        //cout<<"Point is on arc! Return true!"<<endl;
+    if(pointonarc(p1, debug)&&po1){
+        if(debug){
+            cout<<"Point is on arc! Return true!"<<endl;
+        }
         SetStoragePoint1(p1);
         return true;
     }
     
-    if(pointonarc(p2)&&po2){
-        //cout<<"Point 2 is on arc! Return true!"<<endl;
+    if(pointonarc(p2, debug)&&po2){
+        if(debug){
+            cout<<"Point 2 is on arc! Return true!"<<endl;
+        }
         SetStoragePoint2(p2);
         return true;
     }
     
-    //cout<<"No points on the arc! Return false!"<<endl;
+    if(debug){
+        cout<<"No points on the arc! Return false!"<<endl;
+    }
     return false;
 }
 
@@ -104,21 +174,34 @@ arc::GetStorage(){
 }
 
 Point3D //finds next point of intersection on arc. Perhaps need direction check.
-arc::GetNextPoint(Photon& photon){
+arc::GetNextPoint(Photon& photon, bool debug){
+    
     bool check = 0;
-    check = photonarcintersect(photon);
+    check = photonarcintersect(photon, debug);
     Point3D point1 = GetStorage().GetPoint();
     Point3D point2 = GetStorage().GetPoint2();
     
     
-    //cout<<"GetNextPoint Print!"<<endl;
-    //reader.PrintPoint(point1);
-    //reader.PrintPoint(point2);
-    
+    if(debug){
+        cout<<"GetNextPoint Print!"<<endl;
+        cout<<"Points generated from photonarcintersect are:"<<endl;
+        cout<<"Point1:"<<endl;
+        reader.PrintPoint(point1);
+        cout<<"Point2:"<<endl;
+        reader.PrintPoint(point2);
+
+    }
     if(check){
+        
+        
         
         double distance1 = photon.GetPosition().distancetopoint(point1);
         double distance2 = photon.GetPosition().distancetopoint(point2);
+        
+        if(debug){
+            cout<<"Distance to point1 is: "<<distance1<<endl;
+            cout<<"Distance to point2 is: "<<distance2<<endl;
+        }
         
         if(isnan(distance1) && !isnan(distance2)){
             return point2;
@@ -127,8 +210,8 @@ arc::GetNextPoint(Photon& photon){
             return point1;
         }
         
-        bool bool1 = pointonarc (point1);
-        bool bool2 = pointonarc (point2);
+        bool bool1 = pointonarc (point1, debug);
+        bool bool2 = pointonarc (point2, debug);
         
         Vector3D motion1 = point1 - photon.GetPosition();
         Vector3D motion2 = point2 - photon.GetPosition();
@@ -172,9 +255,9 @@ arc::getendangle(){
 }
 
 double
-arc::IntersectDistance(Photon &photon){
+arc::IntersectDistance(Photon &photon, bool debug){
     
-    double distance = photon.GetPosition().distancetopoint(GetNextPoint(photon));
+    double distance = photon.GetPosition().distancetopoint(GetNextPoint(photon, debug));
     return distance;
 }
 
@@ -203,9 +286,9 @@ arc::SetStoragePoint2(Point3D p){
 }
 
 Vector3D
-arc::InsideNormalVector(Point3D &p){
+arc::InsideNormalVector(Point3D &p, bool debug){
     Vector3D normal(NAN,NAN,NAN);
-    if(pointonarc(p)){
+    if(pointonarc(p, debug)){
         normal = e.GetCentre()-p;
         normal.z = 0;
         normal.Normalise();
@@ -214,9 +297,9 @@ arc::InsideNormalVector(Point3D &p){
 }
 
 Vector3D
-arc::OutsideNormalVector(Point3D &p){
+arc::OutsideNormalVector(Point3D &p, bool debug){
     Vector3D normal(NAN,NAN,NAN);
-    if(pointonarc(p)){
+    if(pointonarc(p, debug)){
         normal = p - e.GetCentre();
         normal.z = 0;
         normal.Normalise();
@@ -269,13 +352,13 @@ arc::IntersectionConcave(Photon& photon){
  }*/
 
 Vector3D //If photon intersects arc, and intersection is concave, returns normal vector.
-arc::GetNormalVector(Photon &photon){
-    Point3D nextpoint = GetNextPoint(photon);
+arc::GetNormalVector(Photon &photon, bool debug){
+    Point3D nextpoint = GetNextPoint(photon, debug);
     
-    if(photonarcintersect(photon) && IntersectionConcave(photon)){
-        return InsideNormalVector(nextpoint);
+    if(photonarcintersect(photon, debug) && IntersectionConcave(photon)){
+        return InsideNormalVector(nextpoint, debug);
     }
-    return OutsideNormalVector(nextpoint);
+    return OutsideNormalVector(nextpoint, debug);
     
 }
 

@@ -120,21 +120,25 @@ curvedbox::DToEndSheet(Photon& photon){
 }
 
 double
-curvedbox::DToInsideArc(Photon &photon){
+curvedbox::DToInsideArc(Photon &photon, bool debug){
     bool value = 0;
     
-    //cout<<"Check for collisions on Inside Arc"<<endl;
+    if(debug){
+        cout<<"Check for collisions on Inside Arc"<<endl;
+    }
     
-    
-    if(insidearc.photonarcintersect(photon)){
+    if(insidearc.photonarcintersect(photon, debug)){
         value = 1;
     }
     
-    //cout<<"Test value ="<<value<<endl;
+    if(debug){
+        cout<<"Photon-arc intersect inside arc value ="<<value<<endl;
+        cout<<endl;
+    }
     
     if(value ==1){
-        double distance = insidearc.IntersectDistance(photon);
-        if(distance >= 1e-5){
+        double distance = insidearc.IntersectDistance(photon, debug);
+        if(distance >= 1e-9){
             return distance;
         }
     }
@@ -145,16 +149,26 @@ curvedbox::DToInsideArc(Photon &photon){
 
 
 double
-curvedbox::DToOutsideArc(Photon &photon){
+curvedbox::DToOutsideArc(Photon &photon, bool debug){
     bool test = 0;
     
-    if(outsidearc.photonarcintersect(photon)){
+    if(debug){
+        cout<<"Check for collisions on Outside Arc"<<endl;
+    }
+    
+    if(outsidearc.photonarcintersect(photon, debug)){
         test = 1;
     }
     
+    if(debug){
+        cout<<"Photon-arc intersect outside arc value ="<<test<<endl;
+        cout<<endl;
+    }
+
+    
     if(test ==1){
-        double distance = outsidearc.IntersectDistance(photon);
-        if(distance >= 1e-5){
+        double distance = outsidearc.IntersectDistance(photon, debug);
+        if(distance >= 1e-9){
             return distance;
         }
     }
@@ -351,6 +365,7 @@ double
 curvedbox::NextInterfaceDistance(Photon &photon, bool debug){
     
     if(debug){
+        cout<<endl;
         cout<<"Running NextInterfaceDistance method."<<endl;
     }
     
@@ -361,8 +376,8 @@ curvedbox::NextInterfaceDistance(Photon &photon, bool debug){
     
     d[0] = DToStartSheet(photon);
     d[1] = DToEndSheet(photon);
-    d[2] = DToInsideArc(photon);
-    d[3] = DToOutsideArc(photon);
+    d[2] = DToInsideArc(photon, debug);
+    d[3] = DToOutsideArc(photon, debug);
     d[4] = DToTopSheet(photon);
     d[5] = DToBottomSheet(photon);
     
@@ -401,10 +416,10 @@ curvedbox::GetNextNormal(Photon &photon, bool debug){
             return endsheet.GetNormal();
             break;
         case 2:
-            return insidearc.GetNormalVector(photon);
+            return insidearc.GetNormalVector(photon, debug);
             break;
         case 3:
-            return outsidearc.GetNormalVector(photon);
+            return outsidearc.GetNormalVector(photon, debug);
             break;
         case 4:
             return topplane.GetNormal();
@@ -433,4 +448,14 @@ curvedbox::SetPhotonInside(bool inside){
 bool
 curvedbox::GetPhotonInside(){
     return PhotonInside;
+}
+
+Sheet&
+curvedbox::GetStartSheet(){
+    return startsheet;
+}
+
+Sheet&
+curvedbox::GetEndSheet(){
+    return endsheet;
 }

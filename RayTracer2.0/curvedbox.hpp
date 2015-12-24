@@ -29,8 +29,8 @@ public:
     
     double DToStartSheet(Photon& photon);
     double DToEndSheet(Photon& photon);
-    double DToInsideArc(Photon& photon);
-    double DToOutsideArc(Photon& photon);
+    double DToInsideArc(Photon& photon, bool debug);
+    double DToOutsideArc(Photon& photon, bool debug);
     double DToTopSheet(Photon& photon);
     double DToBottomSheet(Photon& photon);
     
@@ -51,6 +51,9 @@ public:
     bool GetPhotonInside();
     
     void Intersection(Photon& photon);
+    
+    Sheet& GetStartSheet();
+    Sheet& GetEndSheet();
     
     
 };
