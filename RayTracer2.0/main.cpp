@@ -333,7 +333,7 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
     
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
-    double r = 300; //radius of curvature
+    double r = 8.5; //radius of curvature
     double l = 10; //length of lsc
     double height = 10; //height of lsc
     double width = 0.8; //width of lsc/thickness
@@ -341,7 +341,7 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
     ellipse e(centrepoint,r,r);
     e.SetA(r);
     e.SetB(r);
-    arc arcy(e,-tan(l/(2*r)),tan(l/(2*r)));
+    arc arcy(e,-(l/(2*r)),(l/(2*r)));
     
     
     curvedbox* LSC = new curvedbox(arcy,height,width,1.495);
@@ -867,7 +867,7 @@ void FLEX(double runs, int start, int end, bool matlabprint, bool debug, bool fu
     
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
-    double r = 100; //radius of curvature
+    double r = 10; //radius of curvature
     double l = 10; //length of lsc
     double height = 10; //height of lsc
     double width = 0.8; //width of lsc/thickness
@@ -876,7 +876,7 @@ void FLEX(double runs, int start, int end, bool matlabprint, bool debug, bool fu
     ellipse e(centrepoint,r,r);
     e.SetA(r);
     e.SetB(r);
-    arc arcy(e,-tan(l/(2*r)),tan(l/(2*r)));
+    arc arcy(e,-(l/(2*r)),(l/(2*r)));
     
     
     flexi* LSC = new flexi;
@@ -1121,9 +1121,9 @@ int main(int argc, const char * argv[]){
     //double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint
     //run(1000,1,350,520,0,0,1);
     //(1000, 350, 520, 0, 0, 0, 1);
-    clearfibre(2, 350, 520, 1, 1, 1, 1);
+    //clearfibre(2, 350, 520, 1, 1, 1, 1);
     //FLEX(2,350,520,0,1,1,1);
     
-    //flexirun(3000, 350, 520, 0, 0, 0, 1);
+    flexirun(1000, 350, 520, 0, 0, 0, 1);
 
 }
