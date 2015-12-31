@@ -17,3 +17,11 @@ Functions::Random(double a){
     double number = (a * ((double) rand() / (RAND_MAX)));
     return number ;
 }
+
+double
+Functions::GetAverage(vector<double>& a){
+    double average = 0;
+    
+    
+    return average;
+}

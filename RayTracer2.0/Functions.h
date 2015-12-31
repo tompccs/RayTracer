@@ -14,6 +14,8 @@ public:
     
     double Random(double a);
     
+    double GetAverage(vector<double>& a);
+    
 };
 
 #endif

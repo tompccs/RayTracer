@@ -314,8 +314,7 @@ ellipse::PointInsideEllipse(Point3D &point){
     bool test = 0;
     
     double ell = ((x-cx)*(x-cx)/a*a) + ((y-cy)*(y-cy)/b*b);
-    
-    if(fabs(1-ell)<1e-3){
+    if(fabs(ell-1)<1e-3){
         test = 1;
     }
     

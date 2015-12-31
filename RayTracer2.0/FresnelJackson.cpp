@@ -227,10 +227,10 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
           cout<<"Random number is:"<<genrand<<"and Coefficient is: "<<TransCoeff<<endl;  
         }
         
-        if(TransCoeff <= 0){
+        /*if(TransCoeff <= 0){
             cout<<"Negative coefficient of reflection: "<<TransCoeff<< " Exit now."<<endl;
             //exit(2);
-        }
+        }*/
         
         if(genrand>TransCoeff){ //Reflection
             
