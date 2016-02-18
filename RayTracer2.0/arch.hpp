@@ -12,6 +12,9 @@ class arch{
 public:
     void SetTube(tube& t);
     void SetStart(double& s);
+    void SetEnd(double& e);
+    
+
 };
 
 
