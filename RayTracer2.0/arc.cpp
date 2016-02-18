@@ -28,30 +28,38 @@ arc::pointonarc(Point3D& point, bool debug){
         double a = (point.x - c.x);
         double o = (point.y - c.y);
         
-        //cout<<"opposite is "<<o<<" and adjacent is "<<a<<endl;
-        
-        if(o==0){
+        if(debug){cout<<"opposite is "<<o<<" and adjacent is "<<a<<endl;}
+        /*
+        if(fabs(o)<1e-9){
             if(a>0) angle = M_PI_2;
             if(a<0) angle = -M_PI_2;
         }
         
-        if(a==0){
+        if(fabs(a)<1e-9){
             if(o>0) angle = 0;
             if(o<0) angle = M_PI;
-        }
+        }*/
         
         if(a>0){
-            angle = atan(o/a);
+            if(o>0){
+                angle = atan(o/a);
+            }else{
+                angle = atan(o/a);
+            }
+            
         }else{
             if(o<0){
-                angle = - (M_PI_2 + atan(o/a));
+                angle = - M_PI_2 + atan(o/a);
             }
             else{
-                angle = M_PI_2 - atan(o/a);
+                angle = M_PI + atan(o/a);
             }
         }
         
-        //cout<<"angle is"<<angle<<endl;
+        if(debug){
+            cout<<"angle is "<<angle<<endl;
+            cout<<"startangle is "<<startangle<<" and end angle is"<<endangle<<endl;
+        }
         
         if(angle >=startangle && angle<=endangle)
             
@@ -86,19 +94,19 @@ arc::photonarcintersect(Photon &photon, bool debug){
     if(pointonpath(p1, photon)){
         po1 = 1;
         if(debug){
-            cout<<"Po1 value is:"<<po1<<endl;
+            cout<<"PointOnPath1 value is:"<<po1<<endl;
         }
     }
     
     if(pointonpath(p2, photon)){
         po2 = 1;
         if(debug){
-            cout<<"Po2 value is:"<<po2<<endl;
+            cout<<"PointOnPath2 value is:"<<po2<<endl;
         }
     }
     
     if(debug){
-    cout<<"Printpoint - photonarcintersect!"<<endl;
+    cout<<"Printpoints - photonarcintersect!"<<endl;
         reader.PrintPoint(p1);
         reader.PrintPoint(p2);
     }
@@ -109,8 +117,7 @@ arc::photonarcintersect(Photon &photon, bool debug){
             cout<<"Both points are on the arc! Return true!"<<endl;
         }
         
-        SetStoragePoint1(p1);
-        SetStoragePoint2(p2);
+        SetStoragePoint1(p2);
         return true;
     }
     
@@ -126,7 +133,7 @@ arc::photonarcintersect(Photon &photon, bool debug){
         if(debug){
             cout<<"Point 2 is on arc! Return true!"<<endl;
         }
-        SetStoragePoint2(p2);
+        SetStoragePoint1(p2);
         return true;
     }
     

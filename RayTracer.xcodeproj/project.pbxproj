@@ -9,10 +9,14 @@
 /* Begin PBXBuildFile section */
 		C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C24701A84F0FF0074FFD6 /* matrix.cpp */; };
 		C60C844A1990171C00F302FF /* List.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C84481990171C00F302FF /* List.cpp */; };
+		C60E42C61C75E71200C5A851 /* arch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60E42C41C75E71200C5A851 /* arch.cpp */; };
+		C620EBBA1C737CAD00481562 /* Intersection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C620EBB81C737CAD00481562 /* Intersection.cpp */; };
+		C620EBBD1C7385DE00481562 /* tube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C620EBBB1C7385DE00481562 /* tube.cpp */; };
 		C621CBB61BCBA8C9008EA7B3 /* arc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C621CBB41BCBA8C9008EA7B3 /* arc.cpp */; };
 		C62CBCB41990D4FD004FE771 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB21990D4FD004FE771 /* Material.cpp */; };
 		C62CBCB71990D512004FE771 /* Process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CBCB51990D512004FE771 /* Process.cpp */; };
 		C63145701BEA428A00A07215 /* curvedbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C631456E1BEA428A00A07215 /* curvedbox.cpp */; };
+		C63207271C6E2C770003E156 /* circle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C63207251C6E2C770003E156 /* circle.cpp */; };
 		C63249621BC67BB000F910B8 /* combined.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C63249601BC67BB000F910B8 /* combined.cpp */; };
 		C632C870198B7BC0006430D8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C632C86F198B7BC0006430D8 /* main.cpp */; };
 		C632C872198B7BC0006430D8 /* RayTracer2_0.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C632C871198B7BC0006430D8 /* RayTracer2_0.1 */; };
@@ -60,6 +64,12 @@
 		C60C8447199016CD00F302FF /* emission_quantumyield.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emission_quantumyield.txt; sourceTree = "<group>"; };
 		C60C84481990171C00F302FF /* List.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = List.cpp; sourceTree = "<group>"; };
 		C60C84491990171C00F302FF /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
+		C60E42C41C75E71200C5A851 /* arch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arch.cpp; sourceTree = "<group>"; };
+		C60E42C51C75E71200C5A851 /* arch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = arch.hpp; sourceTree = "<group>"; };
+		C620EBB81C737CAD00481562 /* Intersection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Intersection.cpp; sourceTree = "<group>"; };
+		C620EBB91C737CAD00481562 /* Intersection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Intersection.hpp; sourceTree = "<group>"; };
+		C620EBBB1C7385DE00481562 /* tube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tube.cpp; sourceTree = "<group>"; };
+		C620EBBC1C7385DE00481562 /* tube.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tube.hpp; sourceTree = "<group>"; };
 		C621CBB41BCBA8C9008EA7B3 /* arc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arc.cpp; sourceTree = "<group>"; };
 		C621CBB51BCBA8C9008EA7B3 /* arc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = arc.hpp; sourceTree = "<group>"; };
 		C62CBCB21990D4FD004FE771 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
@@ -68,6 +78,8 @@
 		C62CBCB61990D512004FE771 /* Process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Process.h; sourceTree = "<group>"; };
 		C631456E1BEA428A00A07215 /* curvedbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curvedbox.cpp; sourceTree = "<group>"; };
 		C631456F1BEA428A00A07215 /* curvedbox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = curvedbox.hpp; sourceTree = "<group>"; };
+		C63207251C6E2C770003E156 /* circle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = circle.cpp; sourceTree = "<group>"; };
+		C63207261C6E2C770003E156 /* circle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = circle.hpp; sourceTree = "<group>"; };
 		C63249601BC67BB000F910B8 /* combined.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = combined.cpp; sourceTree = "<group>"; };
 		C63249611BC67BB000F910B8 /* combined.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = combined.hpp; sourceTree = "<group>"; };
 		C632C86C198B7BC0006430D8 /* RayTracer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RayTracer; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +167,10 @@
 			children = (
 				C60C8440199016CD00F302FF /* data */,
 				C632C86F198B7BC0006430D8 /* main.cpp */,
+				C63207251C6E2C770003E156 /* circle.cpp */,
+				C620EBBB1C7385DE00481562 /* tube.cpp */,
+				C60E42C41C75E71200C5A851 /* arch.cpp */,
+				C620EBB81C737CAD00481562 /* Intersection.cpp */,
 				C6839AAB19BDC61E003F43BD /* MATLABPrint.cpp */,
 				C636ED4819B73882006AA281 /* MultipleObjects.cpp */,
 				C6DD74BF19ACD3B2009D8EAA /* FresnelJackson.cpp */,
@@ -179,6 +195,10 @@
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
 				C69B47621C297860003A9831 /* flexi.cpp */,
+				C60E42C51C75E71200C5A851 /* arch.hpp */,
+				C620EBB91C737CAD00481562 /* Intersection.hpp */,
+				C620EBBC1C7385DE00481562 /* tube.hpp */,
+				C63207261C6E2C770003E156 /* circle.hpp */,
 				C6DB680C1BCE536C0081E896 /* unittests.hpp */,
 				C631456F1BEA428A00A07215 /* curvedbox.hpp */,
 				C621CBB51BCBA8C9008EA7B3 /* arc.hpp */,
@@ -260,14 +280,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6DB680D1BCE536C0081E896 /* unittests.cpp in Sources */,
+				C620EBBD1C7385DE00481562 /* tube.cpp in Sources */,
 				C632C87A198B7C19006430D8 /* Vector2D.cpp in Sources */,
 				C62CBCB41990D4FD004FE771 /* Material.cpp in Sources */,
+				C620EBBA1C737CAD00481562 /* Intersection.cpp in Sources */,
 				C632C889198B9221006430D8 /* Photon.cpp in Sources */,
 				C632C880198B85C4006430D8 /* Point3D.cpp in Sources */,
 				C632C870198B7BC0006430D8 /* main.cpp in Sources */,
 				C62CBCB71990D512004FE771 /* Process.cpp in Sources */,
 				C632C886198B8E00006430D8 /* Test.cpp in Sources */,
 				C63145701BEA428A00A07215 /* curvedbox.cpp in Sources */,
+				C60E42C61C75E71200C5A851 /* arch.cpp in Sources */,
 				C6DD74C119ACD3B2009D8EAA /* FresnelJackson.cpp in Sources */,
 				C632C883198B85EE006430D8 /* Vector3D.cpp in Sources */,
 				C6A1AD7F1A9B6C00005288C7 /* anisotropic.cpp in Sources */,
@@ -276,6 +299,7 @@
 				C6BE23FB198BBBE500A64442 /* Functions.cpp in Sources */,
 				C60C844A1990171C00F302FF /* List.cpp in Sources */,
 				C65066321BBE8C9F007A57E1 /* ellipse.cpp in Sources */,
+				C63207271C6E2C770003E156 /* circle.cpp in Sources */,
 				C6BE23FE198BBFD000A64442 /* Sheet.cpp in Sources */,
 				C63249621BC67BB000F910B8 /* combined.cpp in Sources */,
 				C69B47641C297860003A9831 /* flexi.cpp in Sources */,

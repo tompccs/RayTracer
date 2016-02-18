@@ -290,6 +290,11 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
             }
         }
     }
+    
+    if(debug){
+        cout<<"New Momentum is:"<<endl;
+        print.PrintVector(NewMomentum);
+    }
 }
 
 void //entrance event
@@ -375,7 +380,7 @@ FresnelJackson::CurvedIn(Photon *photon, Material *world, curvedbox *FLSC, bool 
     
     int surface = FLSC->NextInterface(*photon,debug);
     Vector3D N;
-    if(surface!=3){
+    if(surface!=3 && surface!=0){
         N = FLSC->GetNextNormal(*photon, debug);
         N.Normalise();
         

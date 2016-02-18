@@ -186,7 +186,7 @@ Photon::Progress(double& distance){
     Position = Position + Momentum*distance;
 }
 
-bool //Check that point is on the line with the direction of the Photon
+/*bool //Check that point is on the line with the direction of the Photon
 Photon::PointInline(Point3D &point){
     Point3D P0 = Position;
     Point3D P1 = Position + Momentum;
@@ -201,19 +201,38 @@ Photon::PointInline(Point3D &point){
         return true;
     }
     return false;
+}*/
+
+bool
+Photon::PointInline(Point3D &point){
+    Vector3D dir = point - Position;
+    Vector3D mom = Momentum;
+    dir.Normalise();
+    
+    if(fabs(1-Dot(dir,mom))<1e-6) return true;
+    return false;
 }
 
+bool
+Photon::PointInline2D(Point2D& point){
+    Point2D P0(Position.x, Position.y);
+    Point2D P1(point.x, point.y);
+    Vector2D dir = P1-P0;
+    dir.Normalize();
+    Vector2D mom = Point2D(Momentum.x, Momentum.y);
+    
+    if(fabs(1- Dot(dir, mom))<1e-6) return true;
+    
+    return false;
+}
+
+/*
 bool //Check that point is on the line with the direction of the Photon (in 2D)
 Photon::PointInline2D(Point2D &point){
     Point2D P0(Position.x, Position.y);
     Point2D P1(Position.x + Momentum.x, Position.y + Momentum.y);
     
-    // if 3 points are in line, the sums of the two distances between adjacent points = distance between farthest
-    
-    /*cout<<"P0->P1= "<<P0.distancetopoint(P1)<<endl;
-     cout<<"P1->PX= "<<P1.distancetopoint(point)<<endl;
-     cout<<"P0->PX= "<<P0.distancetopoint(point)<<endl;
-     */
+
     
     
     if(fabs(P0.distancetopoint(P1) + P1.distancetopoint(point) - P0.distancetopoint(point))<=1e-6){
@@ -229,4 +248,4 @@ Photon::PointInline2D(Point2D &point){
         return true;
     }
     return false;
-}
+}*/

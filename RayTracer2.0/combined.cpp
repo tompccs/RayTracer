@@ -19,7 +19,7 @@ combined::SetCheck2(bool set){
 
 bool
 combined::GetCheck2(){
-    return check;
+    return check2;
 }
 
 void
@@ -40,4 +40,24 @@ combined::SetPoint2(Point3D set){
 Point3D
 combined::GetPoint2(){
     return point2;
+}
+
+void
+combined::SetDistance1(double d){
+    distance1 = d;
+}
+
+void
+combined::SetDistance2(double d){
+    distance2 = d;
+}
+
+double&
+combined::GetDistance1(){
+    return distance1;
+}
+
+double&
+combined::GetDistance2(){
+    return distance2;
 }

@@ -18,6 +18,7 @@ public:
     ellipse();
     ellipse(Point3D centre, double a, double b);
     bool pointcheck(Point3D point);
+    //bool circlelineintersect(Photon& photon, bool debug);
     //  bool ellipselineintersectcheck(Photon& photon);
     bool LineOnEllipseIntersection(Photon& photon);
     bool DirectionCheck(Photon& photon, Point3D& point);

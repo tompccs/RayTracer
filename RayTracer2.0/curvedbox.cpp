@@ -52,17 +52,17 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
     double k = central.GetE().GetCentre().y;
     
     double x1_in = h + (inside_a * cos_start);
-    double y1_in = k + (inside_a * fabs(sin_start));
+    double y1_in = k + (inside_a * sin_start);
     
     
     double x1_out = h + (outside_a * cos_start);
-    double y1_out = k + (outside_a * fabs(sin_start));
+    double y1_out = k + (outside_a * sin_start);
     
     double x2_in = h + (inside_a * cos_end);
-    double y2_in = k - (inside_a * sin_end);
+    double y2_in = k + (inside_a * sin_end);
     
     double x2_out = h + (outside_a * cos_end);
-    double y2_out = k - (outside_a * sin_end);
+    double y2_out = k + (outside_a * sin_end);
     
     double z_low = central.GetE().GetCentre().z;
     double z_high = z_low + height;
@@ -102,7 +102,7 @@ curvedbox::curvedbox(arc& central, double height, double width, double refractiv
 double
 curvedbox::DToStartSheet(Photon& photon){
     
-    if(startsheet.GetIntersectionTest(&photon)&&PhotonInside){
+    if(startsheet.GetIntersectionTest(&photon)){
         return startsheet.IntersectionDistance(&photon);
     }
     
@@ -112,7 +112,7 @@ curvedbox::DToStartSheet(Photon& photon){
 double
 curvedbox::DToEndSheet(Photon& photon){
     
-    if(endsheet.GetIntersectionTest(&photon)&&PhotonInside){
+    if(endsheet.GetIntersectionTest(&photon)){
         return endsheet.IntersectionDistance(&photon);
     }
     
@@ -121,24 +121,24 @@ curvedbox::DToEndSheet(Photon& photon){
 
 double
 curvedbox::DToInsideArc(Photon &photon, bool debug){
-    bool value = 0;
+    bool test = 0;
     
     if(debug){
         cout<<"Check for collisions on Inside Arc"<<endl;
     }
     
     if(insidearc.photonarcintersect(photon, debug)){
-        value = 1;
+        test = 1;
     }
     
     if(debug){
-        cout<<"Photon-arc intersect inside arc value ="<<value<<endl;
+        cout<<"Photon-arc intersect inside arc value = "<<test<<endl;
         cout<<endl;
     }
     
-    if(value ==1){
+    if(test ==1){
         double distance = insidearc.IntersectDistance(photon, debug);
-        if(distance > 1e-3){
+        if(distance > 1e-4){
             return distance;
         }
     }
@@ -161,14 +161,14 @@ curvedbox::DToOutsideArc(Photon &photon, bool debug){
     }
     
     if(debug){
-        cout<<"Photon-arc intersect outside arc value ="<<test<<endl;
+        cout<<"Photon-arc intersect outside arc value = "<<test<<endl;
         cout<<endl;
     }
 
     
     if(test ==1){
         double distance = outsidearc.IntersectDistance(photon, debug);
-        if(distance > 1e-3){
+        if(distance > 1e-4){
             return distance;
         }
     }
@@ -230,6 +230,8 @@ void
 curvedbox::Set(arc central, double height, double width, double refractiveindex){
     //copy refractive indeces
     
+    //copy refractive indeces
+    
     this->refractiveindex = refractiveindex;
     
     //First build arcs for both inside plane and outside plane.
@@ -272,17 +274,17 @@ curvedbox::Set(arc central, double height, double width, double refractiveindex)
     double k = central.GetE().GetCentre().y;
     
     double x1_in = h + (inside_a * cos_start);
-    double y1_in = k + (inside_a * fabs(sin_start));
+    double y1_in = k + (inside_a * sin_start);
     
     
     double x1_out = h + (outside_a * cos_start);
-    double y1_out = k + (outside_a * fabs(sin_start));
+    double y1_out = k + (outside_a * sin_start);
     
     double x2_in = h + (inside_a * cos_end);
-    double y2_in = k - (inside_a * sin_end);
+    double y2_in = k + (inside_a * sin_end);
     
     double x2_out = h + (outside_a * cos_end);
-    double y2_out = k - (outside_a * sin_end);
+    double y2_out = k + (outside_a * sin_end);
     
     double z_low = central.GetE().GetCentre().z;
     double z_high = z_low + height;
