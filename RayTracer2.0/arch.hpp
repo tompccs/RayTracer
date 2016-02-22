@@ -4,11 +4,13 @@
 #include <stdio.h>
 #include <math.h>
 #include "tube.hpp"
+#include "test.h"
 
 class arch{
     tube Tube;
     double startangle;
     double endangle;
+    Test reader;
     
 public:
     void SetTube(tube t);
@@ -19,7 +21,7 @@ public:
     double& GetStart();
     double& GetEnd();
     
-    int FindIntersection(Photon& p, bool debug, combined values);
+    int FindIntersection(Photon& p, bool debug, combined& values);
     
     double CheckAngle(Point3D& p);
 };

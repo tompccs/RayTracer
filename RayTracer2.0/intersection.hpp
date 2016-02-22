@@ -5,6 +5,7 @@
 #include "Vector3D.h"
 #include "Point3D.h"
 #include "combined.hpp"
+#include "arch.hpp"
 
 class Intersection{
     
@@ -12,6 +13,7 @@ class Intersection{
     Vector3D Normal;
     Point3D Point;
     combined values;
+    Test reader;
     
 public:
     
@@ -22,6 +24,13 @@ public:
     void SetDistance(double& d);
     void SetNormal(Vector3D& n);
     void SetPoint(Point3D& p);
+    
+    combined& GetValues();
+    void SetValues(combined& v);
+    
+    void ArchIntersect(Photon& p, arch& a, bool debug);
+    
+    
     
 };
 

@@ -35,6 +35,11 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
     
     double cx, cy, rad;
     
+    Vector2D mom2D(photon.GetMomentum().x,photon.GetMomentum().y);
+    mom2D.Normalize();
+    
+    rad = radius;
+    
     cx = centre.x;
     cy = centre.y;
     
@@ -44,20 +49,20 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
     
     double dx,dy,A,B,C,det,t;
     
-    dx = photon.GetMomentum().x;
-    dy = photon.GetMomentum().y;
+    dx = mom2D.x;
+    dy = mom2D.y;
     
     p1 = Point2D(photon.GetPosition().x, photon.GetPosition().y);
-    p1 = Point2D(photon.GetPosition().x + dx, photon.GetPosition().y + dy);
+    p2 = Point2D(photon.GetPosition().x + dx, photon.GetPosition().y + dy);
     
     if(debug){
-        cout<<"Photon->Circle Intersection (2D)"<<endl;
-        cout<<"Checking for intersections between Photon with"<<endl;
+        cout<<"Photon->Circle Intersection (2D)"<<endl<<endl;
+        cout<<"Checking for intersections between Photon"<<endl;
         cout<<"Position: ";
         reader.PrintPoint(photon.GetPosition());
-        cout<<" and Momentum: ";
+        cout<<"and Momentum: ";
         reader.PrintVector(photon.GetMomentum());
-        cout<<"and circle with radius "<<radius<<" and centre";
+        cout<<"with circle with radius "<<radius<<" and centre ";
         reader.Print2DPoint(centre);
     }
 
@@ -69,12 +74,12 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
     det = B * B - 4 * A * C;
     
     if(debug){
-        cout<<"Calculated determinant is "<<det<<endl;
+        cout<<"Calculated determinant is "<<det<<" as A = "<<A<<" B = "<<B<<" C = "<<C<<endl;
     }
     
     if((A <= 1e-7) || (det < 0)){
         //No real solutions
-        cout<<"No real solutions."<<endl;
+        if(debug){cout<<"No real solutions."<<endl;}
         return 0;
     }
     
@@ -93,7 +98,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         t = ((-B - sqrt(det))/ 2*A);
         distance2 = t;
         values.SetDistance2(distance2);
-        cout<<"2 real solutions at distance "<<distance1<<" and "<<distance2<<endl;
+        cout<<"2 real solutions at distances "<<distance1<<" and "<<distance2<<endl;
         return 2;
     }
     

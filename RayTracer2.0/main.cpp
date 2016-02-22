@@ -10,6 +10,8 @@
 #include "unittests.hpp"
 #include "curvedbox.hpp"
 #include "flexi.hpp"
+#include "intersection.hpp"
+#include "arch.hpp"
 
 
 using namespace std;
@@ -2031,6 +2033,49 @@ void POF_FLAT_run(double runs,int lscs, int start, int end, bool debug, bool mat
     
 }
 
+void POF_NEW(){
+    
+    Point2D p(1,1);
+    double r = 5;
+    
+    circle c;
+    c.SetCentre(p);
+    c.SetRadius(r);
+    
+    double h = 10;
+    
+    tube t;
+    t.SetCircle(c);
+    t.SetHeight(h);
+    
+                        
+    arch a;
+    double l = 10;
+    double st = -(l/(2*r));
+    double en = - st;
+    a.SetTube(t);
+    a.SetStart(st);
+    a.SetEnd(en);
+    
+    
+    Photon photon;
+    
+    Point3D pos(-10,1,0);
+    Point3D mom(1,0,-0.5);
+    mom.Normalise();
+    photon.SetPosition(pos);
+    photon.SetMomentum(mom);
+    
+    Intersection i;
+    
+    int answer = a.FindIntersection(photon, 1, i.GetValues());
+    
+    cout<<"# of intersections is "<<answer<<endl<<endl;
+    
+    i.ArchIntersect(photon, a, 1);
+    
+}
+
 int main(int argc, const char * argv[]){
     
     //double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint
@@ -2049,6 +2094,8 @@ int main(int argc, const char * argv[]){
     //flexirun_empty(20, 450, 450, 0, 1, 1, 1);
     
     //flexirun_empty2(200, 450, 450, 0, 1, 1, 1);
-
+    
+    
+    POF_NEW();
 
 }
