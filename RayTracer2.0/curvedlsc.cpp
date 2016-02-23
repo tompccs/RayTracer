@@ -57,18 +57,18 @@ curvedlsc::Set(Point3D centre, double radius, double length, double  thickness, 
     double z_low = 0;
     double z_high = z_low + height;
     
-    double x1_in = h + (radius * cos_start);
-    double y1_in = k + (radius * sin_start);
+    double x1_in = h + (inside_radius * cos_start);
+    double y1_in = k + (inside_radius * sin_start);
     
     
-    double x1_out = h + (radius * cos_start);
-    double y1_out = k + (radius * sin_start);
+    double x1_out = h + (outside_radius * cos_start);
+    double y1_out = k + (outside_radius * sin_start);
     
-    double x2_in = h + (radius * cos_end);
-    double y2_in = k + (radius * sin_end);
+    double x2_in = h + (inside_radius * cos_end);
+    double y2_in = k + (inside_radius * sin_end);
     
-    double x2_out = h + (radius * cos_end);
-    double y2_out = k + (radius * sin_end);
+    double x2_out = h + (outside_radius * cos_end);
+    double y2_out = k + (outside_radius * sin_end);
     
     Point3D bi_start(x1_in,y1_in,z_low);
     Point3D ti_start(x1_in,y1_in,z_high);
@@ -85,10 +85,16 @@ curvedlsc::Set(Point3D centre, double radius, double length, double  thickness, 
     //Build (rectangular) side sheets. Note that top and bottom planes will be used as infinite planes. Distance to intersection
     //needs to be calculated carefully baring this in mind.
     
-    Sheet start(bi_start,bo_start,ti_start);
-    Sheet end(bo_end, bi_end, to_end);
-    Sheet top(ti_start,to_start,ti_end);
-    Sheet bottom(bi_end, bo_end, bi_start);
+    Sheet startsheet(bi_start,bo_start,ti_start);
+    Sheet endsheet(bo_end, bi_end, to_end);
+    Sheet topsheet(ti_start,to_start,ti_end);
+    Sheet bottomsheet(bi_end, bo_end, bi_start);
+    
+    start = startsheet;
+    end = endsheet;
+    top = topsheet;
+    bottom = bottomsheet;
+    
 
     start.OverrideNormal();
     end.OverrideNormal();
