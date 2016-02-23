@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Test.h"
 
+
 class curvedbox: public Material{
     arc insidearc;
     arc outsidearc;

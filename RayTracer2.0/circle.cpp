@@ -84,22 +84,68 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
     }
     
     else if (det == 0){
+        //1 solution
         t= -B / (2*A);
         distance1 = t;
         if(debug){ cout<<"1 real solution at distance "<<t<<endl;}
-        values.SetDistance1(t);
-        return 1;
+        if(t>0){
+            values.SetDistance1(t);
+            return 1;
+        }else{
+            values.SetDistance1(INFINITY);
+            return 0;
+        }
     }
     
     else{
+        bool b1 = 1, b2 = 1;
+        
         t = ((-B + sqrt(det))/ 2*A);
-        distance1 = t;
-        values.SetDistance1(distance1);
-        t = ((-B - sqrt(det))/ 2*A);
-        distance2 = t;
-        values.SetDistance2(distance2);
-        cout<<"2 real solutions at distances "<<distance1<<" and "<<distance2<<endl;
-        return 2;
+        if(t>0){
+            distance1 = t;
+            values.SetDistance1(distance1);
+        }
+        else{
+            b1 = 0;
+            distance1 = INFINITY;
+        }
+        
+        if(t>0){
+            t = ((-B - sqrt(det))/ 2*A);
+            distance2 = t;
+            values.SetDistance2(distance2);
+        }else{
+            distance2 = INFINITY;
+            b2 = 0;
+        }
+        
+        
+        
+        if(b1&&b2){
+            if(debug){
+                cout<<"2 real solutions at distances "<<distance1<<" and "<<distance2<<endl;
+            }
+            return 2;
+        }
+        
+        if(b1^b2){
+            if(b1){
+                if(debug){
+                    cout<<"1 real solution at distance"<<distance1<<endl;
+                }
+            }
+            
+            if(b2){
+                if(debug){
+                    cout<<"1 real solution at distance"<<distance2<<endl;
+                }
+            }
+            return 1;
+        }
+    }
+    
+    if(debug){
+        cout<<"No real solutions for 2D intersection in positive t direction."<<endl;
     }
     
     return 0;

@@ -52,3 +52,12 @@ Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
         reader.PrintVector(Normal);
     }
 }
+
+void
+Intersection::SheetIntersect(Photon &p, Sheet &s, bool debug){
+    
+    
+    if(debug){
+        cout<<"Distance to sheet intersect is:"<<endl;
+    }
+}

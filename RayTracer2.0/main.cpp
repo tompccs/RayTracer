@@ -12,6 +12,7 @@
 #include "flexi.hpp"
 #include "intersection.hpp"
 #include "arch.hpp"
+#include "curvedlsc.hpp"
 
 
 using namespace std;
@@ -2035,8 +2036,13 @@ void POF_FLAT_run(double runs,int lscs, int start, int end, bool debug, bool mat
 
 void POF_NEW(){
     
-    Point2D p(1,1);
-    double r = 5;
+    Point2D p(0,0);
+    double r = 10;
+    
+    double thickness = 0.4;
+    double height = 10;
+    
+    Point3D cen(-r,0,0);
     
     circle c;
     c.SetCentre(p);
@@ -2060,7 +2066,7 @@ void POF_NEW(){
     
     Photon photon;
     
-    Point3D pos(-10,1,0);
+    Point3D pos(10,1,0);
     Point3D mom(1,0,-0.5);
     mom.Normalise();
     photon.SetPosition(pos);
@@ -2073,6 +2079,12 @@ void POF_NEW(){
     cout<<"# of intersections is "<<answer<<endl<<endl;
     
     i.ArchIntersect(photon, a, 1);
+    
+    double n = 1.495;
+    
+    curvedlsc lsc;
+    lsc.Set(cen, r, l, thickness, height, n);
+    
     
 }
 

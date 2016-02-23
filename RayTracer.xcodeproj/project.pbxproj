@@ -10,6 +10,7 @@
 		C60C24721A84F0FF0074FFD6 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C24701A84F0FF0074FFD6 /* matrix.cpp */; };
 		C60C844A1990171C00F302FF /* List.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60C84481990171C00F302FF /* List.cpp */; };
 		C60E42C61C75E71200C5A851 /* arch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C60E42C41C75E71200C5A851 /* arch.cpp */; };
+		C61B910F1C7B61D000DF4C8D /* curvedlsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C61B910D1C7B61D000DF4C8D /* curvedlsc.cpp */; };
 		C620EBBA1C737CAD00481562 /* Intersection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C620EBB81C737CAD00481562 /* Intersection.cpp */; };
 		C620EBBD1C7385DE00481562 /* tube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C620EBBB1C7385DE00481562 /* tube.cpp */; };
 		C621CBB61BCBA8C9008EA7B3 /* arc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C621CBB41BCBA8C9008EA7B3 /* arc.cpp */; };
@@ -66,6 +67,8 @@
 		C60C84491990171C00F302FF /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
 		C60E42C41C75E71200C5A851 /* arch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arch.cpp; sourceTree = "<group>"; };
 		C60E42C51C75E71200C5A851 /* arch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = arch.hpp; sourceTree = "<group>"; };
+		C61B910D1C7B61D000DF4C8D /* curvedlsc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curvedlsc.cpp; sourceTree = "<group>"; };
+		C61B910E1C7B61D000DF4C8D /* curvedlsc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = curvedlsc.hpp; sourceTree = "<group>"; };
 		C620EBB81C737CAD00481562 /* Intersection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Intersection.cpp; sourceTree = "<group>"; };
 		C620EBB91C737CAD00481562 /* Intersection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Intersection.hpp; sourceTree = "<group>"; };
 		C620EBBB1C7385DE00481562 /* tube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tube.cpp; sourceTree = "<group>"; };
@@ -192,6 +195,8 @@
 				C6BE23F9198BBBE500A64442 /* Functions.cpp */,
 				C6BE23FC198BBFD000A64442 /* Sheet.cpp */,
 				C631456E1BEA428A00A07215 /* curvedbox.cpp */,
+				C61B910D1C7B61D000DF4C8D /* curvedlsc.cpp */,
+				C61B910E1C7B61D000DF4C8D /* curvedlsc.hpp */,
 				C6BE23FF198C014200A64442 /* Box.cpp */,
 				C62CBCB51990D512004FE771 /* Process.cpp */,
 				C69B47621C297860003A9831 /* flexi.cpp */,
@@ -292,6 +297,7 @@
 				C63145701BEA428A00A07215 /* curvedbox.cpp in Sources */,
 				C60E42C61C75E71200C5A851 /* arch.cpp in Sources */,
 				C6DD74C119ACD3B2009D8EAA /* FresnelJackson.cpp in Sources */,
+				C61B910F1C7B61D000DF4C8D /* curvedlsc.cpp in Sources */,
 				C632C883198B85EE006430D8 /* Vector3D.cpp in Sources */,
 				C6A1AD7F1A9B6C00005288C7 /* anisotropic.cpp in Sources */,
 				C632C87D198B82AC006430D8 /* Point2D.cpp in Sources */,

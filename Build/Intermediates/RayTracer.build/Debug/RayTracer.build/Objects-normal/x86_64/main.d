@@ -28,4 +28,5 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/intersection.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arch.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/tube.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/circle.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/circle.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedlsc.hpp
