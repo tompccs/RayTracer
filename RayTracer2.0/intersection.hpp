@@ -30,7 +30,10 @@ public:
     void SetValues(combined& v);
     
     void ArchIntersect(Photon& p, arch& a, bool debug);
-    void SheetIntersect(Photon& p, Sheet& s, bool debug);
+    void TopBottomSheetIntersect(Photon& p, Sheet& s, bool debug);
+    void StartEndSheetIntersect(Photon& p, Sheet& s, bool debug);
+    
+    
     
     
     

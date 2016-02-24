@@ -19,14 +19,14 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/ellipse.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/combined.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/flexi.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedlsc.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arch.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/tube.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/circle.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/Intersection.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/MATLABPrint.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/Spherical3D.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/anisotropic.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.cpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/unittests.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/intersection.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arch.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/tube.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/circle.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedlsc.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/unittests.hpp

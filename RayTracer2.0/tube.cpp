@@ -22,7 +22,7 @@ tube::SetHeight(double &h){
 
 int
 tube::FindIntersections(Photon &photon, bool debug, combined& values){
-    
+    //debug = 0;
     int intersect2D = base.FindIntersections(photon, debug, values);
     
     if(debug){
@@ -40,7 +40,7 @@ tube::FindIntersections(Photon &photon, bool debug, combined& values){
         if(debug)cout<<"Single 2D distance is"<<distance2D<<endl;
         double distance3D = Project2D3D(distance2D, photon);
         values.SetDistance1(distance3D);
-        if(debug)cout<<"Projection into 3D distance is"<<distance3D<<endl;
+        if(debug)cout<<"Projection into 3D distance is "<<distance3D<<endl;
         
         return 1;
     }

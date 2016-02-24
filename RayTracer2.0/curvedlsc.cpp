@@ -95,10 +95,163 @@ curvedlsc::Set(Point3D centre, double radius, double length, double  thickness, 
     top = topsheet;
     bottom = bottomsheet;
     
-
+    
     start.OverrideNormal();
     end.OverrideNormal();
     top.OverrideNormal();
     bottom.OverrideNormal();
+    
+}
 
+void
+curvedlsc::FindIntersections(Photon &p, bool debug){
+    intersections.clear();
+    
+    Intersection finder_start, finder_end, finder_inside, finder_outside, finder_top, finder_bottom;
+    
+    finder_inside.ArchIntersect(p, inside, debug);
+    intersections.push_back(finder_inside); //0
+    
+    finder_outside.ArchIntersect(p, outside, debug);
+    intersections.push_back(finder_outside); //1
+    
+    finder_start.StartEndSheetIntersect(p, start, debug);
+    intersections.push_back(finder_start); //2
+    
+    finder_end.StartEndSheetIntersect(p, end, debug);
+    intersections.push_back(finder_end); //3
+    
+    finder_top.TopBottomSheetIntersect(p, top, debug);
+    intersections.push_back(finder_top); //4
+    
+    finder_bottom.TopBottomSheetIntersect(p, bottom, debug);
+    intersections.push_back(finder_bottom); //5
+    
+}
+
+int
+curvedlsc::NextIntersection(Photon &p, bool debug){
+    
+    double min_dist = INFINITY;
+    int interface = 7;
+    
+    for(int i=0; i<6; i++){
+        double dist = intersections[i].GetDistance();
+        if((dist!=INFINITY)&&(dist<=min_dist)){
+            min_dist = intersections[i].GetDistance();
+            interface = i;
+        }
+    }
+    
+    return interface;
+}
+
+double
+curvedlsc::NextDistance(Photon &p, bool debug){
+    
+    
+    int NextInterface = NextIntersection(p, debug);
+    double NextD = INFINITY;
+    
+    if (NextInterface != 7){
+        NextD = intersections[NextInterface].GetDistance();
+    }
+    
+    if(debug){
+        cout<<"Next interface # is "<<NextInterface<<" and distance is "<<NextD<<endl<<endl;
+    }
+
+    
+    return NextD;
+}
+
+Vector3D
+curvedlsc::NextNormal(Photon &p, bool debug){
+    int NextInterface = NextIntersection(p, debug);
+    Vector3D NextV(NAN,NAN,NAN);
+    
+    if (NextInterface != 7){
+        NextV = intersections[NextInterface].GetNormal();
+    }
+    
+    return NextV;
+}
+
+double&
+curvedlsc::GetRefractiveIndex(){
+    return refractiveindex;
+}
+
+
+/*//Indicator that Material has a photon inside
+void
+curvedlsc::SetPhotonInside(bool inside){
+    Photoninside = inside;
+}
+
+//Returns PhotonInside Indicator
+bool&
+curvedlsc::GetPhotonInside(){
+    return Photoninside;
+}*/
+
+void
+curvedlsc::PrintNextInterface(Photon &p, bool debug){
+    int i = NextIntersection(p, debug);
+    cout<<"Next interface number is "<<i<<endl;
+    cout<<"This corresponds to interface:"<<endl;
+    switch (i) {
+        case 0:
+            cout<<"Inside Arc"<<endl;
+            break;
+            
+        case 1:
+            cout<<"Outside Arc"<<endl;
+            break;
+            
+        case 2:
+            cout<<"Start Sheet"<<endl;
+            break;
+            
+        case 3:
+            cout<<"End Sheet"<<endl;
+            break;
+            
+        case 4:
+            cout<<"Top Sheet"<<endl;
+            break;
+            
+        case 5:
+            cout<<"Bottom Sheet"<<endl;
+            break;
+            
+        default:
+            cout<<"No intersection"<<endl;
+            break;
+    }
+}
+
+Sheet&
+curvedlsc::GetSheet(int sheetnumber, bool debug){
+    switch (sheetnumber){
+        case 2:
+            return start;
+            break;
+            
+        case 3:
+            return end;
+            break;
+            
+        case 4:
+            return top;
+            break;
+            
+        case 5:
+            return bottom;
+            break;
+    
+        default:
+            return start;
+            break;
+    }
 }

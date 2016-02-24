@@ -22,7 +22,8 @@ Intersection::GetValues(){
 
 void
 Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
-    
+    //debug = 0;
+    a.FindIntersection(p, debug, values);
     double d1 = values.GetDistance1();
     double d2 = values.GetDistance2();
     double d;
@@ -55,10 +56,60 @@ Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
 }
 
 void
-Intersection::SheetIntersect(Photon &p, Sheet &s, bool debug){
+Intersection::TopBottomSheetIntersect(Photon &p, Sheet &s, bool debug){
+    
+    //debug = 0;
+    
+    double d;
+    
+    if(p.GetInside()){
+        d = s.IntersectionDistance(&p);
+    }else{
+        d = INFINITY;
+    }
+    
+    Distance = d;
+    Point = p.GetPosition() + p.GetMomentum() * d;
+    Normal = s.GetNormal();
+    
     
     
     if(debug){
-        cout<<"Distance to sheet intersect is:"<<endl;
+        cout<<"Distance to sheet intersect is:"<<Distance<<endl;
+        cout<<"This gives an intersection point of "<<endl;
+        reader.PrintPoint(Point);
+        cout<<"At this point, the normal vector is:"<<endl;
+        reader.PrintVector(Normal);
+
     }
 }
+
+void
+Intersection::StartEndSheetIntersect(Photon &p, Sheet &s, bool debug){
+    
+    //debug = 0;
+    double d;
+    
+    if(s.GetIntersectionTest(&p)){
+        d = s.IntersectionDistance(&p);
+    }else{
+        d = INFINITY;
+    }
+    
+    Distance = d;
+    Point = p.GetPosition() + p.GetMomentum() * d;
+    Normal = s.GetNormal();
+    
+    
+    
+    if(debug){
+        cout<<"Distance to sheet intersect is:"<<Distance<<endl;
+        cout<<"This gives an intersection point of "<<endl;
+        reader.PrintPoint(Point);
+        cout<<"At this point, the normal vector is:"<<endl;
+        reader.PrintVector(Normal);
+        
+    }
+}
+
+

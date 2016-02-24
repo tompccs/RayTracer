@@ -33,7 +33,7 @@ arch::GetEnd(){
 int
 arch::FindIntersection(Photon& p, bool debug, combined& values){
     int intersects = Tube.FindIntersections(p, debug, values);
-    
+     //debug = 0;
     if(debug){
         
         cout<<endl;
@@ -63,7 +63,7 @@ arch::FindIntersection(Photon& p, bool debug, combined& values){
         }
         
         
-        double angle1 = CheckAngle(point);
+        double angle1 = CheckAngle(point, debug);
         
         if(debug){
             cout<<"Angle output is "<<angle1<<endl;
@@ -94,8 +94,8 @@ arch::FindIntersection(Photon& p, bool debug, combined& values){
         }
         
         
-        double angle1 = CheckAngle(point);
-        double angle2 = CheckAngle(point2);
+        double angle1 = CheckAngle(point, debug);
+        double angle2 = CheckAngle(point2, debug);
         
         
         if(debug){
@@ -143,15 +143,16 @@ arch::FindIntersection(Photon& p, bool debug, combined& values){
 }
 
 double //Returns the angle relative to centre.
-arch::CheckAngle(Point3D &p){
+arch::CheckAngle(Point3D &p, bool debug){
+    
     
     double angle = NAN;
     
     double x = p.x - Tube.GetCircle().GetCentre().x;
     double y = p.y - Tube.GetCircle().GetCentre().y;
     
-    bool x_sign = signbit(x);
-    bool y_sign = signbit(y);
+    bool x_sign = !signbit(x);
+    bool y_sign = !signbit(y);
     
     if(x_sign && y_sign){
         angle = atan(y/x);

@@ -29,7 +29,7 @@ circle::GetRadius(){
 
 int
 circle::FindIntersections(Photon &photon, bool debug, combined& values){
-    
+    //debug = 0;
     //Method calculates whether a photon will intersect circle in 2D space.
     //Returns number of intersections.
     
@@ -88,7 +88,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         t= -B / (2*A);
         distance1 = t;
         if(debug){ cout<<"1 real solution at distance "<<t<<endl;}
-        if(t>0){
+        if(t>1e-5){
             values.SetDistance1(t);
             return 1;
         }else{
@@ -101,7 +101,8 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         bool b1 = 1, b2 = 1;
         
         t = ((-B + sqrt(det))/ 2*A);
-        if(t>0){
+        
+        if(t>1e-5){
             distance1 = t;
             values.SetDistance1(distance1);
         }
@@ -110,8 +111,9 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
             distance1 = INFINITY;
         }
         
-        if(t>0){
-            t = ((-B - sqrt(det))/ 2*A);
+        t = ((-B - sqrt(det))/ 2*A);
+
+        if(t>1e-5){
             distance2 = t;
             values.SetDistance2(distance2);
         }else{
@@ -123,7 +125,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         
         if(b1&&b2){
             if(debug){
-                cout<<"2 real solutions at distances "<<distance1<<" and "<<distance2<<endl;
+                cout<<"2 real solutions at distances "<<values.GetDistance1()<<" and "<<values.GetDistance2()<<endl;
             }
             return 2;
         }
@@ -131,13 +133,13 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         if(b1^b2){
             if(b1){
                 if(debug){
-                    cout<<"1 real solution at distance"<<distance1<<endl;
+                    cout<<"1 real solution at distance "<<values.GetDistance1()<<endl;
                 }
             }
             
             if(b2){
                 if(debug){
-                    cout<<"1 real solution at distance"<<distance2<<endl;
+                    cout<<"1 real solution at distance"<<values.GetDistance2()<<endl;
                 }
             }
             return 1;

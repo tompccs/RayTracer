@@ -19,4 +19,9 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/Process.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/List.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedbox.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/flexi.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/flexi.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedlsc.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arch.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/tube.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/circle.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/Intersection.hpp
