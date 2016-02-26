@@ -571,7 +571,7 @@ void
 FresnelJackson::NewCurvedOut(Photon *photon, curvedlsc& FLSC, Material *world, bool &debug){
     int surface = FLSC.NextIntersection(*photon, debug);
     Vector3D N;
-    if(surface!=3){
+    if(surface!=3 && surface!=0){
         N = -FLSC.NextNormal(*photon, debug);
         N.Normalise();
         

@@ -102,6 +102,7 @@
 		C632C888198B9221006430D8 /* Photon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photon.h; sourceTree = "<group>"; };
 		C636ED4819B73882006AA281 /* MultipleObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleObjects.cpp; sourceTree = "<group>"; };
 		C636ED4919B73882006AA281 /* MultipleObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipleObjects.h; sourceTree = "<group>"; };
+		C63F99551C8084B300608F8E /* test.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = test.rtf; sourceTree = "<group>"; };
 		C65066301BBE8C9F007A57E1 /* ellipse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ellipse.cpp; sourceTree = "<group>"; };
 		C65066311BBE8C9F007A57E1 /* ellipse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ellipse.hpp; sourceTree = "<group>"; };
 		C6839AAB19BDC61E003F43BD /* MATLABPrint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MATLABPrint.cpp; sourceTree = "<group>"; };
@@ -168,6 +169,7 @@
 		C632C86E198B7BC0006430D8 /* RayTracer2.0 */ = {
 			isa = PBXGroup;
 			children = (
+				C63F99541C8084B300608F8E /* testfolder */,
 				C60C8440199016CD00F302FF /* data */,
 				C632C86F198B7BC0006430D8 /* main.cpp */,
 				C63207251C6E2C770003E156 /* circle.cpp */,
@@ -231,6 +233,14 @@
 				C632C871198B7BC0006430D8 /* RayTracer2_0.1 */,
 			);
 			path = RayTracer2.0;
+			sourceTree = "<group>";
+		};
+		C63F99541C8084B300608F8E /* testfolder */ = {
+			isa = PBXGroup;
+			children = (
+				C63F99551C8084B300608F8E /* test.rtf */,
+			);
+			path = testfolder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

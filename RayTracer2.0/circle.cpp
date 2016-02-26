@@ -77,7 +77,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         cout<<"Calculated determinant is "<<det<<" as A = "<<A<<" B = "<<B<<" C = "<<C<<endl;
     }
     
-    if((A <= 1e-7) || (det < 0)){
+    if((A <= 1e-3) || (det < 0)){
         //No real solutions
         if(debug){cout<<"No real solutions."<<endl;}
         return 0;
@@ -88,7 +88,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         t= -B / (2*A);
         distance1 = t;
         if(debug){ cout<<"1 real solution at distance "<<t<<endl;}
-        if(t>1e-5){
+        if(t>5e-3){
             values.SetDistance1(t);
             return 1;
         }else{
@@ -102,7 +102,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         
         t = ((-B + sqrt(det))/ 2*A);
         
-        if(t>1e-5){
+        if(t>5e-3){
             distance1 = t;
             values.SetDistance1(distance1);
         }
@@ -113,7 +113,7 @@ circle::FindIntersections(Photon &photon, bool debug, combined& values){
         
         t = ((-B - sqrt(det))/ 2*A);
 
-        if(t>1e-5){
+        if(t>5e-3){
             distance2 = t;
             values.SetDistance2(distance2);
         }else{
