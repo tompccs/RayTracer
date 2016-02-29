@@ -56,13 +56,13 @@ Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
 }
 
 void
-Intersection::TopBottomSheetIntersect(Photon &p, Sheet &s, bool debug){
+Intersection::TopBottomSheetIntersect(Photon &p, Sheet &s, bool debug, bool photoninside){
     
     //debug = 0;
     
     double d;
     
-    if(p.GetInside()){
+    if(photoninside){
         d = s.IntersectionDistance(&p);
     }else{
         d = INFINITY;

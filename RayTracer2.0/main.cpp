@@ -910,7 +910,7 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     if(matlabprint) matlab->PhotonPathPrint(paths);
 }
 
-void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint){
+void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint, double rads){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
@@ -946,7 +946,7 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
     
-    double r = 300; //radius of curvature
+    double r = rads; //radius of curvature
     double l = 10; //length of lsc
     double height = 10; //height of lsc
     double width = 0.4; //width of lsc/thickness
@@ -1061,6 +1061,8 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
             
             sy = source->GetA().y + calc->Random(1) * source->GetABLength();
             sz = source->GetA().z + calc->Random(1) * source->GetACLength();
+            
+            
             
             photon->SetPosition(Point3D(50,sy,sz));
             photon->SetMomentum(Vector3D(-1,0,0));
@@ -1230,7 +1232,7 @@ int main(int argc, const char * argv[]){
     
     //flexirun_pof_new(30000, 450, 450, 0, 0,0, 1); //POF paper verification
     
-    flexirun_new(200, 450, 450, 0, 1, 1, 1); //Flexible LSC simulation
+    flexirun_new(2000, 350, 520, 0, 0, 0, 1, 2.4); //Flexible LSC simulation
 
 
 }

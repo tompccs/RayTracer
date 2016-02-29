@@ -121,10 +121,10 @@ curvedlsc::FindIntersections(Photon &p, bool debug){
     finder_end.StartEndSheetIntersect(p, end, debug);
     intersections.push_back(finder_end); //3
     
-    finder_top.TopBottomSheetIntersect(p, top, debug);
+    finder_top.TopBottomSheetIntersect(p, top, debug, ReturnPhotonInside());
     intersections.push_back(finder_top); //4
     
-    finder_bottom.TopBottomSheetIntersect(p, bottom, debug);
+    finder_bottom.TopBottomSheetIntersect(p, bottom, debug, ReturnPhotonInside());
     intersections.push_back(finder_bottom); //5
     
 }
