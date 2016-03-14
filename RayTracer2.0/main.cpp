@@ -589,7 +589,7 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
 }
 
 
-void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint){
+void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint, double rad){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
@@ -627,7 +627,7 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     
     //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
     
-    double r = 10; //radius of curvature
+    double r = rad; //radius of curvature
     double l = M_PI*r; //length of lsc
     double height = 0.98; //height of lsc
     double width = 0.98; //width of lsc/thickness
@@ -1230,9 +1230,9 @@ int main(int argc, const char * argv[]){
    
     //flexirun(2000, 350, 520, 0, 0, 0, 1); //Flexible LSC simulation
     
-    //flexirun_pof_new(30000, 450, 450, 0, 0,0, 1); //POF paper verification
+    flexirun_pof_new(30000, 450, 450, 0, 0,0, 1, 12); //POF paper verification
     
-    flexirun_new(2000, 350, 520, 0, 0, 0, 1, 2.4); //Flexible LSC simulation
+    //flexirun_new(2000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
 
 
 }

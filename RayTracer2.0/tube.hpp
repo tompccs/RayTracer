@@ -14,6 +14,7 @@ public:
     void SetCircle(circle& c);
     void SetHeight(double& h);
     int FindIntersections(Photon& photon, bool debug, combined& values);
+    int FindIntersections2(Photon& photon, bool debug, combined& values);
     double Project2D3D(double& distance2D, Photon& photon);
     
 };

@@ -30,6 +30,7 @@ arch::GetEnd(){
     return endangle;
 }
 
+
 int
 arch::FindIntersection(Photon& p, bool debug, combined& values){
     int intersects = Tube.FindIntersections(p, debug, values);

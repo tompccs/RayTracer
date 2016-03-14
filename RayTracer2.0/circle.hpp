@@ -29,6 +29,8 @@ public:
     double& GetRadius();
     
     int FindIntersections(Photon& photon, bool debug, combined& values);
+    int FindIntersections2(Photon& photon, bool debug, combined& values);
+
     
     
 };

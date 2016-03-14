@@ -23,6 +23,8 @@ public:
     
     int FindIntersection(Photon& p, bool debug, combined& values);
     
+    int FindIntersectionE(Photon& p, bool debug, combined& values);
+    
     double CheckAngle(Point3D& p, bool debug);
 };
 

@@ -42,7 +42,7 @@ Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
     Point2D cen = a.GetTube().GetCircle().GetCentre();
     Point3D cen3(cen.x, cen.y, Point.z);
     
-    Normal = (cen3  - Point).Normalise();
+    Normal = (cen3  - Point)/a.GetTube().GetCircle().GetRadius();
     
     if(debug){
         cout<<endl<<"Full arch intersection. Received distances are:"<<endl;
