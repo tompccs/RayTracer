@@ -27,7 +27,12 @@ public:
     
     void SetConcentration(double c);
     
-    void ReadData(bool evenspaced);
+    void ReadData(bool evenspaced, bool hybrid);
+    
+    void SetInitialScatterLength(Photon* P);
+    
+    void ScatterEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath);
+
     
     void SetInitialAbsorbLength(Photon* P);
     

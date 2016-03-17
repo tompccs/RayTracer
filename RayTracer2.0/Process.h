@@ -13,9 +13,10 @@ class Process{
     Functions calc;
     vector<double> Wavelengths, ExtinctionRateValues;
     vector<double> Wavelengthvalues, QuantumYieldValues, ProbabilityValues;
+    vector<double> lambda_Scatter, ScatterRateValues;
 public:
     
-    void ReadData(bool evenspaced);
+    void ReadData(bool evenspaced, bool hybrid);
     
     double GetExtinctionRate(double& wavelength);
     

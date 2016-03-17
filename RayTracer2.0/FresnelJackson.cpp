@@ -327,7 +327,7 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     }
 }
 
-void //exit event
+bool //exit event
 FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects){
     Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
     double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
@@ -357,6 +357,8 @@ FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bo
             print.PhotonPrint(photon);
         }
     }
+    
+    return Transmitted;
 }
 
 Vector3D //projects a vector onto a plane

@@ -1,26 +1,37 @@
 #include "Process.h"
 
 void //Reads data from files
-Process::ReadData(bool evenspaced){
+Process::ReadData(bool evenspaced, bool hybrid){
     if(!evenspaced){
-        Wavelengthvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_lambda.txt");
-        QuantumYieldValues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_quantumyield.txt");
-        vector<double> yvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_AU.txt");
+        Wavelengthvalues = data.read("data/emission_lambda.txt");
+        QuantumYieldValues = data.read("data/emission_quantumyield.txt");
+        vector<double> yvalues = data.read("data/emission_AU.txt");
         ProbabilityValues = data.auconvert(yvalues);
         
-        vector<double> xvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absoption_lambda.txt");
-        vector<double> newyvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absorption_extinctionrate.txt");
-        Wavelengths = data.newxdata(xvalues);
+        vector<double> xvalues = data.read("data/absoption_lambda.txt");
+        vector<double> newyvalues = data.read("data/absorption_extinctionrate.txt");
+        vector<double>Wavelengths = data.newxdata(xvalues);
+        
         ExtinctionRateValues = data.interp1(xvalues, newyvalues, Wavelengths);
+        
+        vector<double> Sxvalues = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
+        vector<double> Snewyvalues = data.read("data/absorption_extinctionrate.txt");
+        vector<double> SWavelengths = data.newxdata(xvalues);
+        ScatterRateValues = data.interp1(xvalues, newyvalues, Wavelengths);
+
     }
     else{
-        Wavelengthvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_lambda.txt");
-        QuantumYieldValues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_quantumyield.txt");
-        vector<double> yvalues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/emission_AU.txt");
+        Wavelengthvalues = data.read("data/emission_lambda.txt");
+        QuantumYieldValues = data.read("data/emission_quantumyield.txt");
+        vector<double> yvalues = data.read("data/emission_AU.txt");
         ProbabilityValues = data.auconvert(yvalues);
         
-        Wavelengths = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absoption_lambda.txt");
-        ExtinctionRateValues = data.read("/Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/data/absorption_extinctionrate.txt");
+        Wavelengths = data.read("data/absoption_lambda.txt");
+        ExtinctionRateValues = data.read("data/absorption_extinctionrate.txt");
+        
+        lambda_Scatter = data.read("data/absoption_lambda.txt");
+        ScatterRateValues = data.read("data/absorption_extinctionrate.txt");
+
     }
 }
 
@@ -51,7 +62,7 @@ Process::GetEmissionWavelength(){
 bool //checks if reemitted
 Process::QuantumYieldCheck(double &Wavelength){
     //   int i = data.findNearestNeighbourIndex(Wavelength, Wavelengthvalues);
-    if(calc.Random(1)<=0.823) return 1;
+    if(calc.Random(1)<=0) return 1;
     //if(calc.Random(1)<=QuantumYieldValues[i]) return 1; //ADD FILE WITH ALL QY VALUES
     else return 0;
     

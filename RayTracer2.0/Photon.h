@@ -32,11 +32,13 @@ public:
     void SetPolarisation(const Vector3D& P);
     void SetWavelength(const double& W);
     void SetAbsorblength(const double& P);
+    void SetScatterlength(const double& S);
     Vector3D& GetMomentum();
     Point3D& GetPosition();
     Vector3D& GetPolarisation();
     double& GetWavelength();
     double& GetAbsorbLength();
+    double& GetScatterLength();
     void SetRandomPolarisation();
     bool& PhotonAliveCheck();
     void PhotonKill();

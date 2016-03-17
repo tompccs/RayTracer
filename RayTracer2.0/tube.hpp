@@ -7,6 +7,7 @@
 class tube{
     circle base;
     double height;
+    Test reader;
     
 public:
     circle& GetCircle();

@@ -38,8 +38,8 @@ Material::SetConcentration(double c){
 
 //Reads data from a list, of just numbers
 void
-Material::ReadData(bool evenspaced){
-    Events.ReadData(evenspaced);
+Material::ReadData(bool evenspaced, bool hybrid){
+    Events.ReadData(evenspaced, hybrid);
 }
 
 //Sets absortion length as calculated
@@ -84,6 +84,49 @@ Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Poin
         P->SetQYLoss();
     }
 }
+
+//Sets absortion length as calculated
+void
+Material::SetInitialScatterLength(Photon* P){
+    double i = Events.GetPathLength(P->GetWavelength(), Concentration);
+    P->SetAbsorblength(i);
+}
+
+//Absorbtion event
+void
+Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
+    if(debug){ //Debug lines
+        cout<<"Photon scattered"<<endl;
+    }
+    
+    if(matlabprint){ //Matlab Print Lines
+        Point3D newlocation = P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength();
+        dyeabs.push_back(newlocation);
+        photonpath.push_back(newlocation);
+        
+    }
+    
+    if(Events.QuantumYieldCheck(P->GetWavelength())){ //If QY = 1
+        Vector3D a; //Reemit particle
+        P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
+        P->SetMomentum(a.GetRandomUnitVector());
+        P->SetWavelength(Events.GetEmissionWavelength());
+        P->SetRandomPolarisation();
+        SetInitialAbsorbLength(P);
+        
+        if(debug){
+            cout<<"and reemitted."<<endl;
+            print.PhotonPrint(P);
+        }
+        
+    }
+    else{
+        if(debug) cout<<"but not reemitted."<<endl<<endl;
+        P->PhotonKill(); //Or if 0, kill photon.
+        P->SetQYLoss();
+    }
+}
+
 
 //Indicator that Material has a photon inside
 void

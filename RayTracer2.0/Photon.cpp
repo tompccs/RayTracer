@@ -74,6 +74,16 @@ Photon::SetAbsorblength(const double &P){
     AbsorbLength = P;
 }
 
+void
+Photon::SetScatterlength(const double &S){
+    ScatterLength = S;
+}
+
+double&
+Photon::GetScatterLength(){
+    return ScatterLength;
+}
+
 Vector3D& //Get Momentum Vector
 Photon::GetMomentum(){
     return Momentum;

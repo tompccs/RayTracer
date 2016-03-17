@@ -44,7 +44,7 @@
 		C632C86A198B7BC0006430D8 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 				C632C872198B7BC0006430D8 /* RayTracer2_0.1 in CopyFiles */,
@@ -102,6 +102,15 @@
 		C632C888198B9221006430D8 /* Photon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photon.h; sourceTree = "<group>"; };
 		C636ED4819B73882006AA281 /* MultipleObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleObjects.cpp; sourceTree = "<group>"; };
 		C636ED4919B73882006AA281 /* MultipleObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipleObjects.h; sourceTree = "<group>"; };
+		C64D62BF1C9AF879008E2155 /* z-COLD-Abs-R(10)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-COLD-Abs-R(10)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C01C9AF879008E2155 /* z-COLD-Abs-R(60)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-COLD-Abs-R(60)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C11C9AF879008E2155 /* z-COLD-Scat-R(10)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-COLD-Scat-R(10)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C21C9AF879008E2155 /* z-COLD-Scat-R(60)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-COLD-Scat-R(60)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C31C9AF879008E2155 /* z-HOT-Abs-R(10)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-HOT-Abs-R(10)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C41C9AF879008E2155 /* z-HOT-Abs-R(60)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-HOT-Abs-R(60)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C51C9AF879008E2155 /* z-HOT-Scat-R(10)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-HOT-Scat-R(10)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C61C9AF879008E2155 /* z-HOT-Scat-R(60)-W(300,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-HOT-Scat-R(60)-W(300,2500).txt"; sourceTree = "<group>"; };
+		C64D62C71C9AF879008E2155 /* z-HOT-Wavelengths(300,10,2500).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "z-HOT-Wavelengths(300,10,2500).txt"; sourceTree = "<group>"; };
 		C65066301BBE8C9F007A57E1 /* ellipse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ellipse.cpp; sourceTree = "<group>"; };
 		C65066311BBE8C9F007A57E1 /* ellipse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ellipse.hpp; sourceTree = "<group>"; };
 		C6839AAB19BDC61E003F43BD /* MATLABPrint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MATLABPrint.cpp; sourceTree = "<group>"; };
@@ -138,6 +147,7 @@
 		C60C8440199016CD00F302FF /* data */ = {
 			isa = PBXGroup;
 			children = (
+				C64D62BE1C9AF879008E2155 /* hybrid */,
 				C60C8441199016CD00F302FF /* absoption_lambda.txt */,
 				C60C8442199016CD00F302FF /* Absorption-Emission Data.txt */,
 				C60C8443199016CD00F302FF /* absorption_extinctionrate.txt */,
@@ -231,6 +241,22 @@
 				C632C871198B7BC0006430D8 /* RayTracer2_0.1 */,
 			);
 			path = RayTracer2.0;
+			sourceTree = "<group>";
+		};
+		C64D62BE1C9AF879008E2155 /* hybrid */ = {
+			isa = PBXGroup;
+			children = (
+				C64D62BF1C9AF879008E2155 /* z-COLD-Abs-R(10)-W(300,2500).txt */,
+				C64D62C01C9AF879008E2155 /* z-COLD-Abs-R(60)-W(300,2500).txt */,
+				C64D62C11C9AF879008E2155 /* z-COLD-Scat-R(10)-W(300,2500).txt */,
+				C64D62C21C9AF879008E2155 /* z-COLD-Scat-R(60)-W(300,2500).txt */,
+				C64D62C31C9AF879008E2155 /* z-HOT-Abs-R(10)-W(300,2500).txt */,
+				C64D62C41C9AF879008E2155 /* z-HOT-Abs-R(60)-W(300,2500).txt */,
+				C64D62C51C9AF879008E2155 /* z-HOT-Scat-R(10)-W(300,2500).txt */,
+				C64D62C61C9AF879008E2155 /* z-HOT-Scat-R(60)-W(300,2500).txt */,
+				C64D62C71C9AF879008E2155 /* z-HOT-Wavelengths(300,10,2500).txt */,
+			);
+			path = hybrid;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
