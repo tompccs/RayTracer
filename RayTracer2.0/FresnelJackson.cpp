@@ -298,7 +298,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
 }
 
 void //entrance event
-FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
+FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug, bool scatter){
     
     Vector3D N = (lsc->GetInterfaceSheet(photon).GetNormal());
     
@@ -311,6 +311,10 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
     if(Transmitted){
         lsc->SetPhotonInside(1);
         lsc->SetInitialAbsorbLength(photon);
+        if(scatter){
+            lsc->SetInitialScatterLength(photon);
+        }
+        
         photon->SetInside();
         
         if(debug){
@@ -328,7 +332,7 @@ FresnelJackson::In(Photon *photon, Material *world, Material *lsc, bool &debug){
 }
 
 bool //exit event
-FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects){
+FresnelJackson::Out(Photon *photon, Material *material2, Material *material1, bool &debug, MultipleObjects* objects, bool scatter){
     Vector3D N = -(material1->GetInterfaceSheet(photon).GetNormal());
     double value = photon->GetAbsorbLength() - material1->GetInterfaceDistance(photon);
     

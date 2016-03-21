@@ -49,6 +49,14 @@ Material::SetInitialAbsorbLength(Photon* P){
     P->SetAbsorblength(i);
 }
 
+//Sets absortion length as calculated
+void
+Material::SetInitialScatterLength(Photon* P){
+    double i = Events.GetScatterPathLength(P->GetWavelength(), Concentration);
+    P->SetScatterlength(i);
+}
+
+
 //Absorbtion event
 void
 Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
@@ -85,13 +93,6 @@ Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Poin
     }
 }
 
-//Sets absortion length as calculated
-void
-Material::SetInitialScatterLength(Photon* P){
-    double i = Events.GetPathLength(P->GetWavelength(), Concentration);
-    P->SetAbsorblength(i);
-}
-
 //Absorbtion event
 void
 Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
@@ -100,7 +101,7 @@ Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D
     }
     
     if(matlabprint){ //Matlab Print Lines
-        Point3D newlocation = P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength();
+        Point3D newlocation = P->GetPosition()+P->GetMomentum()*P->GetScatterLength();
         dyeabs.push_back(newlocation);
         photonpath.push_back(newlocation);
         
@@ -108,7 +109,7 @@ Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D
     
     if(Events.QuantumYieldCheck(P->GetWavelength())){ //If QY = 1
         Vector3D a; //Reemit particle
-        P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetAbsorbLength());
+        P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetScatterLength());
         P->SetMomentum(a.GetRandomUnitVector());
         P->SetWavelength(Events.GetEmissionWavelength());
         P->SetRandomPolarisation();

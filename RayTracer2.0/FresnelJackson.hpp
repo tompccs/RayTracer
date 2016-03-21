@@ -21,9 +21,9 @@ class FresnelJackson{
 public:
     void Calculate(Vector3D& OldMomentum, Vector3D& OldPolarisation, Vector3D& theFacetNormal, double& Rindex1, double& Rindex2, bool debug);
     
-    void In(Photon* photon, Material* world, Material* lsc, bool& debug);
+    void In(Photon* photon, Material* world, Material* lsc, bool& debug, bool scatter);
     
-    bool Out(Photon* photon, Material* material2, Material* material1, bool& debug, MultipleObjects* objects);
+    bool Out(Photon* photon, Material* material2, Material* material1, bool& debug, MultipleObjects* objects, bool scatter);
     
     Vector3D ProjectionOnPlane(Vector3D plane_normal, Vector3D vector);
     

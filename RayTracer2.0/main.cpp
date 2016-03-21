@@ -19,6 +19,7 @@ using namespace std;
 
 void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint, bool wavelengthprint){
     
+    bool scatter = 0;
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
     
     //Creates environment
@@ -190,7 +191,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint,
                     }
                     
                     else{
-                        inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug); //Else, entrance reflect/refract event.
+                        inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug, scatter); //Else, entrance reflect/refract event.
                         if(matlabprint && objects->PhotonInMaterial()) photonpath.push_back(photon->GetPosition());
                     }
                 }
@@ -215,7 +216,7 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint,
                             }
                         }
                         else{
-                            inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects); //Otherwise exit reflect/refract event.
+                            inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects, 0); //Otherwise exit reflect/refract event.
                             if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
                             
                         }
@@ -1265,7 +1266,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     Point3D D (1,1,1);
     Point3D E (11,1,1);
     Point3D F (1,11,1);
-    double h2 = 0.7;
+    double h2 = 0.75;
     
     Point3D J (1,1,2);
     Point3D K (11,1,2);
@@ -1292,7 +1293,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     lsc2->Set(lscbase2,h3);
     
     lsc->SetRefractiveIndex(1.495);
-    lsc->SetConcentration(1e-4);
+    lsc->SetConcentration(1e-7);
     
     lsc2->SetRefractiveIndex(1.495);
     lsc2->SetConcentration(1e-5);
@@ -1332,7 +1333,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     
     //Loop for each wavelength. Set wavelength Range here.
     
-    for(int wavelength = start; wavelength<= end; wavelength++){
+    for(int wavelength = start; wavelength<= end; wavelength=wavelength+10){
         
         double thisphotons = 0;
         double thistransmission = 0;
@@ -1351,6 +1352,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
         double notabsorbedinside = 0;
         double insideabsorbedexit = 0;
         
+        bool scatter = 1;
         
         //Loop for individual wavelength.
         
@@ -1393,7 +1395,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                     }
                     
                     else{
-                        inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug); //Else, entrance reflect/refract event.
+                        inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug, scatter); //Else, entrance reflect/refract event.
                         if(matlabprint && objects->PhotonInMaterial()) photonpath.push_back(photon->GetPosition());
                     }
                 }
@@ -1401,20 +1403,28 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                 
                 else while(objects->PhotonInMaterial()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
                     
-                    if(photon->GetAbsorbLength()<=objects->CurrentMaterial()->GetInterfaceDistance(photon)){ //If absorption = next event.
-                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
+                    double Scat = photon->GetScatterLength();
+                    double Absorb = photon->GetAbsorbLength();
+                    double Interface = objects->CurrentMaterial()->GetInterfaceDistance(photon);
+                    
+                    if(Absorb<=Interface || Scat<=Interface){ //If absorption/scatter = next event.
+                        if(Absorb<=Scat){ //Absorption event is next.
+                            objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath);
+                        }else{
+                            objects->CurrentMaterial()->ScatterEvent(photon, debug, matlabprint, dyeabs, photonpath);
+                        }
                     }
                     
                     else{ //If boundary is next event.
                         
                         if((objects->CurrentMaterial()->GetInterfaceSheet(photon) == objects->CurrentMaterial()->GetBase())){
-                            if(inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects)){
+                            if(inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects,1)){
                                 transmission++;
                                 thistransmission++;
                             }//If transmittion, add
 
                         }else{
-                            inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects); //Otherwise exit reflect/refract event.
+                            inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects,1); //O therwise exit reflect/refract event.
                             if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
                             
                         }
@@ -1466,7 +1476,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
         InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
         
         if(wavelengthprint){
-            cout<<"Wavelength "<<wavelength<<" done."<<endl;
+            cout<<"Wavelength "<<wavelength<<" done. Transmission:"<<100*thistransmission/thisphotons<<"%"<<endl;
         }
         
     }
@@ -1518,7 +1528,7 @@ int main(int argc, const char * argv[]){
     
     //flexirun_new(2000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
     
-    hybrid(1000,1,350,520,0,0,1); //Hybrid Model simulation.
+    hybrid(1000,1,300,2500,0,0,1); //Hybrid Model simulation.
 
     
 

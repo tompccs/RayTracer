@@ -24,6 +24,10 @@ public:
     
     double GetEmissionWavelength();
     
+    double GetScatterPathLength(double&wavelength, double& concentration);
+    
+    double GetScatterRate(double& wavelength);
+    
     bool QuantumYieldCheck(double& Wavelength);
 };
 
