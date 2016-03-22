@@ -107,13 +107,12 @@ Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D
         
     }
     
-    if(Events.QuantumYieldCheck(P->GetWavelength())){ //If QY = 1
+    if(1){ //If QY = 1
         Vector3D a; //Reemit particle
         P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetScatterLength());
         P->SetMomentum(a.GetRandomUnitVector());
-        P->SetWavelength(Events.GetEmissionWavelength());
         P->SetRandomPolarisation();
-        SetInitialAbsorbLength(P);
+        SetInitialScatterLength(P);
         
         if(debug){
             cout<<"and reemitted."<<endl;

@@ -1308,9 +1308,12 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     
     double photons = 0;
     double transmission = 0;
+    double totalhazecone = 0;
+
     
     //Lists storing output files
     
+    vector<double> hazecone;
     vector<double> transmission_lambda;
     vector<Point3D> dyeabs;
     
@@ -1331,12 +1334,17 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     vector<double> NotAbsorbedInside;
     vector<double> InsideAbsorbedExit;
     
+    double hazeangle_deg = 5;
+    double hazeangle_rad = hazeangle_deg * M_PI / 180;
+    double coshaze = cos(hazeangle_rad);
+    
     //Loop for each wavelength. Set wavelength Range here.
     
     for(int wavelength = start; wavelength<= end; wavelength=wavelength+10){
         
         double thisphotons = 0;
         double thistransmission = 0;
+        double thishazecone = 0;
         
         double thisinside = 0;
         double QYLoss = 0;
@@ -1372,8 +1380,10 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
             sx = source->GetA().x + calc->Random(1) * source->GetABLength();
             sy = source->GetB().y + calc->Random(1) * source->GetACLength();
             
+            Vector3D entrance(0,0,-1);
+            
             photon->SetPosition(Point3D(sx,sy,9));
-            photon->SetMomentum(Vector3D(0,0,-1));
+            photon->SetMomentum(entrance);
             photon->SetWavelength(wavelength);
             photon->SetRandomPolarisation();
             
@@ -1407,7 +1417,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                     double Absorb = photon->GetAbsorbLength();
                     double Interface = objects->CurrentMaterial()->GetInterfaceDistance(photon);
                     
-                    if(Absorb<=Interface || Scat<=Interface){ //If absorption/scatter = next event.
+                    if(Absorb<=Interface ||Scat<=Interface){ //If absorption/scatter = next event.
                         if(Absorb<=Scat){ //Absorption event is next.
                             objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath);
                         }else{
@@ -1421,6 +1431,10 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                             if(inout->Out(photon, objects->NextInterfaceMaterial(photon), objects->CurrentMaterial(), debug, objects,1)){
                                 transmission++;
                                 thistransmission++;
+                                if(Dot(entrance,photon->GetMomentum())>=coshaze){
+                                    thishazecone++;
+                                    totalhazecone++;
+                                }
                             }//If transmittion, add
 
                         }else{
@@ -1460,6 +1474,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
         //Adds value for individual wavelengths to vector.
         
         transmission_lambda.push_back(100*thistransmission/thisphotons);
+        hazecone.push_back(100*thishazecone/thistransmission);
         
         inside.push_back(100*thisinside/thisphotons);
         d_zero.push_back(100*zero/thisphotons);
@@ -1476,7 +1491,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
         InsideAbsorbedExit.push_back(100*insideabsorbedexit/thisphotons);
         
         if(wavelengthprint){
-            cout<<"Wavelength "<<wavelength<<" done. Transmission:"<<100*thistransmission/thisphotons<<"%"<<endl;
+            cout<<"Wavelength "<<wavelength<<" done. Transmission:"<<100*thistransmission/thisphotons<<"%. Inside hazecone:"<<100*thishazecone/thistransmission<<"%"<<endl;
         }
         
     }
@@ -1486,7 +1501,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     //Prints vectors to files for individual wavelengths.
     
     print->PrintVectorFile(transmission_lambda, "transmission.txt");
-    
+    print->PrintVectorFile(hazecone, "hazeresult.txt");
     print->PrintVectorFile(inside, "inside.txt");
     print->PrintVectorFile(d_zero, "0.txt");
     print->PrintVectorFile(d_one, "1.txt");
@@ -1511,6 +1526,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     
     if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
     cout<<"Transmission: "<<result<<"%"<<endl;
+    cout<<"of which inside haze angle of "<<hazeangle_deg<<" degrees: "<<100*totalhazecone/transmission<<"%"<<endl;
     
     if(matlabprint) matlab->PhotonPathPrint(paths);
     
