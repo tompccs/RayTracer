@@ -88,7 +88,6 @@ circle::FindIntersections2(Photon &photon, bool debug, combined& values){
     else if (det == 0){
         //1 solution
         t= -B / (2*A);
-        distance1 = t;
         if(debug){ cout<<"1 real solution at distance "<<t<<endl;}
         if(t>eps){
             values.SetDistance1(t);
@@ -158,7 +157,7 @@ circle::FindIntersections2(Photon &photon, bool debug, combined& values){
 int
 circle::FindIntersections(Photon &photon, bool debug, combined &values){
     int result = 0;
-    double eps = 1e-4;
+    double eps = 0;
     
     Vector2D D(photon.GetMomentum().x, photon.GetMomentum().y);
     D.Normalize();

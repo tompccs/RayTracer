@@ -1,7 +1,7 @@
 #include "Process.h"
 
 void //Reads data from files
-Process::ReadData(bool evenspaced, bool hybrid){
+Process::ReadData(bool evenspaced, bool hybrid, double radius, bool hot){
     if(!hybrid){
         if(!evenspaced){
             Wavelengthvalues = data.read("data/emission_lambda.txt");
@@ -36,34 +36,64 @@ Process::ReadData(bool evenspaced, bool hybrid){
         }
     }else{
         if(!evenspaced){
+            ostringstream linkabs;
+            ostringstream linkscat;
+            if(hot){
+                linkabs <<"data/hybrid/hot/r"<<radius<<"abshot.txt";
+                linkscat <<"data/hybrid/hot/r"<<radius<<"scathot.txt";
+            }else{
+                linkabs<<"data/hybrid/cold/r"<<radius<<"abscold.txt";
+                linkscat<<"data/hybrid/cold/r"<<radius<<"scatcold.txt";
+
+            }
+            
+            string scat = linkscat.str();
+            string abs = linkabs.str();
+            
+            
             Wavelengthvalues = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
             QuantumYieldValues = data.read("data/emission_quantumyield.txt");
             vector<double> yvalues = data.read("data/emission_AU.txt");
             ProbabilityValues = data.auconvert(yvalues);
             
             vector<double> xvalues = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
-            vector<double> newyvalues = data.read("data/hybrid/z-HOT-Abs-R(60)-W(300,2500).txt");
+            vector<double> newyvalues = data.read(abs);
             vector<double>Wavelengths = data.newxdata(xvalues);
             
             ExtinctionRateValues = data.interp1(xvalues, newyvalues, Wavelengths);
             
             vector<double> Sxvalues = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
-            vector<double> Snewyvalues = data.read("data/hybrid/z-HOT-Scat-R(60)-W(300,2500).txt");
+            vector<double> Snewyvalues = data.read(scat);
             vector<double> SWavelengths = data.newxdata(xvalues);
             ScatterRateValues = data.interp1(xvalues, newyvalues, Wavelengths);
             
         }
         else{
+            
+            ostringstream linkabs;
+            ostringstream linkscat;
+            if(hot){
+                linkabs <<"data/hybrid/hotr"<<radius<<"/r"<<radius<<"abshot.txt";
+                linkscat <<"data/hybrid/hotr"<<radius<<"/r"<<radius<<"scathot.txt";
+            }else{
+                linkabs<<"data/hybrid/coldr"<<radius<<"/r"<<radius<<"abscold.txt";
+                linkscat<<"data/hybrid/coldr"<<radius<<"/r"<<radius<<"scatcold.txt";
+                
+            }
+            
+            string scat = linkscat.str();
+            string abs = linkabs.str();
+
             Wavelengthvalues = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
             QuantumYieldValues = data.read("data/emission_quantumyield.txt");
             vector<double> yvalues = data.read("data/emission_AU.txt");
             ProbabilityValues = data.auconvert(yvalues);
             
             Wavelengths = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
-            ExtinctionRateValues = data.read("data/hybrid/z-HOT-Abs-R(60)-W(300,2500).txt");
+            ExtinctionRateValues = data.read(abs);
             
             lambda_Scatter = data.read("data/hybrid/z-HOT-Wavelengths(300,10,2500).txt");
-            ScatterRateValues = data.read("data/hybrid/z-HOT-Scat-R(60)-W(300,2500).txt");
+            ScatterRateValues = data.read(scat);
             
         }
     }

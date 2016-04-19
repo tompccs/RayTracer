@@ -40,7 +40,7 @@ public:
     
     void NewCurvedIn(Photon* photon, Material* world, curvedlsc& FLSC, bool& debug);
     
-    void NewCurvedOut(Photon* photon, curvedlsc& FLSC, Material* world, bool& debug);
+    void NewCurvedOut(Photon* photon, curvedlsc& FLSC, Material* world, bool& debug, double& reflections);
 
 
 };

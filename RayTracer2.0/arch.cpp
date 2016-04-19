@@ -143,14 +143,17 @@ arch::FindIntersection(Photon& p, bool debug, combined& values){
     return 0;
 }
 
+
+
 double //Returns the angle relative to centre.
 arch::CheckAngle(Point3D &p, bool debug){
     
     
     double angle = NAN;
+    double radius = Tube.GetCircle().GetRadius();
     
-    double x = p.x - Tube.GetCircle().GetCentre().x;
-    double y = p.y - Tube.GetCircle().GetCentre().y;
+    double x = (p.x - Tube.GetCircle().GetCentre().x)/radius;
+    double y = (p.y - Tube.GetCircle().GetCentre().y)/radius;
     
     bool x_sign = !signbit(x);
     bool y_sign = !signbit(y);

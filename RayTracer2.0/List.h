@@ -18,6 +18,7 @@ public:
     int findNearestNeighbourIndex(double value, vector <double> &x);
     double findFirstIndexLower(double &value, vector<double> &ydata);
     double GetAfromB(double yvalue, vector<double> &xdata, vector<double> &ydata);
+    
 };
 
 #endif

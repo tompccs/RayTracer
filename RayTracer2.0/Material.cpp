@@ -38,8 +38,8 @@ Material::SetConcentration(double c){
 
 //Reads data from a list, of just numbers
 void
-Material::ReadData(bool evenspaced, bool hybrid){
-    Events.ReadData(evenspaced, hybrid);
+Material::ReadData(bool evenspaced, bool hybrid, double radius, bool hot){
+    Events.ReadData(evenspaced, hybrid, radius, hot);
 }
 
 //Sets absortion length as calculated
@@ -59,7 +59,7 @@ Material::SetInitialScatterLength(Photon* P){
 
 //Absorbtion event
 void
-Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
+Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath, bool& hot, double& radius){
     P->Addabsorption(); // Absorb photon
     if(debug){ //Debug lines
         cout<<"Photon absorbed"<<endl;
@@ -95,7 +95,7 @@ Material::AbsorptionEvent(Photon *P, bool& debug, bool& matlabprint, vector<Poin
 
 //Absorbtion event
 void
-Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath){
+Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath, scattering& sc, bool& hot, double& radius){
     if(debug){ //Debug lines
         cout<<"Photon scattered"<<endl;
     }
@@ -107,11 +107,21 @@ Material::ScatterEvent(Photon *P, bool& debug, bool& matlabprint, vector<Point3D
         
     }
     
-    if(1){ //If QY = 1
-        Vector3D a; //Reemit particle
+    if(1){ //Always reemit particle (scattering event.
+        Vector3D a;
         P->SetPosition(P->GetPosition()+P->GetMomentum()*P->GetScatterLength());
-        P->SetMomentum(a.GetRandomUnitVector());
-        P->SetRandomPolarisation();
+        
+        //Scattering event:
+        sc.RollCoordinates();
+        Vector3D newmom = P->GetMomentum();
+        newmom = sc.Rotated(newmom, sc.GetTheta(), sc.GetPhi());
+        
+        Vector3D newpol = P->GetPosition();
+        newpol = sc.Rotated(newmom, sc.GetTheta(), sc.GetPhi());
+        
+        P->SetMomentum(newmom);
+        
+        P->SetPolarisation(newpol);
         SetInitialScatterLength(P);
         
         if(debug){

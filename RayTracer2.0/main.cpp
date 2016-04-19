@@ -13,6 +13,8 @@
 #include "intersection.hpp"
 #include "arch.hpp"
 #include "curvedlsc.hpp"
+#include "probdistribution.hpp"
+#include "scattering.hpp"
 
 
 using namespace std;
@@ -56,8 +58,11 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint,
     Sheet* lscbase2 = new Sheet;
     Material* lsc2 = new Material;
     
-    lsc->ReadData(1,0);
-    lsc2->ReadData(1,0);
+    double r = 0;
+    bool hot = 0;
+    
+    lsc->ReadData(1,0,r,hot);
+    lsc2->ReadData(1,0,r,hot);
     
     
     Point3D D (1,1,1);
@@ -200,7 +205,9 @@ void run(double runs,int lscs, int start, int end, bool debug, bool matlabprint,
                 else while(objects->PhotonInMaterial()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
                     
                     if(photon->GetAbsorbLength()<=objects->CurrentMaterial()->GetInterfaceDistance(photon)){ //If absorption = next event.
-                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
+                        bool d = 0;
+                        double b = 0;
+                        objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath,d,b); //Absorption event.
                     }
                     
                     else{ //If boundary is next event.
@@ -355,7 +362,9 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
     
     
     curvedbox* LSC = new curvedbox(arcy,height,width,1.495);
-    LSC->ReadData(1,0);
+    double rzz=0;
+    bool hot = 0;
+    LSC->ReadData(1,0,rzz,hot);
     LSC->SetConcentration(1e-4);
     LSC->Set(arcy, height, width, 1.495);
     
@@ -477,7 +486,9 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
                 else while(LSC->GetPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
                     
                     if(photon->GetAbsorbLength()<=LSC->NextInterfaceDistance(*photon,fulldebug)){ //If absorption = next event.
-                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
+                        double d=0;
+                        bool b=0;
+                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath,b,d); //Absorption event.
                     }
                     
                     else{ //If boundary is next event.
@@ -589,7 +600,6 @@ void flexirun(double runs, int start, int end, bool matlabprint, bool debug, boo
     if(matlabprint) matlab->PhotonPathPrint(paths);
 }
 
-
 void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint, double rad){
     
     //Main algorithm. runs = runs per wavelength. debug = debug mode.
@@ -617,10 +627,13 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     Sheet* worldbase = new Sheet;
     worldbase->Set(A,B,C);
     
-    world->SetRefractiveIndex(1.409);
+    world->SetRefractiveIndex(1.402);
     world->SetConcentration(0);
     world->Set(worldbase, h);
-    world->ReadData(1,0);
+    
+    double rm = 0;
+    bool hot = 0;
+    world->ReadData(1,0, rm, hot);
     
     //LSC dimensions and parameters
     
@@ -663,8 +676,9 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     
     LSC.Set(centrepoint, r, l, width, height, n);
     
-    
-    LSC.ReadData(1,0);
+    double rc = 0;
+
+    LSC.ReadData(1,0,rc,hot);
     LSC.SetConcentration(0);
     
     double squareradius = 9.192388155/10;
@@ -692,7 +706,8 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     double hits = 0;
     double absorbed = 0;
     double photons = 0;
-    
+    double total_reflects = 0;
+
     //Lists storing output files
     
     vector<double> output;
@@ -738,6 +753,8 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
         double reflected = 0;
         double notabsorbedinside = 0;
         double insideabsorbedexit = 0;
+
+        double reflection = 0;
         
         
         //Loop for individual wavelength.
@@ -819,7 +836,7 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
                         }
                     }
                     else{
-                        inout->NewCurvedOut(photon, LSC, world, debug); //Otherwise exit reflect/refract event.
+                        inout->NewCurvedOut(photon, LSC, world, debug,reflection); //Otherwise exit reflect/refract event.
                         
                         
                     }
@@ -854,7 +871,8 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
         //Adds value for individual wavelengths to vector.
         
         output.push_back(100*thishits/thisphotons);
-        
+        total_reflects = total_reflects + reflection;
+
         inside.push_back(100*thisinside/thisphotons);
         d_zero.push_back(100*zero/thisphotons);
         d_one.push_back(100*one/thisphotons);
@@ -907,6 +925,8 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
     if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
     cout<<"Total Optical Efficiency: "<<result<<"%"<<endl;
     cout<<"Internal Optical Efficiency: "<<internal_eff<<"%"<<endl;
+    cout<<"Average reflections = "<<total_reflects/photons<<endl;
+
     
     if(matlabprint) matlab->PhotonPathPrint(paths);
 }
@@ -977,9 +997,10 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     
     curvedlsc* LSC = new curvedlsc;
 
+    double rz = 0;
+    bool hot = 0;
     
-    LSC->ReadData(1,0);
-    LSC->SetConcentration(1e-4);
+    LSC->ReadData(1,0,rz,hot);
     LSC->Set(centrepoint, r, l, width, height, n);
     
     double squareradius = 9.192388155/10;
@@ -997,6 +1018,7 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     double hits = 0;
     double absorbed = 0;
     double photons = 0;
+    
     
     //Lists storing output files
     
@@ -1021,9 +1043,12 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     vector<double> InsideAbsorbedExit;
     
     vector<double> InternalEfficiency;
+    double reflections;
     
     //Loop for each wavelength. Set wavelength Range here.
     
+    LSC->SetConcentration(1e-4);
+
     for(int wavelength = start; wavelength<= end; wavelength++){
         
         
@@ -1108,7 +1133,9 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
 
                     
                     if(photon->GetAbsorbLength()<=LSC->NextDistance(*photon,fulldebug)){ //If absorption = next event.
-                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath); //Absorption event.
+                        bool d = 0;
+                        double b = 0;
+                        LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath,d,b); //Absorption event.
                     }
                     
                     else{ //If boundary is next event.
@@ -1126,7 +1153,7 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
                             }
                         }
                         else{
-                            inout->NewCurvedOut(photon, *LSC, world, debug); //Otherwise exit reflect/refract event.
+                            inout->NewCurvedOut(photon, *LSC, world, debug, reflections); //Otherwise exit reflect/refract event.
                             if(matlabprint && world->PointinBox(photon)) photonpath.push_back(photon->GetPosition());
                             
                         }
@@ -1163,7 +1190,6 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
         //Adds value for individual wavelengths to vector.
         
         output.push_back(100*thishits/thisphotons);
-        
         inside.push_back(100*thisinside/thisphotons);
         d_zero.push_back(100*zero/thisphotons);
         d_one.push_back(100*one/thisphotons);
@@ -1220,23 +1246,24 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     if(matlabprint) matlab->PhotonPathPrint(paths);
 }
 
-
-void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabprint, bool wavelengthprint){
+int hybrid(double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness){
     
-    //Main algorithm. runs = runs per wavelength. debug = debug mode.
+    /*               KEY:
+    runs    -   Photons/Wavelength.
+    lscs    -   Allows for creation of multiple lscs.
+    start   -   start wavelength.
+    end     -   end wavelength.
+    debug   -   set this to 1 for debug mode.
+    bool    -   wavelengthprint.       */
     
-    //Creates environment
     
     Material* world = new Material; //Creates new world box.
-    
     FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
     Functions* calc = new Functions; //Used for random number generation
     Test* print = new Test; //Used to output debug lines
     MultipleObjects* objects = new MultipleObjects; //Facilitates multiple LSCs
-    
-    MATLABPrint* matlab = new MATLABPrint;
-    
-    vector<vector<Point3D>> paths;
+    scattering scatterdata; // Used for scaterring calculations
+    bool matlabprint = 0;
     
     //World dimensions and settings
     Point3D A (0,0,0);
@@ -1259,14 +1286,14 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     Sheet* lscbase2 = new Sheet;
     Material* lsc2 = new Material;
     
-    lsc->ReadData(1,1);
-    lsc2->ReadData(1,1);
+    lsc->ReadData(1,1,radius,hot);
+    lsc2->ReadData(1,1,radius,hot);
     
     
     Point3D D (1,1,1);
     Point3D E (11,1,1);
     Point3D F (1,11,1);
-    double h2 = 0.75;
+    double h2 = thickness;
     
     Point3D J (1,1,2);
     Point3D K (11,1,2);
@@ -1281,7 +1308,6 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     Point3D I (6-squareradius,6+squareradius,9);
     
     
-    
     Sheet* source = new Sheet;
     
     source->Set(G,H,I);
@@ -1293,7 +1319,7 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     lsc2->Set(lscbase2,h3);
     
     lsc->SetRefractiveIndex(1.495);
-    lsc->SetConcentration(1e-7);
+    lsc->SetConcentration(conc1);
     
     lsc2->SetRefractiveIndex(1.495);
     lsc2->SetConcentration(1e-5);
@@ -1304,12 +1330,10 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     if(lscs>=1)objects->StoreMaterial(lsc);
     if(lscs==2) objects->StoreMaterial(lsc2);
     
-    if(matlabprint) matlab->PrintLSCs(objects);
-    
     double photons = 0;
     double transmission = 0;
     double totalhazecone = 0;
-
+    
     
     //Lists storing output files
     
@@ -1339,8 +1363,10 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     double coshaze = cos(hazeangle_rad);
     
     //Loop for each wavelength. Set wavelength Range here.
-    
+
     for(int wavelength = start; wavelength<= end; wavelength=wavelength+10){
+
+        scatterdata.GetDistributions(radius, wavelength, hot);
         
         double thisphotons = 0;
         double thistransmission = 0;
@@ -1406,7 +1432,6 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                     
                     else{
                         inout->In(photon, world, objects->NextInterfaceMaterial(photon), debug, scatter); //Else, entrance reflect/refract event.
-                        if(matlabprint && objects->PhotonInMaterial()) photonpath.push_back(photon->GetPosition());
                     }
                 }
                 
@@ -1417,11 +1442,11 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
                     double Absorb = photon->GetAbsorbLength();
                     double Interface = objects->CurrentMaterial()->GetInterfaceDistance(photon);
                     
-                    if(Absorb<=Interface ||Scat<=Interface){ //If absorption/scatter = next event.
+                    if(Absorb<=Interface || Scat<=Interface){ //If absorption/scatter = next event.
                         if(Absorb<=Scat){ //Absorption event is next.
-                            objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath);
+                            objects->CurrentMaterial()->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath,hot,radius);
                         }else{
-                            objects->CurrentMaterial()->ScatterEvent(photon, debug, matlabprint, dyeabs, photonpath);
+                            objects->CurrentMaterial()->ScatterEvent(photon, debug, matlabprint, dyeabs, photonpath, scatterdata, hot, radius);
                         }
                     }
                     
@@ -1466,7 +1491,6 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
             
             world->SetPhotonInside(0);
             objects->ResetPhotonsInside();
-            paths.push_back(photonpath);
             delete photon;
             
         }
@@ -1496,12 +1520,26 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
         
     }
     
-    
+    double conc_thickness = conc1*thickness;
     
     //Prints vectors to files for individual wavelengths.
     
-    print->PrintVectorFile(transmission_lambda, "transmission.txt");
-    print->PrintVectorFile(hazecone, "hazeresult.txt");
+    ostringstream t_lambda;
+    ostringstream h_lambda;
+
+    if(hot){
+        t_lambda<<"r"<<radius<<"_hot_transmission"<<conc_thickness<<".txt";
+        h_lambda<<"r"<<radius<<"_hot_haze"<<conc_thickness<<".txt";
+
+    }else{
+        t_lambda<<"r"<<radius<<"_cold_transmission"<<conc_thickness<<".txt";
+        h_lambda<<"r"<<radius<<"_cold_haze"<<conc_thickness<<".txt";
+    }
+
+
+    
+    print->PrintVectorFile(transmission_lambda, t_lambda.str());
+    print->PrintVectorFile(hazecone, h_lambda.str());
     print->PrintVectorFile(inside, "inside.txt");
     print->PrintVectorFile(d_zero, "0.txt");
     print->PrintVectorFile(d_one, "1.txt");
@@ -1524,11 +1562,22 @@ void hybrid(double runs,int lscs, int start, int end, bool debug, bool matlabpri
     finalresult.push_back(result);
     print->PrintVectorFile(finalresult,"efficiency.txt");
     
-    if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
     cout<<"Transmission: "<<result<<"%"<<endl;
     cout<<"of which inside haze angle of "<<hazeangle_deg<<" degrees: "<<100*totalhazecone/transmission<<"%"<<endl;
     
-    if(matlabprint) matlab->PhotonPathPrint(paths);
+    return 0;
+}
+
+void hybridsweep(){
+    for(int i=10; i>0; i--){
+        double conc = 10^(-i);
+        hybrid(1000,1,300,2500,0,1,1,50,conc,1);
+    }
+    
+    for(int i=10; i>0; i--){
+        double conc = 10^(-i);
+        hybrid(1000,1,300,2500,0,1,0,50,conc,1);
+    }
     
 }
 
@@ -1540,13 +1589,13 @@ int main(int argc, const char * argv[]){
    
     //flexirun(2000, 350, 520, 0, 0, 0, 1); //Simulation #2: Flexible (Old algorithm)
     
-    //flexirun_pof_new(30000, 450, 450, 0, 0,0, 1, 12); //POF Paper, new algorithm
+    //flexirun_pof_new(300000, 450, 450, 0, 0,0, 1, 15); //POF Paper, new algorithm
     
-    //flexirun_new(2000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
+    //flexirun_new(2000, 350, 520, 0, 0, 0, 1, 2.4); //Flexible LSC simulation
     
-    hybrid(1000,1,300,2500,0,0,1); //Hybrid Model simulation.
-
+    //double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness
+    hybrid(10000,1,300,2500,0,1,1,50,1e-7,1); //Hybrid Model simulation.
     
-
+    //hybridsweep();
 
 }

@@ -27,7 +27,6 @@ Intersection::ArchIntersect(Photon &p, arch &a, bool debug){
     double d1 = values.GetDistance1();
     double d2 = values.GetDistance2();
     double d;
-    d = d;
     
     if(d1<=d2){
         d = d1;

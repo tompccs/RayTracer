@@ -21,7 +21,7 @@ tube::SetHeight(double &h){
 }
 
 int
-tube::FindIntersections(Photon &photon, bool debug, combined& values){
+tube::FindIntersections2(Photon &photon, bool debug, combined& values){
     //debug = 0;
     int intersect2D = base.FindIntersections(photon, debug, values);
     
@@ -63,6 +63,91 @@ tube::FindIntersections(Photon &photon, bool debug, combined& values){
     }
     
     return 0;
+}
+
+int
+tube::FindIntersections(Photon &photon, bool debug, combined &values){
+    int result = 0;
+    
+    //Get variable values
+    Vector3D mom = photon.GetMomentum();
+    Point3D pos = photon.GetPosition();
+    double r = base.GetRadius();
+    Point2D P0 = base.GetCentre();
+    
+    double eps = 1e-4;
+    
+    double dx = mom.x;
+    double dy = mom.y;
+    //double dz = mom.z;
+    
+    double x0 = pos.x;
+    double y0 = pos.y;
+    //double z0 = pos.z;
+    
+    double rx = P0.x;
+    double ry = P0.y;
+    
+    double X = x0 - rx;
+    double Y = y0 - ry;
+    
+    double t1, t2;
+    
+    double A = (dx*dx + dy*dy);
+    double B = 2*(dx*X + dy*Y);
+    double C = X*X + Y*Y - r*r;
+    
+    double DET = B*B - 4*A*C;
+    
+    t1 = (-B + sqrt(DET))/(2*A);
+    t2 = (-B - sqrt(DET))/(2*A);
+    
+    bool pos1 = 0;
+    bool pos2 = 0;
+    
+    if(t1>eps){
+        pos1 = 1;
+    }
+    
+    if(t2>eps){
+        pos2 = 1;
+    }
+    
+    
+    if(DET<0){
+        values.SetDistance1(INFINITY);
+        values.SetDistance2(INFINITY);
+        result = 0;
+    }else if(DET==0 && pos1){
+        values.SetDistance1(t1);
+        values.SetDistance2(INFINITY);
+        result = 1;
+    }else if(DET>0){
+        
+        if(pos1&&pos2){
+            if(t1>t2){
+                values.SetDistance1(t1);
+                values.SetDistance2(t2);
+            }else{
+                values.SetDistance1(t2);
+                values.SetDistance2(t1);
+            }
+            result = 2;
+        }
+        
+        if(pos1&&!pos2){
+            values.SetDistance1(t1);
+            values.SetDistance2(INFINITY);
+            result = 1;
+        }
+        if(pos2&&!pos1){
+            values.SetDistance1(t2);
+            values.SetDistance2(INFINITY);
+            result = 1;
+        }
+    }
+    
+    return result;
 }
 
 

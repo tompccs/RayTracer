@@ -1,152 +1,5 @@
 #include "FresnelJackson.hpp"
 
-/*void
-FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2, bool debug){
-    
-    double kCarTolerance = 1e-8;
-    
-    double sini, sinr, cosr, E1_perp, E1_parl, s1, E2_perp, E2_parl, E2_total, s2, TransCoeff, E2_abs, C_parl, C_perp;
-
-    
-    double PdotN;
-    double EdotN;
-    double cosi;
-    
-    Vector3D A_trans;
-    Vector3D A_paral_inc;
-    Vector3D A_paral;
-    
-    double alpha;
-    
-    
-    //Normalise all vectors
-    
-    OldMomentum.Normalise();
-    OldPolarisation.Normalise();
-    theFacetNormal.Normalise();
-    
-    if(debug){
-        if(fabs(Dot(OldMomentum, OldPolarisation)>kCarTolerance)) {
-            cout<< "Oldmomentum and Oldpolarisation are not orthogonal." <<endl;
-        }
-    }
-    
-    PdotN = Dot(OldMomentum, theFacetNormal);
-    EdotN = Dot(OldPolarisation, theFacetNormal);
-    
-    cosi = PdotN;
-    
-    if(fabs(cosi) < 1.0 - kCarTolerance){
-        sini = sqrt(1-cosi*cosi);
-        sinr = sini * Rindex1/Rindex2;
-    }else{
-        sini = 0;
-        sinr = 0;
-    }
-    
-    if(sinr >= 1){
-        //Simulate total internal reflection
-        
-        NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
-        NewPolarisation = -OldPolarisation + theFacetNormal*(2*EdotN);
-        Transmitted = 0;
-    }
-    
-    else{
-        if(cosi>0){
-            cosr = sqrt(1-sinr*sinr);
-        }
-        
-        if(sini>0){
-            A_trans = -Cross(OldMomentum, theFacetNormal);
-            A_trans.Normalise();
-            A_paral_inc = Cross(OldMomentum, theFacetNormal);
-            A_paral_inc.Normalise();
-            E1_perp = Dot(OldPolarisation, A_trans);
-            E1_parl = Dot(OldPolarisation, A_paral_inc);
-        }else{
-            A_trans = OldPolarisation;
-            E1_perp = 0;
-            E1_parl = 0;
-        }
-        
-        s1 = Rindex1*cosi;
-        E2_perp = 2*s1*E1_perp/(Rindex1*cosi+Rindex2*cosr);
-        E2_parl = 2*s1*E1_parl/(Rindex2*cosi+Rindex1*cosr);
-        E2_total = E2_perp*E2_perp + E2_parl*E2_parl;
-        s2 = Rindex2*cosr*E2_total;
-        
-        TransCoeff = s2/s1;
-        
-        double genrand = calc.Random(1);
-        
-        cout<<"TransCoeff is: "<<TransCoeff<<" and genrand is: "<<genrand<<endl;
-        
-        if(genrand>TransCoeff){//Photon is reflected
-            
-            NewMomentum = OldMomentum - theFacetNormal*(2*PdotN);
-            
-            if (sini > 0){ //Incident ray oblique
-                
-                E2_parl = (Rindex2*E2_parl/Rindex1) - E1_parl;
-                E2_perp = E2_perp - E1_perp;
-                E2_total = E2_perp*E2_perp + E2_parl*E2_parl;
-                A_paral = Cross(NewMomentum,A_trans);
-                A_paral.Normalise();
-                E2_abs = sqrt(E2_total);
-                C_parl = E2_parl/E2_abs;
-                C_perp = E2_perp/E2_abs;
-                
-                NewPolarisation = C_parl*A_paral + C_perp*A_trans;
-                
-            }else{ //Incident ray perpendicular
-                
-                if(Rindex2>Rindex1){
-                    NewPolarisation = - OldPolarisation;
-                }
-                else{
-                    NewPolarisation = OldPolarisation;
-                }
-                
-            }
-            
-            NewPolarisation = ProjectionOnPlane(NewMomentum, NewPolarisation);
-            
-            Transmitted = 0;
-        }
-        else{ //Photon gets Transmitted
-            Transmitted = 1;
-
-            if(sini > 0.0){ //Incident ray oblique
-            
-                alpha = cosi - cosr*(Rindex2/Rindex1);
-                NewMomentum = OldMomentum - alpha*theFacetNormal;
-                NewMomentum.Normalise();
-                
-                A_paral = Cross(NewMomentum,A_trans);
-                A_paral.Normalise();
-                E2_abs = sqrt(E2_total);
-                C_parl = E2_parl/E2_abs;
-                C_perp = E2_perp/E2_abs;
-                
-                NewPolarisation = C_parl*A_paral + C_perp*A_trans;
-                
-            }else{ //Incident ray perpendicular
-            
-                NewMomentum = OldMomentum;
-                NewPolarisation = OldPolarisation;
-            
-            }
-            
-        }
-        
-    }
-    
-    NewMomentum.Normalise();
-    NewPolarisation.Normalise();
-    
-}*/
-
 void //calculates new momentum  vector
 FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vector3D &theFacetNormal, double &Rindex1, double &Rindex2, bool debug){
     
@@ -229,7 +82,7 @@ FresnelJackson::Calculate(Vector3D &OldMomentum, Vector3D &OldPolarisation, Vect
         
         /*if(TransCoeff <= 0){
             cout<<"Negative coefficient of reflection: "<<TransCoeff<< " Exit now."<<endl;
-            //exit(2);
+            exit(2);
         }*/
         
         if(genrand>TransCoeff){ //Reflection
@@ -574,7 +427,7 @@ FresnelJackson::NewCurvedIn(Photon *photon, Material *world, curvedlsc& FLSC, bo
 }
 
 void
-FresnelJackson::NewCurvedOut(Photon *photon, curvedlsc& FLSC, Material *world, bool &debug){
+FresnelJackson::NewCurvedOut(Photon *photon, curvedlsc& FLSC, Material *world, bool &debug, double& reflections){
     int surface = FLSC.NextIntersection(*photon, debug);
     Vector3D N;
     if(surface!=3 && surface!=0){
@@ -598,6 +451,7 @@ FresnelJackson::NewCurvedOut(Photon *photon, curvedlsc& FLSC, Material *world, b
     
     if(!Transmitted){
         photon->SetAbsorblength(value);
+        reflections++;
         if(debug){
             cout<<"Exit boundary event. Reflection (No exit):"<<endl;
             print.PhotonPrint(photon);

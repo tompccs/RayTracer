@@ -5,6 +5,9 @@
 #include <vector>
 #include "List.h"
 #include "Functions.h"
+#include <string>
+#include <sstream>
+
 
 using namespace std;
 
@@ -14,9 +17,10 @@ class Process{
     vector<double> Wavelengths, ExtinctionRateValues;
     vector<double> Wavelengthvalues, QuantumYieldValues, ProbabilityValues;
     vector<double> lambda_Scatter, ScatterRateValues;
+    vector<vector<double>> Emission;
 public:
     
-    void ReadData(bool evenspaced, bool hybrid);
+    void ReadData(bool evenspaced, bool hybrid, double radius, bool hot);
     
     double GetExtinctionRate(double& wavelength);
     

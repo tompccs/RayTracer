@@ -68,7 +68,7 @@ Test::PrintVectorFile(vector<double> list, string filename){
         }
         myfile.close();
     }
-    else cout << "Unable to open file";
+    else cout << "Unable to open file kn"<<filename<<endl;
 }
 
 void // Prints Photon details
@@ -95,7 +95,7 @@ Test::PrintTextVector(vector<string> list, string filename){
         }
         myfile.close();
     }
-    else cout << "Unable to open file";
+    else cout << "Unable to open file "<<filename<<endl;
 }
 
 string //Converts a number to a string

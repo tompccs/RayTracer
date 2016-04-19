@@ -5,6 +5,7 @@
 #include "Box.h"
 #include "Process.h"
 #include "Test.h"
+#include "scattering.hpp"
 
 class Material: public Box{
     Process Events;
@@ -27,16 +28,16 @@ public:
     
     void SetConcentration(double c);
     
-    void ReadData(bool evenspaced, bool hybrid);
+    void ReadData(bool evenspaced, bool hybrid, double radius, bool hot);
     
     void SetInitialScatterLength(Photon* P);
     
-    void ScatterEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath);
+    void ScatterEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath, scattering& sc, bool& hot, double& radius);
 
     
     void SetInitialAbsorbLength(Photon* P);
     
-    void AbsorptionEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath);
+    void AbsorptionEvent(Photon* P, bool& debug, bool& matlabprint, vector<Point3D>& dyeabs, vector<Point3D>& photonpath, bool& hot, double& radius);
     
     void SetPhotonInside(bool inside);
     
