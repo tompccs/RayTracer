@@ -1593,7 +1593,7 @@ int main(int argc, const char * argv[]){
     
     //flexirun_pof_new(300000, 450, 450, 0, 0,0, 1, 10); //POF Paper, new algorithm
     
-    flexirun_new(15000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
+    //flexirun_new(15000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
     
     //double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness
     //hybrid(10000,1,300,2500,0,1,0,10,5e15,1); //Hybrid Model simulation.
