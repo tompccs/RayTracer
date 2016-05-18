@@ -782,9 +782,19 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
             
             Point3D spos = source->GetA() + calc->Random(1) * VEC_AC + calc->Random(1) * VEC_AB + sdir;
             
+            double dist = 1.859375;
             
-            photon->SetPosition(spos);
-            photon->SetMomentum(-sdir);
+            Point3D cent_spos = source->Centre() + dist* sdir;
+            
+            double ydir = (width/2)*(acos(1-(2*calc->Random(1)))-M_PI_2)/M_PI_2;
+            double xdir = dist;
+            double zdir = 0;
+            
+            Vector3D newdir(xdir,ydir,zdir);
+            newdir.Normalise();
+            
+            photon->SetPosition(cent_spos);
+            photon->SetMomentum(newdir);
             photon->SetWavelength(wavelength);
             photon->SetRandomPolarisation();
             
@@ -1005,10 +1015,13 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     
     double squareradius = 9.192388155/10;
     
+    Point3D SourceA(30,0,5);
+    Point3D SourceB(30,0,5);
+    Point3D SourceC(30,0,5);
     
-    Point3D SourceA (30,0-squareradius,5-squareradius);
-    Point3D SourceB (30,0+squareradius,5-squareradius);
-    Point3D SourceC (30,0-squareradius,5+squareradius);
+    //Point3D SourceA (30,0-squareradius,5-squareradius);
+    //Point3D SourceB (30,0+squareradius,5-squareradius);
+    //Point3D SourceC (30,0-squareradius,5+squareradius);
     
     Sheet* source = new Sheet;
     
@@ -1568,18 +1581,7 @@ int hybrid(double runs, int lscs, int start, int end, bool debug, bool wavelengt
     return 0;
 }
 
-void hybridsweep(){
-    for(int i=10; i>0; i--){
-        double conc = 10^(-i);
-        hybrid(1000,1,300,2500,0,1,1,50,conc,1);
-    }
-    
-    for(int i=10; i>0; i--){
-        double conc = 10^(-i);
-        hybrid(1000,1,300,2500,0,1,0,50,conc,1);
-    }
-    
-}
+
 
 int main(int argc, const char * argv[]){
     
@@ -1589,13 +1591,12 @@ int main(int argc, const char * argv[]){
    
     //flexirun(2000, 350, 520, 0, 0, 0, 1); //Simulation #2: Flexible (Old algorithm)
     
-    //flexirun_pof_new(300000, 450, 450, 0, 0,0, 1, 15); //POF Paper, new algorithm
+    //flexirun_pof_new(300000, 450, 450, 0, 0,0, 1, 10); //POF Paper, new algorithm
     
-    //flexirun_new(2000, 350, 520, 0, 0, 0, 1, 2.4); //Flexible LSC simulation
+    flexirun_new(15000, 350, 520, 0, 0, 0, 1, 300); //Flexible LSC simulation
     
     //double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness
-    hybrid(10000,1,300,2500,0,1,1,50,1e-7,1); //Hybrid Model simulation.
+    //hybrid(10000,1,300,2500,0,1,0,10,5e15,1); //Hybrid Model simulation.
     
-    //hybridsweep();
 
 }
