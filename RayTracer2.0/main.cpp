@@ -15,6 +15,7 @@
 #include "curvedlsc.hpp"
 #include "probdistribution.hpp"
 #include "scattering.hpp"
+#include "matrixread.hpp"
 
 
 using namespace std;
@@ -1587,7 +1588,7 @@ int main(int argc, const char * argv[]){
     
     //double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint
     
-    //run(2000,1,350,520,0,0,1); //Simulation #1: Flat LSC
+    run(2000,1,350,520,0,0,1); //Simulation #1: Flat LSC
    
     //flexirun(2000, 350, 520, 0, 0, 0, 1); //Simulation #2: Flexible (Old algorithm)
     
@@ -1597,6 +1598,9 @@ int main(int argc, const char * argv[]){
     
     //double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness
     //hybrid(10000,1,300,2500,0,1,0,10,5e15,1); //Hybrid Model simulation.
+    
+    
+    
     
 
 }

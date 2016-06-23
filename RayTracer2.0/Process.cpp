@@ -145,7 +145,7 @@ Process::GetEmissionWavelength(){
 bool //checks if reemitted
 Process::QuantumYieldCheck(double &Wavelength){
     //   int i = data.findNearestNeighbourIndex(Wavelength, Wavelengthvalues);
-    if(calc.Random(1)<=0.83) return 1;
+    if(calc.Random(1)<=1) return 1;
     //if(calc.Random(1)<=QuantumYieldValues[i]) return 1; //ADD FILE WITH ALL QY VALUES
     else return 0;
     

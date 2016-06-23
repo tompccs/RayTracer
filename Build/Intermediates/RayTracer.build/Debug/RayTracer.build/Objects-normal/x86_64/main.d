@@ -15,7 +15,7 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/Process.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/List.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/scattering.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/probdistribution.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/probdistribution.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/curvedbox.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/arc.hpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/ellipse.hpp \
@@ -31,4 +31,5 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/anisotropic.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.cpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/unittests.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/unittests.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrixread.hpp

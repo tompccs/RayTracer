@@ -1,0 +1,75 @@
+cmake_minimum_required(VERSION 3.5)
+project(RayTracer2_0)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+set(SOURCE_FILES
+    RayTracer2.0/anisotropic.cpp
+    RayTracer2.0/anisotropic.h
+    RayTracer2.0/arc.cpp
+    RayTracer2.0/arc.hpp
+    RayTracer2.0/arch.cpp
+    RayTracer2.0/arch.hpp
+    RayTracer2.0/Box.cpp
+    RayTracer2.0/Box.h
+    RayTracer2.0/circle.cpp
+    RayTracer2.0/circle.hpp
+    RayTracer2.0/combined.cpp
+    RayTracer2.0/combined.hpp
+    RayTracer2.0/curvedbox.cpp
+    RayTracer2.0/curvedbox.hpp
+    RayTracer2.0/curvedlsc.cpp
+    RayTracer2.0/curvedlsc.hpp
+    RayTracer2.0/curvedplane.cpp
+    RayTracer2.0/curvedplane.hpp
+    RayTracer2.0/ellipse.cpp
+    RayTracer2.0/ellipse.hpp
+    RayTracer2.0/flexi.cpp
+    RayTracer2.0/flexi.hpp
+    RayTracer2.0/FresnelJackson.cpp
+    RayTracer2.0/FresnelJackson.hpp
+    RayTracer2.0/Functions.cpp
+    RayTracer2.0/Functions.h
+    RayTracer2.0/intersection.cpp
+    RayTracer2.0/intersection.hpp
+    RayTracer2.0/List.cpp
+    RayTracer2.0/List.h
+    RayTracer2.0/main.cpp
+    RayTracer2.0/Material.cpp
+    RayTracer2.0/Material.h
+    RayTracer2.0/MATLABPrint.cpp
+    RayTracer2.0/MATLABPrint.h
+    RayTracer2.0/matrix.cpp
+    RayTracer2.0/matrix.h
+    RayTracer2.0/MatrixMath.cpp
+    RayTracer2.0/MatrixMath.h
+    RayTracer2.0/MultipleObjects.cpp
+    RayTracer2.0/MultipleObjects.h
+    RayTracer2.0/Photon.cpp
+    RayTracer2.0/Photon.h
+    RayTracer2.0/Point2D.cpp
+    RayTracer2.0/Point2D.h
+    RayTracer2.0/Point3D.cpp
+    RayTracer2.0/Point3D.h
+    RayTracer2.0/Process.cpp
+    RayTracer2.0/Process.h
+    RayTracer2.0/scattering.cpp
+    RayTracer2.0/scattering.hpp
+    RayTracer2.0/Sheet.cpp
+    RayTracer2.0/Sheet.h
+    RayTracer2.0/Spherical3D.cpp
+    RayTracer2.0/Spherical3D.h
+    RayTracer2.0/Test.cpp
+    RayTracer2.0/Test.h
+    RayTracer2.0/tube.cpp
+    RayTracer2.0/tube.hpp
+    RayTracer2.0/unittests.cpp
+    RayTracer2.0/unittests.hpp
+    RayTracer2.0/Vector2D.cpp
+    RayTracer2.0/Vector2D.h
+    RayTracer2.0/Vector3D.cpp
+    RayTracer2.0/Vector3D.h
+    probdistribution.cpp
+    probdistribution.hpp)
+
+add_executable(RayTracer2_0 ${SOURCE_FILES})
