@@ -29,6 +29,8 @@ public:
     
     void PrintVals();
     
+    vector<vector<double>>& GetMatrix();
+    
 };
 
 

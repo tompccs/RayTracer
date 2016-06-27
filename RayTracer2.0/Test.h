@@ -26,6 +26,8 @@ public:
     
     void PrintVectorFile(vector<double> list, string filename);
     
+    void PrintMatrixFile(vector< vector<double>> &mat, string filename);
+    
     void PhotonPrint(Photon* photon);
     
     void PrintTextVector(vector<string> list, string filename);

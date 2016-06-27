@@ -79,3 +79,8 @@ matrixread::PrintVals(){
         cout<<endl;
     }
 }
+
+vector<vector<double>>&
+matrixread::GetMatrix(){
+    return vals;
+}

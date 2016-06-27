@@ -71,6 +71,20 @@ Test::PrintVectorFile(vector<double> list, string filename){
     else cout << "Unable to open file kn"<<filename<<endl;
 }
 
+void
+Test::PrintMatrixFile(vector< vector< double >> &mat, string filename){
+    ofstream myfile (filename);
+    if (myfile.is_open()){
+        for(int i=0; i<mat.size(); i++){
+            for(int j=0; j<mat[i].size(); j++){
+                myfile<<mat[i][j]<<"    ";
+            }
+            myfile<<endl;
+        }
+        myfile.close();
+    }
+}
+
 void // Prints Photon details
 Test::PhotonPrint(Photon *photon){
     cout<<"Photon has position: ";
