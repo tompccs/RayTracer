@@ -26,10 +26,13 @@ public:
     void Data(const char* filename);
 
     double& GetValue(int i, int j);
+    void SetValue(int i, int j, double value);
     
     void PrintVals();
     
     vector<vector<double>>& GetMatrix();
+    
+    
     
 };
 

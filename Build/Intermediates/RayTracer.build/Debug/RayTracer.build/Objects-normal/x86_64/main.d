@@ -32,4 +32,5 @@ dependencies: \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.h \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrix.cpp \
   /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/unittests.hpp \
-  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrixread.hpp
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/matrixread.hpp \
+  /Users/misha/Documents/IoannisGroup/RayTracer2.0/RayTracer2.0/spectra.hpp

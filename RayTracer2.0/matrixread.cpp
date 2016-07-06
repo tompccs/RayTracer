@@ -67,6 +67,11 @@ matrixread::GetValue(int i, int j){
 }
 
 void
+matrixread::SetValue(int i, int j, double value){
+    vals[i][j] = value;
+}
+
+void
 matrixread::PrintVals(){
     int I = (int) vals.size();
     int J = (int) vals[0].size();

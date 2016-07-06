@@ -16,6 +16,7 @@
 #include "probdistribution.hpp"
 #include "scattering.hpp"
 #include "matrixread.hpp"
+#include "spectra.hpp"
 
 
 using namespace std;
@@ -781,7 +782,7 @@ void flexirun_pof_new(double runs, int start, int end, bool matlabprint, bool de
             VEC_AB = source->GetB() - source->GetA();
             VEC_AC = source->GetC() - source->GetA();
             
-            Point3D spos = source->GetA() + calc->Random(1) * VEC_AC + calc->Random(1) * VEC_AB + sdir;
+            //Point3D spos = source->GetA() + calc->Random(1) * VEC_AC + calc->Random(1) * VEC_AB + sdir;
             
             double dist = 1.859375;
             
@@ -1062,14 +1063,6 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
     
     //Loop for each wavelength. Set wavelength Range here.
     
-    double startconc = 0;
-    double endconc = 1e-6;
-    double steps = 100;
-    
-    double increment = (endconc - startconc)/steps;
-    
-    for(double conc = startconc; conc<= endconc; conc = conc + increment){
-        
         LSC->SetConcentration(1e-4);
         
         for(int wavelength = start; wavelength<= end; wavelength++){
@@ -1266,7 +1259,6 @@ void flexirun_new(double runs, int start, int end, bool matlabprint, bool debug,
         cout<<"Internal Optical Efficiency: "<<internal_eff<<"%"<<endl;
         
         if(matlabprint) matlab->PhotonPathPrint(paths);
-    }
 }
 
 int hybrid(double runs, int lscs, int start, int end, bool debug, bool wavelengthprint, bool hot, double radius, double conc1, double thickness){
@@ -1592,13 +1584,268 @@ int hybrid(double runs, int lscs, int start, int end, bool debug, bool wavelengt
 }
 
 void testsesh(){
-    Test t;
-    matrixread m;
-    m.Data("testjnum.txt");
-    t.PrintMatrixFile(m.GetMatrix(), "printed.txt");
-    m.Data("printed.txt");
-    m.PrintVals();
+    spectra am;
+    am.Import("spectrum.txt");
+    cout<<am.GetMatrix().GetValue(1, 0);
+    
 }
+
+//Eliminating all extra stored data, creating just sweep for efficiencies
+void parametersweep(double runs, int start, int end, bool matlabprint, bool debug, bool fulldebug, bool wavelengthprint, double rads){
+    
+    //Main algorithm. runs = runs per wavelength. debug = debug mode.
+    
+    //Creates environment
+    
+    Material* world = new Material; //Creates new world box.
+    
+    FresnelJackson* inout = new FresnelJackson; //Calculation for boundarys
+    Functions* calc = new Functions; //Used for random number generation
+    Test* print = new Test; //Used to output debug lines
+    
+    MATLABPrint* matlab = new MATLABPrint;
+    
+    vector<vector<Point3D>> paths;
+    
+    //World dimensions and settings
+    Point3D A (-500,-500,-500);
+    Point3D B (500,-500,-500);
+    Point3D C (-500,500,-500);
+    double h = 1000;
+    
+    Sheet* worldbase = new Sheet;
+    worldbase->Set(A,B,C);
+    
+    world->SetRefractiveIndex(1);
+    world->SetConcentration(0);
+    world->Set(worldbase, h);
+    
+    //LSC dimensions and parameters
+    
+    //Setting LSC parameters with a given LSC length, l, radius of curvature r. This gives output angles for arc. values a and b must be equal.
+    
+    vector<vector<double>> externalsweep;
+    vector<vector<double>> internalsweep;
+    
+    
+    
+    for(int thickness_run = 1; thickness_run<3; thickness_run++){
+
+    
+    double r = rads; //radius of curvature
+    double l = 100; //length of lsc
+    double height = 100; //height of lsc
+    double width = 0.4*thickness_run; //width of lsc/thickness
+    
+    
+    Point3D centrepoint(-(r),0,0);
+    
+    Point2D centre2D(centrepoint.x,centrepoint.y);
+    
+    circle cen;
+    cen.SetCentre(centre2D);
+    cen.SetRadius(r);
+    
+    tube tub;
+    tub.SetCircle(cen);
+    tub.SetHeight(height);
+    
+    arch arc;
+    arc.SetTube(tub);
+    double st = -l/(2*r);
+    double en = - st;
+    arc.SetStart(st);
+    arc.SetEnd(en);
+    
+    double n = 1.495;
+    
+    
+    curvedlsc* LSC = new curvedlsc;
+    
+    double rz = 0;
+    bool hot = 0;
+    
+    LSC->ReadData(1,0,rz,hot);
+    LSC->Set(centrepoint, r, l, width, height, n);
+    
+    double squareradius = 50;
+    
+    Point3D SourceA (30,0-squareradius,5-squareradius);
+    Point3D SourceB (30,0+squareradius,5-squareradius);
+    Point3D SourceC (30,0-squareradius,5+squareradius);
+    
+    Sheet* source = new Sheet;
+    
+    source->Set(SourceA,SourceB,SourceC);
+    
+    
+    //Lists storing output files
+    
+    vector<double> externalsweep_conc;
+    vector<double> internalsweep_conc;
+    
+    for(int conc_run=1; conc_run<3; conc_run++){
+        
+        
+        vector<double> output;
+        vector<Point3D> dyeabs;
+        
+        vector<double> InternalEfficiency;
+        double reflections;
+        
+        
+        //Loop for each wavelength. Set wavelength Range here.
+        
+        double hits = 0;
+        double absorbed = 0;
+        double photons = 0;
+        
+        double conc = 1e-4*conc_run;
+        
+        LSC->SetConcentration(conc);
+        
+        for(int wavelength = start; wavelength<= end; wavelength++){
+            
+            
+            double thisphotons = 0;
+            double thishits = 0;
+            
+            //Loop for individual wavelength.
+            
+            for(int i = 0; i<runs; i++){
+                
+                vector<Point3D> photonpath;
+                
+                
+                //New photon settings
+                Photon* photon = new Photon;
+                
+                photons++;
+                thisphotons++;
+                
+                double sy, sz;
+                
+                sy = source->GetA().y + calc->Random(1) * source->GetABLength();
+                sz = source->GetA().z + calc->Random(1) * source->GetACLength();
+                
+                
+                
+                photon->SetPosition(Point3D(50,sy,sz));
+                photon->SetMomentum(Vector3D(-1,0,0));
+                photon->SetWavelength(wavelength);
+                photon->SetRandomPolarisation();
+                
+                world->CorrectPhotonInside(photon);
+                
+                if(debug) {
+                    cout<<"New photon:"<<endl<<endl;
+                    print->PhotonPrint(photon);
+                }
+                
+                while(world->ReturnPhotonInside() & photon->PhotonAliveCheck()){ //While photon is inside world and alive.
+                    if(!LSC->ReturnPhotonInside()){ //If photon is not in a LSC.
+                        
+                        LSC->FindIntersections(*photon, debug);
+                        
+                        if(fulldebug){
+                            cout<<"World Exit Distance is "<<world->GetInterfaceDistance(photon)<<"."<<endl;
+                        }
+                        
+                        if(world->GetInterfaceDistance(photon)<LSC->NextDistance(*photon,fulldebug)){ //If next boundary is exit.
+                            photon->PhotonKill();
+                            photon->SetExit();
+                            world->SetPhotonInside(0);
+                            if(debug) {
+                                cout<<"World exit."<<endl<<endl;
+                            }
+                        }
+                        
+                        else{
+                            inout->NewCurvedIn(photon, world, *LSC, debug); //Else, entrance reflect/refract event.
+                            if(matlabprint && LSC->ReturnPhotonInside()) photonpath.push_back(photon->GetPosition());
+                        }
+                    }
+                    
+                    
+                    else while(LSC->ReturnPhotonInside()&&photon->PhotonAliveCheck()){ //while photon is in LSC.
+                        
+                        LSC->FindIntersections(*photon, debug);
+                        
+                        
+                        if(photon->GetAbsorbLength()<=LSC->NextDistance(*photon,fulldebug)){ //If absorption = next event.
+                            bool d = 0;
+                            double b = 0;
+                            LSC->AbsorptionEvent(photon,debug,matlabprint,dyeabs,photonpath,d,b); //Absorption event.
+                        }
+                        
+                        else{ //If boundary is next event.
+                            
+                            int nextinterface = LSC->NextIntersection(*photon,fulldebug);
+                            
+                            if((nextinterface!=0 && nextinterface!=1)){
+                                photon->PhotonKill(); //If sheet is not inside or outside. Kill photon + add counters.
+                                hits++;
+                                thishits++;
+                                if(debug){
+                                    cout<<"Hit on sheet "<<nextinterface<<" at interface point: ";
+                                    print->PrintPoint(photon->GetPosition()+photon->GetMomentum()*LSC->NextDistance(*photon,fulldebug));
+                                    cout<<endl;
+                                }
+                            }
+                            else{
+                                inout->NewCurvedOut(photon, *LSC, world, debug, reflections); //Otherwise exit reflect/refract event.
+                            }
+                        }
+                    }
+                }
+                
+                //Counters
+                
+                if(photon->GetAbsorptions()!=0) absorbed++;
+                
+                //Deletes photon.
+                
+                world->SetPhotonInside(0);
+                LSC->SetPhotonInside(0);
+                paths.push_back(photonpath);
+                delete photon;
+                
+            }
+            if(wavelengthprint){
+                cout<<"Wavelength "<<wavelength<<"nm done."<<endl;
+            }
+            
+            
+        }
+        
+        //Calculates total efficiency and prints as 'result'
+        
+        double result = 100 * hits/photons;
+        double internal_eff = 100 * hits/absorbed;
+
+        externalsweep_conc.push_back(result);
+        internalsweep_conc.push_back(internal_eff);
+        
+        if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
+        cout<<"Total Optical Efficiency: "<<result<<"%"<<endl;
+        cout<<"Internal Optical Efficiency: "<<internal_eff<<"%"<<endl;
+        
+        if(matlabprint) matlab->PhotonPathPrint(paths);
+    }
+        print->PrintVectorFile(internalsweep_conc,"internal.txt");
+        print->PrintVectorFile(externalsweep_conc,"external.txt");
+        
+        internalsweep.push_back(internalsweep_conc);
+        externalsweep.push_back(externalsweep_conc);
+    }
+    
+    print->PrintMatrixFile(internalsweep, "internalsweep.txt");
+    print->PrintMatrixFile(externalsweep, "externalsweep.txt");
+
+    
+    
+}
+
 
 
 
@@ -1618,9 +1865,12 @@ int main(int argc, const char * argv[]){
     //hybrid(10000,1,300,2500,0,1,0,10,5e15,1); //Hybrid Model simulation.
     
     
-    //testsesh();
+    testsesh();
     
-    flexirun_new(15000, 350, 520, 0, 0, 0, 1, 300);
+    //flexirun_new(15000, 350, 520, 0, 0, 0, 1, 300);
+    
+    //parametersweep(15000, 350, 520, 0, 0, 0, 1, 300);
+
     
     
 }
