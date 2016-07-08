@@ -1635,8 +1635,8 @@ void parametersweep(double runs, int start, int end, bool matlabprint, bool debu
     vector<vector<double>> externalsweep;
     vector<vector<double>> internalsweep;
     vector<vector<double>> absorbedsweep;
-    
-    vector<double> thicknesses;
+    vector<vector<double>> thicknesssweep;
+    vector<vector<double>> concentrationsweep;
     
     
     
@@ -1647,7 +1647,6 @@ void parametersweep(double runs, int start, int end, bool matlabprint, bool debu
         double l = 100; //length of lsc
         double height = 100; //height of lsc
         double width = 0.4; //width of lsc/thickness
-        thicknesses.push_back(width);
         
         Point3D centrepoint(-(r),0,0);
         
@@ -1695,6 +1694,8 @@ void parametersweep(double runs, int start, int end, bool matlabprint, bool debu
         vector<double> externalsweep_conc;
         vector<double> internalsweep_conc;
         vector<double> absorbed_conc;
+        vector<double> concentration_conc;
+        vector<double> thickness_conc;
         
         
         for(double conc_run=-9; conc_run<0; conc_run++){
@@ -1831,9 +1832,12 @@ void parametersweep(double runs, int start, int end, bool matlabprint, bool debu
             double internal_eff = 100 * hits/absorbed;
             double absorption = 100 * absorbed / photons;
             
+            
             externalsweep_conc.push_back(result);
             internalsweep_conc.push_back(internal_eff);
             absorbed_conc.push_back(absorption);
+            concentration_conc.push_back(conc);
+            thickness_conc.push_back(width);
 
             
             if(matlabprint) matlab->DyeAbsorbPrint(dyeabs);
@@ -1850,12 +1854,16 @@ void parametersweep(double runs, int start, int end, bool matlabprint, bool debu
         internalsweep.push_back(internalsweep_conc);
         externalsweep.push_back(externalsweep_conc);
         absorbedsweep.push_back(absorbed_conc);
+        thicknesssweep.push_back(thickness_conc);
+        concentrationsweep.push_back(concentration_conc);
         
     }
     
-    print->PrintMatrixFile(internalsweep, "internalsweep.txt");
-    print->PrintMatrixFile(externalsweep, "externalsweep.txt");
-    print->PrintMatrixFile(absorbedsweep, "absorbedsweep.txt");
+    print->PrintMatrixFile(internalsweep, "internalefficiencies.txt");
+    print->PrintMatrixFile(externalsweep, "externalefficiences.txt");
+    print->PrintMatrixFile(absorbedsweep, "absorptionpercentages.txt");
+    print->PrintMatrixFile(concentrationsweep, "concentrations.txt");
+    print->PrintMatrixFile(thicknesssweep, "thicknesses.txt");
     
     
     
