@@ -78,7 +78,7 @@ spectra::NormaliseProbabilities(vector<double> &vect){
     }
     
     double total = vect[vect.size()-1];
-    
+        
     for(int i=0; i<vect.size(); i++){
         vect[i] = vect[i]/total;
     }
