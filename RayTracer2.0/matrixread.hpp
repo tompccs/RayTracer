@@ -32,6 +32,8 @@ public:
     
     vector<vector<double>>& GetMatrix();
     
+    double& Lookup(double& x);
+    
     
     
 };

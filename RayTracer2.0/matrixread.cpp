@@ -10,7 +10,7 @@ matrixread::Import(const char* filename){
     //int rows = 1;
     if (myfile.is_open())
     {
-        while ( getline (myfile,line,'\r') )
+        while ( getline (myfile,line,'\n') )
         {
             text.push_back(line);
             //cout<<line<<"End of line"<<endl;
@@ -89,3 +89,16 @@ vector<vector<double>>&
 matrixread::GetMatrix(){
     return vals;
 }
+
+double&
+matrixread::Lookup(double &x){
+    
+    int i = 0;
+    
+    while(GetValue(i, 0)<x){
+        i++;
+    }
+    
+    return GetValue(i, 1);
+}
+

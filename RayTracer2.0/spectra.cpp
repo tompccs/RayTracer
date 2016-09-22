@@ -41,7 +41,7 @@ spectra::TrimWavelengths(double start, double end){
     vector<double> lambda;
     vector<double> intensity;
     for(int i=0; i<mat.GetMatrix().size(); i++){
-        if(mat.GetMatrix()[i][0]>start && mat.GetMatrix()[i][0]<end){
+        if(mat.GetMatrix()[i][0]>=start && mat.GetMatrix()[i][0]<end){
             lambda.push_back(mat.GetMatrix()[i][0]);
             intensity.push_back(mat.GetMatrix()[i][1]);
         
