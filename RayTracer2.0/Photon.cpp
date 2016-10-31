@@ -118,7 +118,7 @@ Photon::SetRandomPolarisation(){
     Vector3D tmp_vec = Momentum % Vector3D(1,0,0);
     Vector3D output;
     
-    if(Magnitude(tmp_vec)>min_len){
+    if(Magnitude(tmp_vec)>=min_len){
         output = Momentum % tmp_vec;
         output.Normalise();
     }
